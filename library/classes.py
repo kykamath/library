@@ -6,6 +6,22 @@ Created on Jun 22, 2011
 from datetime import timedelta, datetime
 import time, random
 
+def timeit(method):
+    '''
+    A decorator to time method calls. The code for this method was obtained from
+    http://www.zopyx.de/blog/a-python-decorator-for-measuring-the-execution-time-of-methods
+    The author of this code might be Andreas Jung.
+    '''
+    def timed(*args, **kw):
+        timeItMessage = 'timeit: '
+        ts = time.time()
+        print '%sStarting %r'%(timeItMessage, method.__name__)
+        result = method(*args, **kw)
+        te = time.time()
+        print '%s%r took %2.2f sec' % (timeItMessage, method.__name__, te-ts)
+        return result
+    return timed
+
 class Settings(dict):
     '''
     Part of this class was obtained from Jeff McGee.

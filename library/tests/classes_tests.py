@@ -3,10 +3,10 @@ Created on Jun 23, 2011
 
 @author: kykamath
 '''
-import unittest, sys
+import unittest, sys, time
 sys.path.append('../')
 from datetime import datetime, timedelta
-from classes import GeneralMethods, TwoWayMap, FixedIntervalMethod
+from classes import GeneralMethods, TwoWayMap, FixedIntervalMethod, timeit
 
 test_time = datetime.now()
 
@@ -35,6 +35,10 @@ class GeneralMethodsTests(unittest.TestCase):
         self.assertEqual(datetime(2011,7,5,15,15), GeneralMethods.approximateToNearest5Minutes(datetime(2011,7,5,15,15)))
         self.assertEqual(datetime(2011,7,5,15,10), GeneralMethods.approximateToNearest5Minutes(datetime(2011,7,5,15,13,11,30)))
         self.assertEqual(datetime(2011,7,5,15,35), GeneralMethods.approximateToNearest5Minutes(datetime(2011,7,5,15,35,01)))
+    def test_timeit(self):
+        @timeit
+        def method(): time.sleep(1)
+        method()
     
 class TwoWayDictTests(unittest.TestCase):
     def setUp(self):
