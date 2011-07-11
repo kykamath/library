@@ -36,9 +36,13 @@ class GeneralMethodsTests(unittest.TestCase):
         self.assertEqual(datetime(2011,7,5,15,10), GeneralMethods.approximateToNearest5Minutes(datetime(2011,7,5,15,13,11,30)))
         self.assertEqual(datetime(2011,7,5,15,35), GeneralMethods.approximateToNearest5Minutes(datetime(2011,7,5,15,35,01)))
     def test_timeit(self):
+        class dummy:
+            @staticmethod
+            @timeit
+            def test(): time.sleep(2)
         @timeit
         def method(): time.sleep(1)
-        method()
+        method(), dummy.test()
     
 class TwoWayDictTests(unittest.TestCase):
     def setUp(self):
