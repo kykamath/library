@@ -4,9 +4,9 @@ Created on Jun 21, 2011
 @author: kykamath
 '''
 import sys
-from classes import TwoWayMap
 sys.path.append('../')
 import unittest
+from classes import TwoWayMap
 from clustering import EvaluationMetrics, EMTextClustering
 
 class EvaluationMetricsTests(unittest.TestCase):
