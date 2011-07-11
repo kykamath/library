@@ -15,7 +15,7 @@ def timeit(method):
     def timed(*args, **kw):
         timeItMessage = 'timeit: '
         ts = time.time()
-        print '%sStarting %r'%(timeItMessage, method.__name__)
+#        print '%sStarting %r'%(timeItMessage, method.__name__)
         result = method(*args, **kw)
         te = time.time()
         print '%s%r took %2.2f sec' % (timeItMessage, method.__name__, te-ts)
