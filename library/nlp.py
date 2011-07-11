@@ -4,11 +4,13 @@ Created on Jun 14, 2011
 @author: kykamath
 '''
 
-import enchant, json, re
+import enchant, re, cjson, os, pprint
+from stop_words import stopWords
 
 current_directory = '/'.join(__file__.split('/')[:-1])
 twitter_stop_words_file=current_directory+'/data/stop_words.json'
 twitter_stop_words_over_threshold_percentage = 0.5
+stopWordsModule = 'stop_words.py'
 
 pattern = re.compile('[\W_]+')
 enchantDict = enchant.Dict("en_US")
@@ -32,25 +34,22 @@ def getPhrases(items, minPhraseLength, maxPhraseLength):
     return groups
 
 class StopWords:
-    list = None
+    set=None
     @staticmethod
-    def load(extra_terms):
-        if StopWords.list == None: 
-            StopWords.list = {}
-            stop_word_candidates = json.load(open(twitter_stop_words_file))
-            for stop_word_candidate in stop_word_candidates:
-                if stop_word_candidates[stop_word_candidate]['ot'] >= twitter_stop_words_over_threshold_percentage: StopWords.list[stop_word_candidate]=True
-            for term in extra_terms: StopWords.list[term] = True
+    def contains(word, extra_terms=['#p2', '#ff', '#fb', '#followfriday']): 
+        if StopWords.set==None: StopWords.set = set(stopWords+extra_terms)
+        return word in StopWords.set
     @staticmethod
-    def contains(word):
-        try:
-            return StopWords.list[word]
-        except KeyError: return False
+    def createStopWordsModule():
+        outputList=[]
+        stop_word_candidates = [t for t in cjson.decode(open(twitter_stop_words_file).readlines()[0]).iteritems()]
+        for stop_word_candidate in stop_word_candidates:
+            if stop_word_candidate[1]['ot'] >= twitter_stop_words_over_threshold_percentage: outputList.append(stop_word_candidate[0])
+        os.system('echo "stopWords=%s" > %s'%(pprint.pformat(outputList), stopWordsModule))
         
-def getWordsFromRawEnglishMessage(message, check_stop_words=True, extra_terms=['#p2', '#ff', '#fb', '#followfriday']):
+def getWordsFromRawEnglishMessage(message, check_stop_words=True):
     returnWords = []
     if isEnglish(message.lower()):
-        if StopWords.list==None: StopWords.load(extra_terms)
         message = filter(lambda x: not x.startswith('@') and not x.startswith('http:'), message.lower().split())
         for word in message:
             if word[0]=='#': returnWords.append(str('#'+pattern.sub('', word)))
@@ -59,3 +58,6 @@ def getWordsFromRawEnglishMessage(message, check_stop_words=True, extra_terms=['
         if check_stop_words: return filter(lambda w: not StopWords.contains(w) and len(w)>2, returnWords)
         else: return filter(lambda w: len(w)>2, returnWords)
     return returnWords
+
+if __name__ == '__main__':
+    StopWords.createStopWordsModule()
