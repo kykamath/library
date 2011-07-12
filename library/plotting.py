@@ -10,6 +10,8 @@ from numpy.ma.core import exp, log
 
 def getLatexForString(str): return '$'+str.replace(' ', '\\ ')+'$'
 
+def plotMethods(methods): map(lambda method: method(returnAxisValuesOnly=False), methods), plt.show()
+
 class CurveFit():
     @staticmethod
     def decreasingExponentialFunction(p, x): 
