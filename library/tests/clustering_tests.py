@@ -19,6 +19,7 @@ class EvaluationMetricsTests(unittest.TestCase):
     def test_getpurityForClustersWithEmpltyClusters(self): self.assertEqual(0.0, EvaluationMetrics.getValueForClusters([[]], EvaluationMetrics.purity))
     def test_getNMIForClusters(self): self.assertEqual('%0.3f'%0.783, '%0.3f'%EvaluationMetrics.getValueForClusters(self.clusters, EvaluationMetrics.nmi))
     def test_getNMIForPerfectClusters(self): self.assertEqual(1.0, EvaluationMetrics.getValueForClusters([[1,1], [1,1], [1,1]], EvaluationMetrics.nmi))
+    def test_getF1ForClusters(self): print EvaluationMetrics.getValueForClusters(self.clusters, EvaluationMetrics.f1)
     
 #class ClusteringTests(unittest.TestCase):
 #    def test_emClustering(self):
