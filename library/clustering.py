@@ -82,7 +82,9 @@ class EvaluationMetrics:
         for l2 in unique(y):
             l2_count=nonzero(y==l2)[0].size
             Hy+=-(double(l2_count)/N)*log2(double(l2_count)/N)
-        return I/((Hx+Hy)/2)
+        denominator = (Hx+Hy)/2
+        if denominator==0: return 1.0
+        return I/denominator
 
     @staticmethod
     def _getPredictedAndLabels(clusters):
