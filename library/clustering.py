@@ -55,6 +55,34 @@ class EvaluationMetrics:
         for u,v in zip(predicted,labels):
             if u==v: correctAssignedItems+=1
         return correctAssignedItems/len(predicted) 
+    
+    @staticmethod
+    def mutual_info(x,y):
+        N=double(x.size)
+        I=0.0
+        eps = finfo(float).eps
+        for l1 in unique(x):
+            for l2 in unique(y):
+                #Find the intersections
+                l1_ids=nonzero(x==l1)[0]
+                l2_ids=nonzero(y==l2)[0]
+                pxy=(double(intersect1d(l1_ids,l2_ids).size)/N)+eps
+                I+=pxy*log2(pxy/((l1_ids.size/N)*(l2_ids.size/N)))
+        return I
+    
+    @staticmethod
+    def nmi(x,y):
+        N=x.size
+        I=EvaluationMetrics.mutual_info(x,y)
+        Hx=0
+        for l1 in unique(x):
+            l1_count=nonzero(x==l1)[0].size
+            Hx+=-(double(l1_count)/N)*log2(double(l1_count)/N)
+        Hy=0
+        for l2 in unique(y):
+            l2_count=nonzero(y==l2)[0].size
+            Hy+=-(double(l2_count)/N)*log2(double(l2_count)/N)
+        return I/((Hx+Hy)/2)
 
     @staticmethod
     def _getPredictedAndLabels(clusters):
