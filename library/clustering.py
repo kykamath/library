@@ -110,7 +110,7 @@ class EMTextClustering:
     '''
     PHRASE_TO_DIMENSION = TwoWayMap.MAP_FORWARD
     DIMENSION_TO_PHRASE = TwoWayMap.MAP_REVERSE
-    def __init__(self, documents, numberOfClusters): self.documents, self.means, self.numberOfClusters, self.vectors = documents, [], numberOfClusters, None
+    def __init__(self, documents, numberOfClusters): self.documents, self.means, self.numberOfClusters, self.vectors = list(documents), [], numberOfClusters, None
     
     def _convertDocumentsToVector(self):
         self.vectors = []
