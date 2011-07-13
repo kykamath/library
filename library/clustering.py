@@ -8,11 +8,11 @@ import cjson, math
 from numpy import *
 from scipy.stats import mode
 from nltk import cluster
-import random
 from collections import defaultdict
 from operator import itemgetter
 from classes import TwoWayMap
 from vector import VectorGenerator
+from nltk.cluster import euclidean_distance
 
 class EvaluationMetrics:
     '''
@@ -103,15 +103,16 @@ class TrainingAndTestDocuments:
             topic = pickOneByProbability(topics.keys(), [topics[k]['prob'] for k in topics.keys()])
             print ' '.join([topic] + [pickOneByProbability(topics[topic]['tags'].keys(), [topics[topic]['tags'][k] for k in topics[topic]['tags'].keys()]) for i in range(2)] + [random.choice(stopwords) for i in range(5)])
 
-class EMTextClustering:
+class Clustering(object):
     '''
     Clusters documents given in the form 
     [(id, text), (id, text), ...., (id, text)]
     '''
     PHRASE_TO_DIMENSION = TwoWayMap.MAP_FORWARD
     DIMENSION_TO_PHRASE = TwoWayMap.MAP_REVERSE
-    def __init__(self, documents, numberOfClusters): self.documents, self.means, self.numberOfClusters, self.vectors = list(documents), [], numberOfClusters, None
-    
+    def __init__(self, documents, numberOfClusters): 
+        self.documents, self.means, self.numberOfClusters, self.vectors = list(documents), [], numberOfClusters, None
+        if self.vectors==None: self._convertDocumentsToVector()
     def _convertDocumentsToVector(self):
         self.vectors = []
         dimensions = TwoWayMap()
@@ -122,14 +123,17 @@ class EMTextClustering:
             vector = zeros(len(dimensions))
             for w in document.split(): vector[dimensions.get(EMTextClustering.PHRASE_TO_DIMENSION, w)]+=1 
             self.vectors.append(vector)
-        
+    
+class EMTextClustering(Clustering):
     def cluster(self):
-        if self.vectors==None: self._convertDocumentsToVector()
-        for i in range(self.numberOfClusters): 
-            self.means.append(VectorGenerator.getRandomGaussianUnitVector(len(self.vectors[0]), 4, 1).values())
-#            self.means.append(ones(len(self.vectors[0])))
+        for i in range(self.numberOfClusters): self.means.append(VectorGenerator.getRandomGaussianUnitVector(len(self.vectors[0]), 4, 1).values())
         clusterer = cluster.EMClusterer(self.means, bias=0.1) 
-        return clusterer.cluster(self.vectors, True, trace=True) 
+        return clusterer.cluster(self.vectors, True, trace=True)
+
+class KMeansClustering(Clustering):
+    def cluster(self):
+        clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance)
+        return clusterer.cluster(self.vectors, True)
 
 if __name__ == '__main__':
 #    TrainingAndTestDocuments.generate()
