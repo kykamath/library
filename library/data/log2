@@ -1,0 +1,6 @@
+We don't have as much tutorial material as we could, but the problem of 
+transforming your data into Mahout vectors (VectorWritable sequence 
+files) is often quite application-specific. We do have an example in the 
+synthetic control package which you may be able to use or adapt. Look at 
+the InputDriver and InputMapper classes in 
+o.a.m.clustering.syntheticcontrol in examples/.
