@@ -162,8 +162,8 @@ class EMTextClustering(Clustering):
         return clusterer.cluster(self.vectors, True, trace=True)
 
 class KMeansClustering(Clustering):
-    def cluster(self):
-        clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance)
+    def cluster(self, **kwargs):
+        clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance, **kwargs)
         return clusterer.cluster(self.vectors, True)
     
 class MRWordCounter(MRJob):
