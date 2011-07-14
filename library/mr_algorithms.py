@@ -30,6 +30,14 @@ class WordCountSample2(MRJobWrapper):
         yield word, sum(occurrences)
     def steps(self):
         return [self.mr(self.get_words, self.sum_words),]
+    
+class KMeans(MRJobWrapper):
+    '''
+    A MR implementation for kMeans.
+    This is a port of MR-kmeans code written for hadoopy by Brandyn White (http://brandynwhite.com/).
+    The original source code is at: https://github.com/bwhite/hadoop_vision/tree/master/kmeans 
+    '''
+    pass
 
 if __name__ == '__main__':
     '''
