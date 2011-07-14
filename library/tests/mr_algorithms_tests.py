@@ -3,7 +3,7 @@ Created on Jul 13, 2011
 
 @author: kykamath
 '''
-import sys
+import sys, os
 from StringIO import StringIO
 sys.path.append('../')
 import unittest
@@ -26,6 +26,11 @@ class MRJobWrapperTests(unittest.TestCase):
     def test_runJob(self): 
         self.assertEqual([(w,1)for w in sorted(self.testString.split())], list(self.wcSample1.runJob(inputFileList=[self.log1])))
         self.assertEqual([(w,1)for w in sorted(self.testString.split())], list(self.wcSample2.runJob(inputFileList=[self.log1])))
+    def test_forHadoopOnly(self):
+        if os.uname()[1]=='spock':
+            wcSample1 = WordCountSample1(args='-r hadoop'.split())
+            self.assertEqual([(w,1)for w in sorted(self.testString.split())], list(wcSample1.runJob(inputFileList=[self.log1])))
+        else: print 'Not running hadoop specific tests.'
 
 if __name__ == '__main__':
     unittest.main()
