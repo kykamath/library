@@ -13,7 +13,7 @@ log1 = '../../../data/log1'
 
 class WordCountTests(unittest.TestCase):
     def setUp(self):
-        self.wordCount = WordCount()
+        self.wordCount = WordCount(args='-r inline'.split())
     def test_mapper(self): self.assertEqual([(w,1)for w in testString.split()], list(self.wordCount.mapper('', testString)))
     def test_reducer(self): self.assertEqual([('foo', 2)], list(self.wordCount.reducer('foo', [1, 1])))
     def test_runJob(self): 
