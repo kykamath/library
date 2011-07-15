@@ -19,9 +19,7 @@ class MRJobWrapper():
     '''
     def _setOptions(self, **kwargs):
         self.mrjob.args = kwargs.get('inputFileList', self.mrjob.args)
-        print self.mrjob.options.jobconf
         self.mrjob.options.jobconf = combine_dicts(self.mrjob.options.jobconf, kwargs.get('jobconf', self.mrjob.options.jobconf))
-        print self.mrjob.options.jobconf
     def runJob(self, **kwargs):
         self._setOptions(**kwargs)
         with self.mrjob.make_runner() as runner:
