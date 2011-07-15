@@ -3,7 +3,7 @@ Created on Jul 14, 2011
 
 @author: kykamath
 '''
-from mr_algorithms.mrjobwrapper import MRJobWrapper
+from library.mrjobwrapper import MRJobWrapper
 
 class WordCount(MRJobWrapper):
     def mapper(self, key, value):

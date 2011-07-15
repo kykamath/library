@@ -7,7 +7,6 @@ import sys
 sys.path.append('../../../')
 import unittest, os
 from mr_algorithms.demo.word_count import WordCount
-from StringIO import StringIO
 
 testString='Sachin Tendulkar is one century away from reaching 100 international'
 log1 = '../../../data/log1'

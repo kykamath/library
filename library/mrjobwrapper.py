@@ -18,6 +18,8 @@ class MRJobWrapper(MRJob):
     will be using regularly.
     '''
     def __init__(self, *args, **kwargs): super(MRJobWrapper, self).__init__(*args, **kwargs)
+    def _setOptions(self):
+        self.options.python_archives = ['/'.join(__file__.split('/')[:-2])+'/dist/my_library-1.0.tar.gz']
     def runJob(self, inputFileList):
         self.args = inputFileList
         with self.make_runner() as runner:
