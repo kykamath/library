@@ -21,9 +21,15 @@ class StringToArrayProtocol(HadoopStreamingProtocol):
         return cjson.encode({'id':key, 'vector': value.tolist()})
 
 class KMeansVariables:
-    CLUSTERS='{"clusters": [[-1.0, -1.0], [1.0, 1.0]]}'
+    CLUSTERS=None
 
 class KMeans(MRJobWrapper):
+    
+#    def steps(self):
+#        return [
+#                self.mr(self.mapper, self.reducer),
+#                ]
+    
     '''
     A MR implementation for kMeans.
     This is a port of hadoop_vision/kmeans code written for hadoopy by Brandyn White (http://brandynwhite.com/).
@@ -39,6 +45,12 @@ class KMeans(MRJobWrapper):
         """Parse stop_words option."""
         super(KMeans, self).load_options(args)
         self.clusters = np.array(cjson.decode(self.options.clusters)['clusters'])
+    
+    @classmethod
+    def protocols(cls):
+        protocol_dict = super(KMeans, cls).protocols()
+        protocol_dict['string_to_array'] = StringToArrayProtocol
+        return protocol_dict
     
     def mapper(self, unused_i, point):
         """Take in a point, find its NN.
@@ -74,12 +86,6 @@ class KMeans(MRJobWrapper):
         m = self._compute_centroid(s)
         yield n, m 
         
-    @classmethod
-    def protocols(cls):
-        protocol_dict = super(KMeans, cls).protocols()
-        protocol_dict['string_to_array'] = StringToArrayProtocol
-        return protocol_dict
-    
     def _nearest_cluster_id(self, clusters, point):
         """Find L2 squared nearest neighbor
 

@@ -24,6 +24,9 @@ class MRJobWrapperTests(unittest.TestCase):
             wcSample1 = WordCount(args='-r hadoop'.split())
             self.assertEqual([(w,1)for w in sorted(testString.split())], list(wcSample1.runJob(inputFileList=[log1])))
         else: print 'Not running hadoop specific tests.'
+    def test_runMapper(self):
+#        self.assertEqual([(w,1)for w in testString.split()], list(self.wordCount.runMapper(inputFileList=[log1])))
+        print list(self.wordCount.runMapper(inputFileList=[log1]))
 
 
 if __name__ == '__main__':

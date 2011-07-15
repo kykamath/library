@@ -3,7 +3,15 @@ Created on Jul 14, 2011
 
 @author: kykamath
 '''
+import sys
 from mrjob.job import MRJob
+
+class WritableObject:
+    def __init__(self):
+        self.content = []
+    def write(self, string):
+        self.content.append(string)
+
 class MRJobWrapper(MRJob):
     '''
     A wrapper for MRJob. This defines some methods that I
@@ -15,3 +23,11 @@ class MRJobWrapper(MRJob):
         with self.make_runner() as runner:
             runner.run()
             for line in runner.stream_output(): yield self.parse_output_line(line)
+    def runMapper(self, inputFileList):
+        self.args = inputFileList
+        reader = self.protocols()[self.DEFAULT_OUTPUT_PROTOCOL or self.DEFAULT_PROTOCOL]
+        mapperOutput = WritableObject()
+        self.stdout = mapperOutput
+        self.run_mapper()
+        sys.stdout = sys.__stdout__ 
+        for i in filter (lambda a: a != '\n', mapperOutput.content): yield reader.read(i)
