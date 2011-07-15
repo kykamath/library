@@ -22,7 +22,8 @@ class KMeans(MRJobWrapper):
         
     @staticmethod
     def cluster(fileName, initialClusters, mrArgs = '-r hadoop', iterations=5):
-        KMeansVariables.CLUSTERS=getClustersJSONFromArrayList(initialClusters)
+#        KMeansVariables.CLUSTERS=getClustersJSONFromArrayList(initialClusters)
+        KMeansVariables.write(getClustersJSONFromArrayList(initialClusters))
         for i in range(iterations): 
             print 'Iteration: ', i
             KMeansVariables.CLUSTERS=getClustersJSONFromArrayList([a[1] for a in KMeans(args=mrArgs.split()).runJob(inputFileList=[fileName])])

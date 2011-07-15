@@ -8,7 +8,7 @@ from mrjob.job import MRJob
 from mrjob.protocol import HadoopStreamingProtocol
 import numpy as np
 
-clusters_file = '/tmp/clusters'
+clusters_file = 'clusters'
 
 class StringToArrayProtocol(HadoopStreamingProtocol):
     @classmethod
@@ -20,7 +20,7 @@ class StringToArrayProtocol(HadoopStreamingProtocol):
         return cjson.encode({'id':key, 'vector': value.tolist()})
 
 class KMeansVariables:
-    CLUSTERS=None
+#    CLUSTERS=None
     @staticmethod
     def write(data):
         with open(clusters_file, 'w') as f: f.write(data+'\n')
@@ -46,7 +46,6 @@ class KMeansMRJob(MRJob):
     def load_options(self, args):
         """Parse stop_words option."""
         super(KMeansMRJob, self).load_options(args)
-        print self.options.clusters
         data = open(self.options.clusters).readlines()[0].strip()
 #        self.clusters = np.array(cjson.decode(self.options.clusters)['clusters'])
         self.clusters = np.array(cjson.decode(data)['clusters'])
