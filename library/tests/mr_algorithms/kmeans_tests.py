@@ -65,7 +65,7 @@ class KMeansTests(unittest.TestCase):
             self.assertEqual( [[-1.8333333333299999, -1.93333333333], [2.2999999999999998, 2.2999999999999998]], [a.tolist() for a in arrays])
     def test_cluster(self):
         mrArgs = '-r hadoop' if os.uname()[1]=='spock' else '-r local'
-        self.assertEqual([(0, ['2', '3', '6']), (1, ['0', '1', '4', '5', '7'])], 
+        self.assertEqual([['2', '3', '6'], ['1', '0', '7', '4', '5']], 
                          list(KMeans.cluster(fileName, 
                                              initialClusters=[np.array([-3.0, -3.0]), np.array([3.0, 3.0])], 
                                              mrArgs=mrArgs,
