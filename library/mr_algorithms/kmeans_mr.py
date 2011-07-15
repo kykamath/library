@@ -18,7 +18,7 @@ class StringToArrayProtocol(HadoopStreamingProtocol):
         return cjson.encode({'id':key, 'vector': value.tolist()})
 
 class KMeansVariables:
-    CLUSTERS='{"clusters": [[-3.0, -3.0], [3.0, 3.0]]}'
+    CLUSTERS=None
 
 class KMeansMRJob(MRJob):
     
