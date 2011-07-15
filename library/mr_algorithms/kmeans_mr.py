@@ -8,6 +8,8 @@ from mrjob.job import MRJob
 from mrjob.protocol import HadoopStreamingProtocol
 import numpy as np
 
+clusters_file = 'clusters'
+
 class StringToArrayProtocol(HadoopStreamingProtocol):
     @classmethod
     def read(cls, line): 
@@ -19,6 +21,9 @@ class StringToArrayProtocol(HadoopStreamingProtocol):
 
 class KMeansVariables:
     CLUSTERS=None
+    @staticmethod
+    def write(data):
+        with open(clusters_file, 'w') as f: f.write(data+'\n')
 
 class KMeansMRJob(MRJob):
     
@@ -35,12 +40,15 @@ class KMeansMRJob(MRJob):
     DEFAULT_PROTOCOL = 'string_to_array'
     def configure_options(self):
         super(KMeansMRJob, self).configure_options()
-        self.add_passthrough_option( '--clusters', dest='clusters', default=KMeansVariables.CLUSTERS, help='provide initial clusters')
+#        self.add_passthrough_option( '--clusters', dest='clusters', default=KMeansVariables.CLUSTERS, help='provide initial clusters')
+        self.add_file_option( '--clusters', dest='clusters', default=clusters_file, help='provide initial clusters file')
         
     def load_options(self, args):
         """Parse stop_words option."""
         super(KMeansMRJob, self).load_options(args)
-        self.clusters = np.array(cjson.decode(self.options.clusters)['clusters'])
+        data = open(self.options.clusters).readlines()[0].strip()
+#        self.clusters = np.array(cjson.decode(self.options.clusters)['clusters'])
+        self.clusters = np.array(cjson.decode(data)['clusters'])
     
     @classmethod
     def protocols(cls):
