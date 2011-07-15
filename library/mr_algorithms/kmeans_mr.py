@@ -46,6 +46,7 @@ class KMeansMRJob(MRJob):
     def load_options(self, args):
         """Parse stop_words option."""
         super(KMeansMRJob, self).load_options(args)
+        print self.options.clusters
         data = open(self.options.clusters).readlines()[0].strip()
 #        self.clusters = np.array(cjson.decode(self.options.clusters)['clusters'])
         self.clusters = np.array(cjson.decode(data)['clusters'])
