@@ -48,20 +48,20 @@ class KMeansTests(unittest.TestCase):
         def tolist(s): return [(x[0], x[1].tolist()) for x in s]
         print dir(self.kmeans)
         self.assertEqual(tolist(test_out), tolist([list(self.kmeans.mapper(k,v))[0] for k,v in test_in]))
-#    def test_reducer(self): 
-#        test_in = [
-#                   (0, [np.array([2., 2., 1.]), np.array([1., 1., 1.]), np.array([-1., -1., 1.]),  np.array([-2., -2., 1.])]),
-#                   (1, [np.array([12., 12., 1.]), np.array([11., 11., 1.]), np.array([9., 9., 1.]), np.array([8., 8., 1.])])
-#                ]
-#        test_out = [(0, np.array([0., 0.])),
-#                    (1, np.array([10., 10.]))]
-#        def tolist(s): return [(x[0], x[1].tolist()) for x in s]
-#        self.assertEqual(tolist(test_out), tolist([list(self.kmeans.reducer(k,v))[0] for k,v in test_in]))
-#    def test_runJob(self): 
-#        for object in [self.kmeans, KMeans(args='-r hadoop'.split()) if os.uname()[1]=='spock' else KMeans(args='-r inline'.split())]:
-#            ids, arrays = zip(*list(object.runJob(inputFileList=[fileName])))
-#            self.assertEqual((0, 1), ids)
-#            self.assertEqual( [[-1.8333333333299999, -1.93333333333], [2.2999999999999998, 2.2999999999999998]], [a.tolist() for a in arrays])
+    def test_reducer(self): 
+        test_in = [
+                   (0, [np.array([2., 2., 1.]), np.array([1., 1., 1.]), np.array([-1., -1., 1.]),  np.array([-2., -2., 1.])]),
+                   (1, [np.array([12., 12., 1.]), np.array([11., 11., 1.]), np.array([9., 9., 1.]), np.array([8., 8., 1.])])
+                ]
+        test_out = [(0, np.array([0., 0.])),
+                    (1, np.array([10., 10.]))]
+        def tolist(s): return [(x[0], x[1].tolist()) for x in s]
+        self.assertEqual(tolist(test_out), tolist([list(self.kmeans.reducer(k,v))[0] for k,v in test_in]))
+    def test_runJob(self): 
+        for object in [self.kmeans, KMeans(args='-r hadoop'.split()) if os.uname()[1]=='spock' else KMeans(args='-r inline'.split())]:
+            ids, arrays = zip(*list(object.runJob(inputFileList=[fileName])))
+            self.assertEqual((0, 1), ids)
+            self.assertEqual( [[-1.8333333333299999, -1.93333333333], [2.2999999999999998, 2.2999999999999998]], [a.tolist() for a in arrays])
 #    def test_cluster(self):
 #        mrArgs = '-r inline'
 #        if os.uname()[1]=='spock':mrArgs = '-r hadoop'
