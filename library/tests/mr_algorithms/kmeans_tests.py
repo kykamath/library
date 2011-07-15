@@ -3,7 +3,7 @@ Created on Jul 14, 2011
 
 @author: kykamath
 '''
-import sys
+import sys, os
 sys.path.append('../../')
 import unittest
 from library.file_io import FileIO
@@ -61,10 +61,12 @@ class KMeansTests(unittest.TestCase):
             self.assertEqual((0, 1), ids)
             self.assertEqual( [[-1.8333333333299999, -1.93333333333], [2.2999999999999998, 2.2999999999999998]], [a.tolist() for a in arrays])
     def test_cluster(self):
+        mrArgs = '-r inline'
+        if os.uname()[1]=='spock':mrArgs = '-r hadoop'
         self.assertEqual([(0, [2, 3, 6]), (1, [0, 1, 4, 5, 7])], 
                          list(KMeans.cluster(fileName, 
                                              initialClusters=[np.array([-3.0, -3.0]), np.array([3.0, 3.0])], 
-                                             mrArgs='-r inline',
+                                             mrArgs=mrArgs,
                                              iterations=5)))
 
 class StringToArrayProtocolTests(unittest.TestCase):
