@@ -18,9 +18,9 @@ class StringToArrayProtocol(HadoopStreamingProtocol):
     @classmethod
     def write(cls, key, value):
         return cjson.encode({'id':key, 'vector': value.tolist()})
+    
 
 class KMeansVariables:
-#    CLUSTERS=None
     @staticmethod
     def write(data):
         with open(clusters_file, 'w') as f: f.write(data+'\n')
@@ -40,14 +40,12 @@ class KMeansMRJob(MRJob):
     DEFAULT_PROTOCOL = 'string_to_array'
     def configure_options(self):
         super(KMeansMRJob, self).configure_options()
-#        self.add_passthrough_option( '--clusters', dest='clusters', default=KMeansVariables.CLUSTERS, help='provide initial clusters')
         self.add_file_option( '--clusters', dest='clusters', default=clusters_file, help='provide initial clusters file')
         
     def load_options(self, args):
         """Parse stop_words option."""
         super(KMeansMRJob, self).load_options(args)
         data = open(self.options.clusters).readlines()[0].strip()
-#        self.clusters = np.array(cjson.decode(self.options.clusters)['clusters'])
         self.clusters = np.array(cjson.decode(data)['clusters'])
     
     @classmethod
