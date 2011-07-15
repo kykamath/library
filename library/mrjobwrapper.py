@@ -4,7 +4,6 @@ Created on Jul 14, 2011
 @author: kykamath
 '''
 import sys
-from mrjob.job import MRJob
 from mrjob.conf import dump_mrjob_conf
 
 class WritableObject:
@@ -13,25 +12,26 @@ class WritableObject:
     def write(self, string):
         self.content.append(string)
 
-class MRJobWrapper(MRJob):
+class MRJobWrapper():
     '''
     A wrapper for MRJob. This defines some methods that I
     will be using regularly.
     '''
-    def __init__(self, *args, **kwargs): super(MRJobWrapper, self).__init__(*args, **kwargs)
     def runJob(self, inputFileList):
-        self.args = inputFileList
-        with self.make_runner() as runner:
+        self.mrjob.args = inputFileList
+        with self.mrjob.make_runner() as runner:
             runner.run()
-            for line in runner.stream_output(): yield self.parse_output_line(line)
+            for line in runner.stream_output(): yield self.mrjob.parse_output_line(line)
     def runMapper(self, inputFileList):
-        self.args = inputFileList
-        reader = self.protocols()[self.DEFAULT_OUTPUT_PROTOCOL or self.DEFAULT_PROTOCOL]
+        self.mrjob.args = inputFileList
+        reader = self.mrjob.protocols()[self.mrjob.DEFAULT_OUTPUT_PROTOCOL or self.mrjob.DEFAULT_PROTOCOL]
         mapperOutput = WritableObject()
-        self.stdout = mapperOutput
-        self.run_mapper()
+        self.mrjob.stdout = mapperOutput
+        self.mrjob.run_mapper()
         sys.stdout = sys.__stdout__ 
         for i in filter (lambda a: a != '\n', mapperOutput.content): yield reader.read(i)
+    def mapper(self, key, value): return self.mrjob.mapper(key, value)
+    def reducer(self, key, values): return self.mrjob.reducer(key, values)
         
 def  updateMRJobConf():
     conf = {'runners':{
