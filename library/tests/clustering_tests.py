@@ -6,7 +6,8 @@ Created on Jun 21, 2011
 import sys
 sys.path.append('../')
 import unittest
-from clustering import EvaluationMetrics, EMTextClustering, KMeansClustering
+from clustering import EvaluationMetrics, EMTextClustering, KMeansClustering,\
+    MRKmeansClustering, Clustering
 
 class EvaluationMetricsTests(unittest.TestCase):
     def setUp(self):
@@ -21,23 +22,21 @@ class EvaluationMetricsTests(unittest.TestCase):
     def test_getNMIForPerfectClusters(self): self.assertEqual(1.0, EvaluationMetrics.getValueForClusters([[1,1], [1,1], [1,1]], EvaluationMetrics.nmi))
     def test_getF1ForClusters(self): print EvaluationMetrics.getValueForClusters(self.clusters, EvaluationMetrics.f1)
     
-#class ClusteringTests(unittest.TestCase):
-#    def test_emClustering(self):
-#        documents = [
-#                     (1, 'a b c d f g'),
-#                     (2, 'a b c d t h'),
-#                     (3, '1 2 3 4 5'),
-#                     (4, '1 2 3 ')
-#                     ]
-#        print EMTextClustering(documents,2).cluster()
-#    def test_kmeansClustering(self):
-#        documents = [
-#                     (1, 'a b c d f g'),
-#                     (2, 'a b c d t h'),
-#                     (3, '1 2 3 4 5'),
-#                     (4, '1 2 3 ')
-#                     ]
-#        clusters = KMeansClustering(documents,2).cluster()
-#        self.assertTrue(clusters[0]==clusters[1] and clusters[2]==clusters[3])
+class ClusteringTests(unittest.TestCase):
+    def setUp(self):
+        self.documents = [
+                     (1, 'a b c d f g'),
+                     (2, 'a b c d t h'),
+                     (3, '1 2 3 4 5'),
+                     (4, '1 2 3 ')
+                     ]
+    def test_emClustering(self):
+        print EMTextClustering(self.documents,2).cluster()
+    def test_kmeansClustering(self):
+        clusters = KMeansClustering(self.documents,2).cluster()
+        self.assertTrue(clusters[0]==clusters[1] and clusters[2]==clusters[3])
+    def test_dumpDocumentVectorsToFile(self):
+        clusters = MRKmeansClustering(self.documents, 2).cluster()
+        
 if __name__ == '__main__':
     unittest.main()

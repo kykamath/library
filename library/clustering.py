@@ -13,6 +13,7 @@ from operator import itemgetter
 from classes import TwoWayMap
 from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
+from library.file_io import FileIO
 
 class EvaluationMetrics:
     '''
@@ -148,11 +149,14 @@ class Clustering(object):
         dimensions = TwoWayMap()
         for docId, document in self.documents:
             for w in document.split(): 
-                if not dimensions.contains(EMTextClustering.PHRASE_TO_DIMENSION, w): dimensions.set(EMTextClustering.PHRASE_TO_DIMENSION, w, len(dimensions))
+                if not dimensions.contains(Clustering.PHRASE_TO_DIMENSION, w): dimensions.set(Clustering.PHRASE_TO_DIMENSION, w, len(dimensions))
         for docId, document in self.documents:
             vector = zeros(len(dimensions))
-            for w in document.split(): vector[dimensions.get(EMTextClustering.PHRASE_TO_DIMENSION, w)]+=1 
+            for w in document.split(): vector[dimensions.get(Clustering.PHRASE_TO_DIMENSION, w)]+=1 
             self.vectors.append(vector)
+    def dumpDocumentVectorsToFile(self, fileName):
+        for document, vector in zip(self.documents, self.vectors):
+            FileIO.writeToFileAsJson({'id': document[0], 'vector': vector.tolist()}, fileName)
     
 class EMTextClustering(Clustering):
     def cluster(self):
@@ -164,4 +168,7 @@ class KMeansClustering(Clustering):
     def cluster(self, **kwargs):
         clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance, **kwargs)
         return clusterer.cluster(self.vectors, True)
-    
+
+class MRKmeansClustering(Clustering):
+    def cluster(self, **kwargs):
+        print self.vectors
