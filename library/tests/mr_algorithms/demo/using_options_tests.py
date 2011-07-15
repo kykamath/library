@@ -4,9 +4,9 @@ Created on Jul 14, 2011
 @author: kykamath
 '''
 import sys
-from mr_algorithms.demo.using_options import UsingOptions
 sys.path.append('../../../')
 import unittest
+from mr_algorithms.demo.using_options import UsingOptions
 
 testString='Sachin Tendulkar is one century away from reaching 100 international'
 log1 = '../../../data/log1'
