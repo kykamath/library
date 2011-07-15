@@ -21,11 +21,13 @@ class MRJobWrapper(MRJob):
     def _setOptions(self):
         self.options.python_archives = ['/'.join(__file__.split('/')[:-2])+'/dist/my_library-1.0.tar.gz']
     def runJob(self, inputFileList):
+        self._setOptions()
         self.args = inputFileList
         with self.make_runner() as runner:
             runner.run()
             for line in runner.stream_output(): yield self.parse_output_line(line)
     def runMapper(self, inputFileList):
+        self._setOptions()
         self.args = inputFileList
         reader = self.protocols()[self.DEFAULT_OUTPUT_PROTOCOL or self.DEFAULT_PROTOCOL]
         mapperOutput = WritableObject()
