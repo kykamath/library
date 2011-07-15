@@ -3,8 +3,8 @@ Created on Jul 15, 2011
 
 @author: kykamath
 '''
-import sys, cjson
-sys.path.append('../../')
+import sys, cjson, os
+sys.path.append('/'.join(os.path.abspath( __file__ ).split('/')[:-2]))
 from mrjobwrapper import MRJobWrapper
 from mr_algorithms.kmeans_mr import KMeansMRJob, KMeansVariables
 from file_io import FileIO
@@ -29,3 +29,4 @@ class KMeans(MRJobWrapper):
         clustering = zip(*(KMeans(args=mrArgs.split()).runMapper(inputFileList=[fileName])))[0]
         documentClustering = [(clusterId, data['id'])for clusterId, data in zip(clustering, FileIO.iterateJsonFromFile(fileName))]
         for k, v in groupby(sorted(documentClustering, key=itemgetter(0)), key=itemgetter(0)): yield k, [i[1] for i in v]
+        
