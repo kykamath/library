@@ -20,6 +20,5 @@ class MRJobWrapperTests(unittest.TestCase):
     def test_runJob(self): 
         self.assertEqual([(w+self.wordCount.options.val1,1)for w in sorted(testString.split())], list(self.wordCount.runJob(inputFileList=[log1])))
 
-
 if __name__ == '__main__':
     unittest.main()

@@ -9,8 +9,7 @@ class MRJobWrapper(MRJob):
     A wrapper for MRJob. This defines some methods that I
     will be using regularly.
     '''
-    def __init__(self, *args, **kwargs):
-        super(MRJobWrapper, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs): super(MRJobWrapper, self).__init__(*args, **kwargs)
     def runJob(self, inputFileList):
         self.args = inputFileList
         with self.make_runner() as runner:
