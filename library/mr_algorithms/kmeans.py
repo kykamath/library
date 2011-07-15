@@ -115,8 +115,6 @@ class KMeans(MRJobWrapper):
     
     @staticmethod
     def cluster(fileName, initialClusters, mrArgs = '-r hadoop', iterations=5):
-        print getClustersJSONFromArrayList(initialClusters)
-        exit()
         KMeansVariables.CLUSTERS=getClustersJSONFromArrayList(initialClusters)
         for i in range(iterations): 
             print 'Iteration: ', i
