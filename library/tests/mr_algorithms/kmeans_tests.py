@@ -46,7 +46,6 @@ class KMeansTests(unittest.TestCase):
                     (1, np.array([9., 9., 1.])),
                     (1, np.array([8., 8., 1.]))]
         def tolist(s): return [(x[0], x[1].tolist()) for x in s]
-        print dir(self.kmeans)
         self.assertEqual(tolist(test_out), tolist([list(self.kmeans.mapper(k,v))[0] for k,v in test_in]))
     def test_reducer(self): 
         test_in = [
@@ -62,14 +61,14 @@ class KMeansTests(unittest.TestCase):
             ids, arrays = zip(*list(object.runJob(inputFileList=[fileName])))
             self.assertEqual((0, 1), ids)
             self.assertEqual( [[-1.8333333333299999, -1.93333333333], [2.2999999999999998, 2.2999999999999998]], [a.tolist() for a in arrays])
-#    def test_cluster(self):
-#        mrArgs = '-r inline'
-#        if os.uname()[1]=='spock':mrArgs = '-r hadoop'
-#        self.assertEqual([(0, [2, 3, 6]), (1, [0, 1, 4, 5, 7])], 
-#                         list(KMeans.cluster(fileName, 
-#                                             initialClusters=[np.array([-3.0, -3.0]), np.array([3.0, 3.0])], 
-#                                             mrArgs=mrArgs,
-#                                             iterations=5)))
+    def test_cluster(self):
+        mrArgs = '-r inline'
+        if os.uname()[1]=='spock':mrArgs = '-r hadoop'
+        self.assertEqual([(0, [2, 3, 6]), (1, [0, 1, 4, 5, 7])], 
+                         list(KMeans.cluster(fileName, 
+                                             initialClusters=[np.array([-3.0, -3.0]), np.array([3.0, 3.0])], 
+                                             mrArgs=mrArgs,
+                                             iterations=5)))
 
 class StringToArrayProtocolTests(unittest.TestCase):
     def test_read(self):
