@@ -8,7 +8,7 @@ from mrjob.job import MRJob
 from mrjob.protocol import HadoopStreamingProtocol
 import numpy as np
 
-clusters_file = 'clusters'
+clusters_file = '/tmp/clusters'
 
 class StringToArrayProtocol(HadoopStreamingProtocol):
     @classmethod
