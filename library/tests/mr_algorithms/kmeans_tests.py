@@ -6,9 +6,9 @@ Created on Jul 14, 2011
 import sys, os
 sys.path.append('../../')
 import unittest
-from library.file_io import FileIO
+from file_io import FileIO
 import numpy as np
-from mr_algorithms.kmeans_mr import KMeansVariables, StringToArrayProtocol
+from mr_algorithms.kmeans_mr import StringToArrayProtocol
 from mr_algorithms.kmeans import KMeans
 
 fileName = '../../data/kmeans'
@@ -26,8 +26,7 @@ def create_input_file():
     
 class KMeansTests(unittest.TestCase):
     def setUp(self): 
-        KMeansVariables.CLUSTERS='{"clusters": [[-1.0, -1.0], [1.0, 1.0]]}'
-        self.kmeans = KMeans(args='-r inline'.split())
+        self.kmeans = KMeans(args='-r local'.split())
     def test_mapper(self): 
         test_in = [(0, np.array([2., 2.])),
                    (1, np.array([1., 1.])),
