@@ -4,13 +4,20 @@ Created on Jul 14, 2011
 @author: kykamath
 '''
 import sys
-from mrjob.inline import InlineMRJobRunner
 sys.path.append('../')
 from mrjobwrapper import MRJobWrapper
 from mrjob.protocol import HadoopStreamingProtocol
+from library.file_io import FileIO
 import cjson
 import numpy as np
+from itertools import groupby
+from operator import itemgetter
 
+def getClustersJSONFromArrayList(arrays):
+    lists = []
+    for a in arrays:lists.append(a.tolist())
+    return cjson.encode({'clusters': lists})
+        
 class StringToArrayProtocol(HadoopStreamingProtocol):
     @classmethod
     def read(cls, line): 
@@ -25,11 +32,10 @@ class KMeansVariables:
 
 class KMeans(MRJobWrapper):
     
-#    def steps(self):
-#        return [
-#                self.mr(self.mapper, self.reducer),
-#                ]
-    
+    def steps(self):
+        return [
+                self.mr(self.mapper, self.reducer),
+                ]
     '''
     A MR implementation for kMeans.
     This is a port of hadoop_vision/kmeans code written for hadoopy by Brandyn White (http://brandynwhite.com/).
@@ -106,6 +112,16 @@ class KMeans(MRJobWrapper):
     
     def _compute_centroid(self, s):
         return s[0:-1] / s[-1]
+    
+    @staticmethod
+    def cluster(fileName, initialClusters, mrArgs = '-r hadoop', iterations=5):
+        KMeansVariables.CLUSTERS=getClustersJSONFromArrayList(initialClusters)
+        for i in range(iterations): 
+            print 'Iteration: ', i
+            KMeansVariables.CLUSTERS=getClustersJSONFromArrayList([a[1] for a in KMeans(args=mrArgs.split()).runJob(inputFileList=[fileName])])
+        clustering = zip(*(KMeans(args=mrArgs.split()).runMapper(inputFileList=[fileName])))[0]
+        documentClustering = [(clusterId, data['id'])for clusterId, data in zip(clustering, FileIO.iterateJsonFromFile(fileName))]
+        for k, v in groupby(sorted(documentClustering, key=itemgetter(0)), key=itemgetter(0)): yield k, [i[1] for i in v]
     
 if __name__ == '__main__':
     KMeans.run()

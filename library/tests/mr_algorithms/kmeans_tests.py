@@ -17,10 +17,10 @@ def create_input_file():
                    (1, [1., 1.]),
                    (2, [-1., -1.]),
                    (3, [-2., -2.]),
-                   (4, [12., 12.]),
-                   (5, [11., 11.]),
-                   (6, [9., 9.]),
-                   (7, [8., 8.])]
+                   (4, [3., 3.]),
+                   (5, [3.5, 3.5]),
+                   (6, [-2.5, -2.8]),
+                   (7, [2., 2.])]
     for id, vector in test_in: FileIO.writeToFileAsJson({'id': id, 'vector': vector}, fileName)
     
 class KMeansTests(unittest.TestCase):
@@ -46,7 +46,6 @@ class KMeansTests(unittest.TestCase):
                     (1, np.array([8., 8., 1.]))]
         def tolist(s): return [(x[0], x[1].tolist()) for x in s]
         self.assertEqual(tolist(test_out), tolist([list(self.kmeans.mapper(k,v))[0] for k,v in test_in]))
-            
     def test_reducer(self): 
         test_in = [
                    (0, [np.array([2., 2., 1.]), np.array([1., 1., 1.]), np.array([-1., -1., 1.]),  np.array([-2., -2., 1.])]),
@@ -56,12 +55,17 @@ class KMeansTests(unittest.TestCase):
                     (1, np.array([10., 10.]))]
         def tolist(s): return [(x[0], x[1].tolist()) for x in s]
         self.assertEqual(tolist(test_out), tolist([list(self.kmeans.reducer(k,v))[0] for k,v in test_in]))
-        
     def test_runJob(self): 
         for object in [self.kmeans, KMeans()]:
             ids, arrays = zip(*list(object.runJob(inputFileList=[fileName])))
             self.assertEqual((0, 1), ids)
-            self.assertEqual( [[-1.5, -1.5], [7.1666666666700003, 7.1666666666700003]], [a.tolist() for a in arrays])
+            self.assertEqual( [[-1.8333333333299999, -1.93333333333], [2.2999999999999998, 2.2999999999999998]], [a.tolist() for a in arrays])
+    def test_cluster(self):
+        self.assertEqual([(0, [2, 3, 6]), (1, [0, 1, 4, 5, 7])], 
+                         list(KMeans.cluster(fileName, 
+                                             initialClusters=[np.array([-3.0, -3.0]), np.array([3.0, 3.0])], 
+                                             mrArgs='-r inline',
+                                             iterations=5)))
 
 class StringToArrayProtocolTests(unittest.TestCase):
     def test_read(self):
@@ -69,12 +73,6 @@ class StringToArrayProtocolTests(unittest.TestCase):
         self.assertEqual(0, id), self.assertEqual([2.0,2.0], ar.tolist())
     def test_write(self): self.assertEqual('{"vector": [2.0, 2.0], "id": 0}', StringToArrayProtocol.write(0, np.array([2.0,2.0])))
 
-def demo():
-    KMeansVariables.CLUSTERS='{"clusters": [[-1.0, -1.0], [1.0, 1.0]]}'
-    print list(KMeans().runJob(inputFileList=[fileName]))
-    print list(KMeans().runMapper(inputFileList=[fileName]))
-
 if __name__ == '__main__':
 #    create_input_file()
-#    unittest.main()
-    demo()
+    unittest.main()
