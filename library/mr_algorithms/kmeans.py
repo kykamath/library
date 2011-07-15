@@ -5,8 +5,8 @@ Created on Jul 14, 2011
 '''
 import sys
 sys.path.append('../')
-from mrjobwrapper import MRJobWrapper
 from mrjob.protocol import HadoopStreamingProtocol
+from library.mrjobwrapper import MRJobWrapper
 from library.file_io import FileIO
 import cjson
 import numpy as np
@@ -28,7 +28,7 @@ class StringToArrayProtocol(HadoopStreamingProtocol):
         return cjson.encode({'id':key, 'vector': value.tolist()})
 
 class KMeansVariables:
-    CLUSTERS=None
+    CLUSTERS='{"clusters": [[-3.0, -3.0], [3.0, 3.0]]}'
 
 class KMeans(MRJobWrapper):
     
@@ -115,6 +115,8 @@ class KMeans(MRJobWrapper):
     
     @staticmethod
     def cluster(fileName, initialClusters, mrArgs = '-r hadoop', iterations=5):
+        print getClustersJSONFromArrayList(initialClusters)
+        exit()
         KMeansVariables.CLUSTERS=getClustersJSONFromArrayList(initialClusters)
         for i in range(iterations): 
             print 'Iteration: ', i
