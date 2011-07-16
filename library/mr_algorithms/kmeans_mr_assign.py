@@ -50,6 +50,7 @@ class KMeansAssignMRJob(MRJob):
     def mapper(self, id, point):
         n = self._nearest_cluster_id(self.clusters, point)
         point = self._extend_point(point)
+        self.set_status('alive!')
         yield '%d:ilab:%s'%(n, id), point
         
     def _nearest_cluster_id(self, clusters, point):
@@ -63,6 +64,7 @@ class KMeansAssignMRJob(MRJob):
         return point
         
     def reducer(self, n_id, points):
+        self.set_status('alive!')
         for p in points: yield n_id, p
         
 if __name__ == '__main__':

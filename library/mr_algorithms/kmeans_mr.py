@@ -68,6 +68,7 @@ class KMeansMRJob(MRJob):
         """
         n = self._nearest_cluster_id(self.clusters, point)
         point = self._extend_point(point)
+        self.set_status('alive!')
         yield n, point
         
     def reducer(self, n, points):
@@ -82,6 +83,7 @@ class KMeansMRJob(MRJob):
             key: cluster index (int)
             value: cluster center (numpy array)
         """
+        self.set_status('alive!')
         s = 0
         for p in points:
             s += np.array(p)
