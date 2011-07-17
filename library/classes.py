@@ -5,6 +5,7 @@ Created on Jun 22, 2011
 '''
 from datetime import timedelta, datetime
 import time, random
+from collections import defaultdict
 
 def timeit(method):
     '''
@@ -61,7 +62,12 @@ class GeneralMethods:
     def getRandomColor(): return '#'+''.join(random.choice('0123456789abcdef') for i in range(6))
     @staticmethod
     def approximateToNearest5Minutes(dateTimeObject):return datetime(dateTimeObject.year, dateTimeObject.month, dateTimeObject.day, dateTimeObject.hour, 5*(dateTimeObject.minute/5))
-
+    @staticmethod
+    def getValueDistribution(map, valueFunction, *args):
+        distribution = defaultdict(int)
+        for v in map.itervalues(): distribution[valueFunction(v, *args)]+=1
+        return distribution
+        
 class TwoWayMap:
     '''
     A data strucutre that enables 2 way mapping.
