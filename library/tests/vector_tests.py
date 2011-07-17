@@ -33,6 +33,7 @@ class VectorTests(unittest.TestCase):
         v1[1]=5;v1[2]=10; v2[1]=5;v2[2]=10
         self.assertEqual(v1+v2,{1: 10, 2: 20})
         self.assertEqual(v1-v2,{1: 0, 2: 0})
+        self.assertEqual(Vector({1: 2, 2: 15, 3:5}), Vector({1:2,2:5})+Vector({2:10,3:5}))
         v3=Vector()
         v3+=v1; v3+=v2
         self.assertEqual(v3, {1: 10, 2: 20})

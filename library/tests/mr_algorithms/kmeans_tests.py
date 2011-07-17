@@ -4,11 +4,11 @@ Created on Jul 14, 2011
 @author: kykamath
 '''
 import sys, os
-from mr_algorithms.kmeans_mr_assign import KMeansAssignMRJob
 sys.path.append('../../')
 import unittest
 from file_io import FileIO
 import numpy as np
+from mr_algorithms.kmeans_mr_assign import KMeansAssignMRJob
 from mr_algorithms.kmeans_mr import StringToArrayProtocol, KMeansVariables
 from mr_algorithms.kmeans import KMeans
 
