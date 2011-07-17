@@ -6,6 +6,7 @@ Created on Jul 14, 2011
 import sys, cjson
 from mrjob.conf import dump_mrjob_conf, combine_dicts
 from mrjob.protocol import HadoopStreamingProtocol
+from mrjob.job import MRJob
 
 class WritableObject:
     def __init__(self):
@@ -43,6 +44,13 @@ def  updateMRJobConf():
                 }
             }
     with open('/Users/kykamath/.mrjob', 'w') as f: dump_mrjob_conf(conf, f)
+    
+class ModifiedMRJob(MRJob):
+    @classmethod
+    def protocols(cls):
+        protocol_dict = super(ModifiedMRJob, cls).protocols()
+        protocol_dict[CJSONValueProtocol.ID] = CJSONValueProtocol
+        return protocol_dict
     
 class CJSONValueProtocol(HadoopStreamingProtocol):
     """A cjson wrapper for CJSONValueProtocol.
