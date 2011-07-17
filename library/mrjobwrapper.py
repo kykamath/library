@@ -63,7 +63,7 @@ class ModifiedMRJob(MRJob):
         protocol_dict = super(ModifiedMRJob, cls).protocols()
         protocol_dict[CJSONValueProtocol.ID] = CJSONValueProtocol
         return protocol_dict
-    @classmethod
-    def run(cls):
-        MRJob.run(cls)
+#    @classmethod
+#    def run(cls):
+#        MRJob.run(cls)
     
