@@ -46,6 +46,7 @@ def  updateMRJobConf():
     with open('/Users/kykamath/.mrjob', 'w') as f: dump_mrjob_conf(conf, f)
     
 class ModifiedMRJob(MRJob):
+    DEFAULT_INPUT_PROTOCOL=CJSONValueProtocol.ID
     @classmethod
     def protocols(cls):
         protocol_dict = super(ModifiedMRJob, cls).protocols()
