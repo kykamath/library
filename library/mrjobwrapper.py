@@ -45,20 +45,20 @@ def  updateMRJobConf():
             }
     with open('/Users/kykamath/.mrjob', 'w') as f: dump_mrjob_conf(conf, f)
    
-class CJSONValueProtocol(HadoopStreamingProtocol):
-    """A cjson wrapper for CJSONValueProtocol.
+class CJSONProtocol(HadoopStreamingProtocol):
+    """A cjson wrapper for CJSONProtocol.
     """
-    ID = 'cjson_value'
+    ID = 'cjson'
     @classmethod
-    def read(cls, line): return (None, cjson.decode(line))
+    def read(cls, line):
+        key, value = line.split('\t')
+        return cjson.decode(key), cjson.decode(value)
     @classmethod
-    def write(cls, key, value): return cjson.encode(value)
+    def write(cls, key, value): return '%s\t%s' % (cjson.encode(key), cjson.encode(value))
     
 class ModifiedMRJob(MRJob):
-    DEFAULT_INPUT_PROTOCOL=CJSONValueProtocol.ID
-    DEFAULT_PROTOCOL=CJSONValueProtocol.ID
-#    def __init__(self, *args, **kwargs):
-#        MRJob.__init__(self, *args, **kwargs)
+    DEFAULT_INPUT_PROTOCOL=CJSONProtocol.ID
+    DEFAULT_PROTOCOL=CJSONProtocol.ID
     def _setOptions(self, **kwargs):
         self.args = kwargs.get('inputFileList', self.args)
         self.options.jobconf = combine_dicts(self.options.jobconf, kwargs.get('jobconf', self.options.jobconf))
@@ -70,6 +70,6 @@ class ModifiedMRJob(MRJob):
     @classmethod
     def protocols(cls):
         protocol_dict = super(ModifiedMRJob, cls).protocols()
-        protocol_dict[CJSONValueProtocol.ID] = CJSONValueProtocol
+        protocol_dict[CJSONProtocol.ID] = CJSONProtocol
         return protocol_dict
     
