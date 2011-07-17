@@ -56,6 +56,7 @@ class CJSONValueProtocol(HadoopStreamingProtocol):
     
 class ModifiedMRJob(MRJob):
     DEFAULT_INPUT_PROTOCOL=CJSONValueProtocol.ID
+    DEFAULT_PROTOCOL=CJSONValueProtocol.ID
     def __init__(self, *args, **kwargs):
         MRJob.__init__(self, *args, **kwargs)
     @classmethod
@@ -63,7 +64,4 @@ class ModifiedMRJob(MRJob):
         protocol_dict = super(ModifiedMRJob, cls).protocols()
         protocol_dict[CJSONValueProtocol.ID] = CJSONValueProtocol
         return protocol_dict
-#    @classmethod
-#    def run(cls):
-#        MRJob.run(cls)
     
