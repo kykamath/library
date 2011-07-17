@@ -44,6 +44,15 @@ def  updateMRJobConf():
                 }
             }
     with open('/Users/kykamath/.mrjob', 'w') as f: dump_mrjob_conf(conf, f)
+   
+class CJSONValueProtocol(HadoopStreamingProtocol):
+    """A cjson wrapper for CJSONValueProtocol.
+    """
+    ID = 'cjson_value'
+    @classmethod
+    def read(cls, line): return (None, cjson.decode(line))
+    @classmethod
+    def write(cls, key, value): return cjson.encode(value)
     
 class ModifiedMRJob(MRJob):
     DEFAULT_INPUT_PROTOCOL=CJSONValueProtocol.ID
@@ -53,11 +62,3 @@ class ModifiedMRJob(MRJob):
         protocol_dict[CJSONValueProtocol.ID] = CJSONValueProtocol
         return protocol_dict
     
-class CJSONValueProtocol(HadoopStreamingProtocol):
-    """A cjson wrapper for CJSONValueProtocol.
-    """
-    ID = 'cjson_value'
-    @classmethod
-    def read(cls, line): return (None, cjson.decode(line))
-    @classmethod
-    def write(cls, key, value): return cjson.encode(value)
