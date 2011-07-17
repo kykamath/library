@@ -57,8 +57,16 @@ class CJSONValueProtocol(HadoopStreamingProtocol):
 class ModifiedMRJob(MRJob):
     DEFAULT_INPUT_PROTOCOL=CJSONValueProtocol.ID
     DEFAULT_PROTOCOL=CJSONValueProtocol.ID
-    def __init__(self, *args, **kwargs):
-        MRJob.__init__(self, *args, **kwargs)
+#    def __init__(self, *args, **kwargs):
+#        MRJob.__init__(self, *args, **kwargs)
+    def _setOptions(self, **kwargs):
+        self.args = kwargs.get('inputFileList', self.args)
+        self.options.jobconf = combine_dicts(self.options.jobconf, kwargs.get('jobconf', self.options.jobconf))
+    def runJob(self, **kwargs):
+        self._setOptions(**kwargs)
+        with self.make_runner() as runner:
+            runner.run()
+            for line in runner.stream_output(): yield self.parse_output_line(line)
     @classmethod
     def protocols(cls):
         protocol_dict = super(ModifiedMRJob, cls).protocols()
