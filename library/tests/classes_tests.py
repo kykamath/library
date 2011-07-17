@@ -45,7 +45,7 @@ class GeneralMethodsTests(unittest.TestCase):
         method(), dummy.test()
     def test_getValueDistribution(self):
         map = {'a': [1,2,3], 'b': [3], 'c': [4]}
-        self.assertEqual({1: 2, 3: 1}, GeneralMethods.getValueDistribution(map, len))
+        self.assertEqual({1: 2, 3: 1}, GeneralMethods.getValueDistribution(map.itervalues(), len))
     
 class TwoWayDictTests(unittest.TestCase):
     def setUp(self):

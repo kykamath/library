@@ -63,9 +63,9 @@ class GeneralMethods:
     @staticmethod
     def approximateToNearest5Minutes(dateTimeObject):return datetime(dateTimeObject.year, dateTimeObject.month, dateTimeObject.day, dateTimeObject.hour, 5*(dateTimeObject.minute/5))
     @staticmethod
-    def getValueDistribution(map, valueFunction, *args):
+    def getValueDistribution(itemList, valueFunction, *args):
         distribution = defaultdict(int)
-        for v in map.itervalues(): distribution[valueFunction(v, *args)]+=1
+        for v in itemList: distribution[valueFunction(v, *args)]+=1
         return distribution
         
 class TwoWayMap:
