@@ -3,8 +3,9 @@ Created on Jul 14, 2011
 
 @author: kykamath
 '''
-import sys
+import sys, cjson
 from mrjob.conf import dump_mrjob_conf, combine_dicts
+from mrjob.protocol import HadoopStreamingProtocol
 
 class WritableObject:
     def __init__(self):
@@ -42,3 +43,12 @@ def  updateMRJobConf():
                 }
             }
     with open('/Users/kykamath/.mrjob', 'w') as f: dump_mrjob_conf(conf, f)
+    
+class CJSONValueProtocol(HadoopStreamingProtocol):
+    """A cjson wrapper for CJSONValueProtocol.
+    """
+    ID = 'cjson_value'
+    @classmethod
+    def read(cls, line): return (None, cjson.decode(line))
+    @classmethod
+    def write(cls, key, value): return cjson.encode(value)
