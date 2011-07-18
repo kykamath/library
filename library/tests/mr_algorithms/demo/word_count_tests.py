@@ -3,11 +3,10 @@ Created on Jul 14, 2011
 
 @author: kykamath
 '''
-import sys
+import sys, unittest
+sys.path.append('../../../')
 from mr_algorithms.demo.word_count import WordCountMRJob
 from mrjobwrapper import CJSONProtocol
-sys.path.append('../../../')
-import unittest
 
 test_document='Sachin Tendulkar is one century away from reaching 100 international'
 log1 = '../../../data/log1'
