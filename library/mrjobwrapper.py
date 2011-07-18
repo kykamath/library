@@ -67,6 +67,14 @@ class ModifiedMRJob(MRJob):
         with self.make_runner() as runner:
             runner.run()
             for line in runner.stream_output(): yield self.parse_output_line(line)
+    def runMapper(self, **kwargs):
+        self._setOptions(**kwargs)
+        reader = self.protocols()[self.DEFAULT_OUTPUT_PROTOCOL or self.DEFAULT_PROTOCOL]
+        mapperOutput = WritableObject()
+        self.stdout = mapperOutput
+        self.run_mapper()
+        sys.stdout = sys.__stdout__ 
+        for i in filter (lambda a: a != '\n', mapperOutput.content): yield reader.read(i)
     @classmethod
     def protocols(cls):
         protocol_dict = super(ModifiedMRJob, cls).protocols()

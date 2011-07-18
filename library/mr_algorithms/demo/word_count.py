@@ -1,13 +1,13 @@
 '''
-Created on Jul 15, 2011
+Created on Jul 14, 2011
 
 @author: kykamath
 '''
-import sys
-sys.path.append('../../')
-from mr_algorithms.demo.word_count_mr import WordCountMRJob
-from mrjobwrapper import MRJobWrapper
-
-class WordCount(MRJobWrapper):
-    def __init__(self, args):
-        self.mrjob = WordCountMRJob(args=args)
+from mrjobwrapper import ModifiedMRJob
+class WordCountMRJob(ModifiedMRJob):
+    def mapper(self, key, value):
+        for word in value.split(): yield word, 1
+    def reducer(self, key, values): yield key, sum(values)
+    
+if __name__ == '__main__':
+    WordCountMRJob.run()
