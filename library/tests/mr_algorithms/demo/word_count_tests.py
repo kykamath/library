@@ -4,7 +4,7 @@ Created on Jul 14, 2011
 @author: kykamath
 '''
 import sys
-from mr_algorithms.demo.word_count_mr import WordCountMRJob
+from mr_algorithms.demo.word_count import WordCountMRJob
 from mrjobwrapper import CJSONProtocol
 sys.path.append('../../../')
 import unittest
