@@ -2,6 +2,9 @@
 Created on Jul 14, 2011
 
 @author: kykamath
+
+A wrapper for mrjob module. This defines some methods and classes
+that I will be using regularly.
 '''
 import sys, cjson
 from mrjob.conf import dump_mrjob_conf, combine_dicts
@@ -15,9 +18,7 @@ class WritableObject:
         self.content.append(string)
 
 class MRJobWrapper():
-    '''
-    A wrapper for MRJob. This defines some methods that I
-    will be using regularly.
+    ''' MARKED FOR REMOVAL. DO NOT USE THIS.
     '''
     def _setOptions(self, **kwargs):
         self.mrjob.args = kwargs.get('inputFileList', self.mrjob.args)
