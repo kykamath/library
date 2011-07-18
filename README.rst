@@ -5,7 +5,7 @@ A collection of modules used by different projects.
 
 Dependancies
 ============
-* `Python-cjson (Dependent module: Multiple modules) <http://pypi.python.org/pypi/python-cjson>`_
+* `Python-cjson <http://pypi.python.org/pypi/python-cjson>`_ - Better install this. Multiple modules use this.
 * `mrjob (Dependent module: mrjobwrapper) <http://packages.python.org/mrjob/>`_
 * `Natural Language Toolkit (Dependent module: nlp) <http://www.nltk.org/>`_
 * `PyEnchant (Dependent module: nlp) <http://www.rfk.id.au/software/pyenchant/>`_
