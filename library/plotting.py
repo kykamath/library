@@ -60,4 +60,8 @@ def getCumulativeDistribution(probabilityDistribution):
     cumulativeDistribution, cumulative_value = [], 0
     for v in probabilityDistribution: cumulativeDistribution.append(cumulative_value+v); cumulative_value+=v
     return cumulativeDistribution
-    
+
+def getInverseCumulativeDistribution(probabilityDistribution):
+    cumulativeDistribution, cumulative_value = [], 1
+    for v in probabilityDistribution: cumulativeDistribution.append(cumulative_value); cumulative_value-=v
+    return cumulativeDistribution    

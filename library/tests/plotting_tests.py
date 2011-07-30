@@ -5,7 +5,8 @@ Created on Jul 5, 2011
 '''
 import unittest
 import scipy
-from plotting import CurveFit, getCumulativeDistribution
+from plotting import CurveFit, getCumulativeDistribution,\
+    getInverseCumulativeDistribution
 
 class CurveFitTests(unittest.TestCase):
     def test_curveFitdemo(self):
@@ -27,6 +28,9 @@ class GlobalMethodTests(unittest.TestCase):
         pd = [0.5,0.25, 0.1, 0.1, 0.05]
         cd = [0.5,0.75,0.85,0.95,1.0]
         self.assertEqual(cd,getCumulativeDistribution(pd))
-
+    def test_getInverseCumulativeDistribution(self):
+        pd = [0.5,0.25, 0.1, 0.1, 0.05]
+        cd = [1, 0.5, 0.25, 0.14999999999999999, 0.049999999999999989]
+        self.assertEqual(cd,getInverseCumulativeDistribution(pd))
 if __name__ == '__main__':
     unittest.main()
