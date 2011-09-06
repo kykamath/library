@@ -14,7 +14,8 @@ testGraph = graph2
 
 class ClusteringTests(unittest.TestCase):
     def test_clusterUsingMincutTrees(self):
-        print clusterUsingMincutTrees(graph, alpha=3)
+        print clusterUsingMincutTrees(graph2, alpha=12.5)
+        print clusterUsingMincutTrees(graph, alpha=3.6)
 
 if __name__ == '__main__':
     unittest.main()

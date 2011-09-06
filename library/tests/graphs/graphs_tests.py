@@ -28,6 +28,23 @@ graph2.add_edge(1, 2, capacity=10)
 graph2.add_edge(2, 3, capacity=13)
 graph2.add_edge(3, 1, capacity=12)
 
+graph3 = nx.Graph()
+graph3.add_edge(1, 2, capacity=10)
+graph3.add_edge(1, 3, capacity=10)
+graph3.add_edge(2, 4, capacity=10)
+graph3.add_edge(3, 4, capacity=10)
+graph3.add_edge(3, 5, capacity=1)
+graph3.add_edge(3, 6, capacity=1)
+graph3.add_edge(5, 6, capacity=10)
+graph3.add_edge(7, 6, capacity=1)
+graph3.add_edge(8, 6, capacity=1)
+graph3.add_edge(7, 8, capacity=10)
+
+
+#plot(graph3, draw_edge_labels=True)
+print getMincutTree(graph3)
+exit()
+
 class GraphTests(unittest.TestCase):
 #    def setUp(self):
 #    def test_plot(self):
@@ -35,11 +52,12 @@ class GraphTests(unittest.TestCase):
 #        plot(nx.star_graph(20), draw_edge_labels=True, node_color='#A0CBE2',edge_color=colors,width=4,edge_cmap=plt.cm.Blues,with_labels=False)
     def test_getMincutTree(self):
         mincutTree = getMincutTree(graph)
-#        plot(mincutTree, draw_edge_labels=True)
-#        plot(graph, draw_edge_labels=True)
-#        self.assertEqual([1, 2, 3, 4, 5, 6], mincutTree.nodes())
-#        self.assertEqual([(1, 2, {'capacity': 18}), (2, 6, {'capacity': 17}), (3, 5, {'capacity': 15}), (4, 5, {'capacity': 14}), (5, 6, {'capacity': 13})], mincutTree.edges(data=True))
-#        plot(getMincutTree(graph), draw_edge_labels=True)
+        self.assertEqual([1, 2, 3, 4, 5, 6], mincutTree.nodes())
+        self.assertEqual([(1, 2, {'capacity': 18}), (2, 6, {'capacity': 17}), (3, 5, {'capacity': 15}), (4, 5, {'capacity': 14}), (5, 6, {'capacity': 13})], mincutTree.edges(data=True))
+        mincutTree = getMincutTree(graph2)
+        self.assertEqual([1, 2, 3], mincutTree.nodes())
+        self.assertEqual([(1, 3, {'capacity': 22}), (2, 3, {'capacity': 23})], mincutTree.edges(data=True))
+#        plot(getMincutTree(graph3), draw_edge_labels=True)
     
 class MinCutTreeTests(unittest.TestCase):
     def setUp(self):

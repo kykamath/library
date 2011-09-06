@@ -46,19 +46,22 @@ def getMincutTree(graph, mincutMethod = ford_fulkerson):
 #        print s, t
         neigboringNodes = []
         reducedGraph = getReducedGraphForMincutTreeNode(nodeToSplit)
-        print [(n, n.vertices) for n in reducedGraph.nodes() if type(n) is CompoundNode ]
 #        a,b,c = mincutMethod(reducedGraph, s, t)
-        print s, t
+#        print s, t
+        print s, t, nodeToSplit
         mincutWeight, _, (sComponent, tComponent) = mincutMethod(reducedGraph, s, t)
         sCompoundNode = CompoundNode.getInstance(vertexId.next(), sComponent)
         tCompoundNode = CompoundNode.getInstance(vertexId.next(), tComponent)
         for componentNode in [sCompoundNode, tCompoundNode]:
+            print componentNode, componentNode.vertices
             for v in componentNode.vertices[:]: 
                 if type(v) is CompoundNode: 
                     if v in minCutTree[nodeToSplit] and minCutTree[nodeToSplit][v]: neigboringNodes.append((componentNode, v, minCutTree[nodeToSplit][v][CAPACITY]))
                     componentNode.vertices.remove(v)
             setMincutTreeNode(componentNode.vertices, componentNode)
         minCutTree.splitNode(nodeToSplit, (sCompoundNode, tCompoundNode, mincutWeight), neigboringNodes)
+        print [(n, n.vertices) for n in minCutTree.nodes() if type(n) is CompoundNode ]
+        plot(minCutTree, draw_edge_labels= True)
 #        exit()
         nodeToSplit = minCutTree.getNextNonSingletonNode()
     
