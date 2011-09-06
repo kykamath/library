@@ -3,26 +3,18 @@ Created on Sep 5, 2011
 
 @author: kykamath
 '''
+import sys
+sys.path.append('../../')
 import unittest
 import networkx as nx
-from graphs.clustering import MinCutClustering
+from graphs_tests import graph, graph2
+from graphs.clustering import clusterUsingMincutTrees
 
-class MinCutClusteringTests(unittest.TestCase):
-    def setUp(self):
-        self.graph = nx.Graph()
-        self.graph.add_edge(1, 2, capacity=10)
-        self.graph.add_edge(2, 3, capacity=4)
-        self.graph.add_edge(3, 4, capacity=5)
-        self.graph.add_edge(4, 5, capacity=7)
-        self.graph.add_edge(5, 6, capacity=3)
-        self.graph.add_edge(6, 1, capacity=8)
-        self.graph.add_edge(2, 6, capacity=3)
-        self.graph.add_edge(3, 5, capacity=4)
-        self.graph.add_edge(2, 5, capacity=2)
-        self.graph.add_edge(3, 6, capacity=2)
-        self.graph.add_edge(6, 4, capacity=2)
-    def test_cluster(self):
-        MinCutClustering.cluster(self.graph)
+testGraph = graph2
+
+class ClusteringTests(unittest.TestCase):
+    def test_clusterUsingMincutTrees(self):
+        print clusterUsingMincutTrees(graph, alpha=3)
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,32 +3,43 @@ Created on Sep 5, 2011
 
 @author: kykamath
 '''
+import sys
+sys.path.append('../../')
 import unittest
 import networkx as nx
 from graphs import plot, CompoundNode, getMincutTree, MinCutTree
 import matplotlib.pyplot as plt
 
+graph = nx.Graph()
+graph.add_edge(1, 2, capacity=10)
+graph.add_edge(2, 3, capacity=4)
+graph.add_edge(3, 4, capacity=5)
+graph.add_edge(4, 5, capacity=7)
+graph.add_edge(5, 6, capacity=3)
+graph.add_edge(6, 1, capacity=8)
+graph.add_edge(2, 6, capacity=3)
+graph.add_edge(3, 5, capacity=4)
+graph.add_edge(2, 5, capacity=2)
+graph.add_edge(3, 6, capacity=2)
+graph.add_edge(6, 4, capacity=2)
+
+graph2 = nx.Graph()
+graph2.add_edge(1, 2, capacity=10)
+graph2.add_edge(2, 3, capacity=13)
+graph2.add_edge(3, 1, capacity=12)
+
 class GraphTests(unittest.TestCase):
-    def setUp(self):
-        self.graph = nx.Graph()
-        self.graph.add_edge(1, 2, capacity=10)
-        self.graph.add_edge(2, 3, capacity=4)
-        self.graph.add_edge(3, 4, capacity=5)
-        self.graph.add_edge(4, 5, capacity=7)
-        self.graph.add_edge(5, 6, capacity=3)
-        self.graph.add_edge(6, 1, capacity=8)
-        self.graph.add_edge(2, 6, capacity=3)
-        self.graph.add_edge(3, 5, capacity=4)
-        self.graph.add_edge(2, 5, capacity=2)
-        self.graph.add_edge(3, 6, capacity=2)
-        self.graph.add_edge(6, 4, capacity=2)
+#    def setUp(self):
 #    def test_plot(self):
 #        colors=range(20)
 #        plot(nx.star_graph(20), draw_edge_labels=True, node_color='#A0CBE2',edge_color=colors,width=4,edge_cmap=plt.cm.Blues,with_labels=False)
     def test_getMincutTree(self):
-        mincutTree = getMincutTree(self.graph)
-        self.assertEqual([1, 2, 3, 4, 5, 6], mincutTree.nodes())
-        self.assertEqual([(1, 2, {'capacity': 18}), (2, 6, {'capacity': 17}), (3, 5, {'capacity': 15}), (4, 5, {'capacity': 14}), (5, 6, {'capacity': 13})], mincutTree.edges(data=True))
+        mincutTree = getMincutTree(graph)
+#        plot(mincutTree, draw_edge_labels=True)
+#        plot(graph, draw_edge_labels=True)
+#        self.assertEqual([1, 2, 3, 4, 5, 6], mincutTree.nodes())
+#        self.assertEqual([(1, 2, {'capacity': 18}), (2, 6, {'capacity': 17}), (3, 5, {'capacity': 15}), (4, 5, {'capacity': 14}), (5, 6, {'capacity': 13})], mincutTree.edges(data=True))
+#        plot(getMincutTree(graph), draw_edge_labels=True)
     
 class MinCutTreeTests(unittest.TestCase):
     def setUp(self):

@@ -40,9 +40,15 @@ def getMincutTree(graph, mincutMethod = ford_fulkerson):
     nodeToSplit = initialNode
     
     while nodeToSplit!=None:
+        print '\n\n\n'
         s, t = nodeToSplit.getRandomPairOfVertices()
+#        s, t = 6,1
+#        print s, t
         neigboringNodes = []
         reducedGraph = getReducedGraphForMincutTreeNode(nodeToSplit)
+        print [(n, n.vertices) for n in reducedGraph.nodes() if type(n) is CompoundNode ]
+#        a,b,c = mincutMethod(reducedGraph, s, t)
+        print s, t
         mincutWeight, _, (sComponent, tComponent) = mincutMethod(reducedGraph, s, t)
         sCompoundNode = CompoundNode.getInstance(vertexId.next(), sComponent)
         tCompoundNode = CompoundNode.getInstance(vertexId.next(), tComponent)
@@ -53,7 +59,7 @@ def getMincutTree(graph, mincutMethod = ford_fulkerson):
                     componentNode.vertices.remove(v)
             setMincutTreeNode(componentNode.vertices, componentNode)
         minCutTree.splitNode(nodeToSplit, (sCompoundNode, tCompoundNode, mincutWeight), neigboringNodes)
-        
+#        exit()
         nodeToSplit = minCutTree.getNextNonSingletonNode()
     
     graphToReturn = nx.Graph()
@@ -72,11 +78,7 @@ class MinCutTree(nx.Graph):
 class CompoundNode(str):
     def __init__(self, label): self.value=label#; self.metaInfo = {}
     def getRandomPairOfVertices(self): return sample(self.vertices, 2)
-#    def setMetaInfo(self, key, value): self.metaInfo[key]=value
     @staticmethod
     def getInstance(label, vertices): cn = CompoundNode(label); cn.vertices = vertices; return cn
     
-#if __name__ == '__main__':
-#    print type('') is CompoundNode
-#    print type(CompoundNode('')) is CompoundNode
     

@@ -10,6 +10,8 @@ __author__ = """Loïc Séguin-C. <loicseguin@gmail.com>"""
 # BSD license.
 
 import networkx as nx
+from operator import itemgetter
+from itertools import groupby, product
 
 __all__ = ['ford_fulkerson',
            'ford_fulkerson_flow',
@@ -83,14 +85,26 @@ def _create_flow_dict(G, H, inf_capacity_flows, capacity='capacity'):
 
     return flow
 
-def edgeLabel(u, v): return '_'.join(sorted([str(u),str(v)]))
+uniqueString = '_%$^%$^%$^$%^$%^_'
+def edgeLabel(u, v): return uniqueString.join(sorted([str(u),str(v)]))
+def retrieveVertexFromLabel(label): return label.split(uniqueString)
 
-def _getGraphComponentsAfterFlow(G, edgesRemoved):
-    tempGraph = nx.Graph()
-    for u, v in G.edges_iter(): 
-        tempGraph.add_node(u), tempGraph.add_node(v)
-        if edgeLabel(u, v) not in edgesRemoved: tempGraph.add_edge(u, v)
-    return connected_components(tempGraph)
+def _getGraphComponentsAfterFlow(G, potentialEdgesToRemove):
+    print potentialEdgesToRemove
+    for edgeSet in list(product(*potentialEdgesToRemove)):
+        tempGraph = G.subgraph(G.nodes()).copy()
+        for u, v in edgeSet: tempGraph.remove_edge(u, v)
+        components = connected_components(tempGraph)
+        print edgeSet, len(components)
+        if len(components)==2: 
+            print components
+            return components 
+#        print potentialEdgesToRemove
+#        print list(product(*potentialEdgesToRemove))
+#    for u, v in G.edges_iter(): 
+#        tempGraph.add_node(u), tempGraph.add_node(v)
+#        if edgeLabel(u, v) not in edgesRemoved: tempGraph.add_edge(u, v)
+#    return connected_components(tempGraph)
     
 
 def ford_fulkerson(G, s, t, capacity='capacity'):
@@ -164,7 +178,7 @@ def ford_fulkerson(G, s, t, capacity='capacity'):
     auxiliary, inf_capacity_flows = _create_auxiliary_digraph(G,
                                                         capacity=capacity)
     flow_value = 0   # Initial feasible flow.
-    edgesRemoved = []
+    potentialEdgesToRemove = []
 
     # As long as there is an (s, t)-path in the auxiliary digraph, find
     # the shortest (with respect to the number of arcs) such path and
@@ -180,9 +194,20 @@ def ford_fulkerson(G, s, t, capacity='capacity'):
 
         # Find the minimum capacity of an edge in the path.
         try:
-            path_capacity = min([auxiliary[u][v][capacity]
-                                for u, v in path_edges
-                                if capacity in auxiliary[u][v]])
+            pathData = [((u, v), auxiliary[u][v][capacity]) 
+                                 for u, v in path_edges 
+                                 if capacity in auxiliary[u][v]]
+            edges_by_path_capacity = dict([(u, list(v)) for u, v in groupby(pathData, key=itemgetter(1))])
+            _, path_capacity = min(pathData, key=itemgetter(1))
+#            minEdgePath = None
+#            print edges_by_path_capacity
+#            if len(edges_by_path_capacity[path_capacity])>1: minEdgePath = edges_by_path_capacity[path_capacity][0][0]
+#            else: minEdgePath = edges_by_path_capacity[path_capacity][0][0]
+#            print edges_by_path_capacity
+            print path_capacity, edges_by_path_capacity[path_capacity]
+#            print [i[0] for i in edges_by_path_capacity[path_capacity]]
+#            potentialEdgesToRemove.append((len([i[0] for i in edges_by_path_capacity[path_capacity]]), [i[0] for i in edges_by_path_capacity[path_capacity]]))
+#            print '****', minEdgePath, path_capacity
         except ValueError: 
             # path of infinite capacity implies no max flow
             raise nx.NetworkXUnbounded(
@@ -197,7 +222,8 @@ def ford_fulkerson(G, s, t, capacity='capacity'):
                 edge_attr[capacity] -= path_capacity
                 if edge_attr[capacity] == 0:
                     auxiliary.remove_edge(u, v)
-                    edgesRemoved.append(edgeLabel(u, v))
+#                    print u, v
+                    potentialEdgesToRemove.append([(u, v)])
             else:
                 inf_capacity_flows[(u, v)] += path_capacity
 
@@ -209,7 +235,9 @@ def ford_fulkerson(G, s, t, capacity='capacity'):
     
     flow_dict = _create_flow_dict(G, auxiliary, inf_capacity_flows,
                                   capacity=capacity)
-    componentsAfterFlow = _getGraphComponentsAfterFlow(G, edgesRemoved)
+#    potentialEdgesToRemove = [i[1] for i in sorted(potentialEdgesToRemove, key=itemgetter(0))]
+    componentsAfterFlow = _getGraphComponentsAfterFlow(G, potentialEdgesToRemove)
+    print flow_value
     return flow_value, flow_dict, componentsAfterFlow
 
 
