@@ -4,6 +4,7 @@ Created on Sep 6, 2011
 @author: kykamath
 '''
 import graph_tool.all as gt
+import networkx as nx
 from numpy.random import seed, random
 from scipy.linalg import norm
 
@@ -12,7 +13,7 @@ class XGraph(gt.Graph):
         gt.Graph.__init__(self, directed=directed)
         self.node={}; self.edge={};
         self.nodeToNodeIdMap = {}
-#    def xadd_edge(self, source, target):  return self.add_edge(self.node[source], self.node[target])
+    def xadd_edge(self, sourceId, targetId):  return self.add_edge(self.node[sourceId], self.node[targetId])
     def xadd_vertex(self, vertexId):
         if vertexId not in self.node: 
             self.node[vertexId]=gt.Graph.add_vertex(self, n=1)
@@ -30,6 +31,20 @@ assert([vlist, vlist1] == vlist2)
 print g.num_vertices()
 print g.num_edges()
 print 'id for', g.node[5], g.nodeToNodeIdMap[vlist]
+
+graph2 = nx.Graph()
+graph2.add_edge(1, 2, capacity=10)
+graph2.add_edge(2, 3, capacity=13)
+graph2.add_edge(3, 1, capacity=12)
+
+def getGraphToolGraphFromNetworkxGraph(nxGraph):
+    gtGraph = XGraph()
+    capacity = gtGraph.new_edge_property('double')
+    for v in nxGraph.nodes_iter(): gtGraph.xadd_vertex(v)
+    for u, v, data in nxGraph.edges_iter(data=True): edge = gtGraph.xadd_edge(u, v); capacity[edge] = data['capacity']
+    gtGraph.edge_properties['capacity']=capacity
+    return gtGraph
+    
 
 #seed(42)
 #points = random((400, 2)) * 10
