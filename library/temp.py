@@ -20,17 +20,30 @@ class XGraph(gt.Graph):
             self.nodeToNodeIdMap[self.node[vertexId]]=vertexId
         return self.node[vertexId]
 
-#g = gt.Graph()
-g = XGraph()
-vlist = g.xadd_vertex(5)
-vlist1 = g.xadd_vertex(6)
-vlist2 = []
-for v in g.vertices():
-    vlist2.append(v)
-assert([vlist, vlist1] == vlist2)
-print g.num_vertices()
-print g.num_edges()
-print 'id for', g.node[5], g.nodeToNodeIdMap[vlist]
+##g = gt.Graph()
+#g = XGraph()
+#vlist = g.xadd_vertex(5)
+#vlist1 = g.xadd_vertex(6)
+#vlist2 = []
+#for v in g.vertices():
+#    vlist2.append(v)
+#assert([vlist, vlist1] == vlist2)
+#print g.num_vertices()
+#print g.num_edges()
+#print 'id for', g.node[5], g.nodeToNodeIdMap[vlist]
+
+graph = nx.Graph()
+graph.add_edge(1, 2, capacity=10)
+graph.add_edge(2, 3, capacity=4)
+graph.add_edge(3, 4, capacity=5)
+graph.add_edge(4, 5, capacity=7)
+graph.add_edge(5, 6, capacity=3)
+graph.add_edge(6, 1, capacity=8)
+graph.add_edge(2, 6, capacity=3)
+graph.add_edge(3, 5, capacity=4)
+graph.add_edge(2, 5, capacity=2)
+graph.add_edge(3, 6, capacity=2)
+graph.add_edge(6, 4, capacity=2)
 
 graph2 = nx.Graph()
 graph2.add_edge(1, 2, capacity=10)
@@ -41,10 +54,23 @@ def getGraphToolGraphFromNetworkxGraph(nxGraph):
     gtGraph = XGraph()
     capacity = gtGraph.new_edge_property('double')
     for v in nxGraph.nodes_iter(): gtGraph.xadd_vertex(v)
-    for u, v, data in nxGraph.edges_iter(data=True): edge = gtGraph.xadd_edge(u, v); capacity[edge] = data['capacity']
+    for u, v, data in nxGraph.edges_iter(data=True): 
+        edge = gtGraph.xadd_edge(u, v); capacity[edge] = data['capacity']
+        edge = gtGraph.xadd_edge(v, u); capacity[edge] = data['capacity']
     gtGraph.edge_properties['capacity']=capacity
     return gtGraph
-    
+
+gtGraph = getGraphToolGraphFromNetworkxGraph(graph)
+print gtGraph.num_edges(), gtGraph.num_vertices()
+capacity = gtGraph.edge_properties['capacity']
+#for e in gtGraph.edges(): print e, capacity[e]
+
+src, tgt = gtGraph.vertex(0), gtGraph.vertex(5)
+gtGraph.set_directed(True)
+res = gt.edmonds_karp_max_flow(gtGraph, src, tgt, capacity)
+res.a = capacity.a - res.a  # the actual flow
+max_flow = sum(res[e] for e in tgt.in_edges())
+print max_flow
 
 #seed(42)
 #points = random((400, 2)) * 10
