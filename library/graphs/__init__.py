@@ -11,7 +11,7 @@ def plot(graph, **kwargs):
     if kwargs.get('draw_edge_labels', False): edge_labels=nx.draw_networkx_edge_labels(graph,pos)
     else: edge_labels=[]
     nx.draw(graph, pos, edge_labels=edge_labels, **kwargs)
-    plt.show()
+    plt.savefig('plot.pdf')
 
 def getMincutTree(graph, mincutMethod = ford_fulkerson):
     ''' Construciton of mincut tree as described in 
@@ -31,40 +31,27 @@ def getMincutTree(graph, mincutMethod = ford_fulkerson):
             if reducedGraph.has_edge(uVertexInReducedGraph, vVertexInReducedGraph): reducedGraph[uVertexInReducedGraph][vVertexInReducedGraph][CAPACITY]+=graph[u][v][CAPACITY]
             else: reducedGraph.add_edge(uVertexInReducedGraph, vVertexInReducedGraph, capacity=graph[u][v][CAPACITY])
         return reducedGraph
-            
     vertexId = vertexIdGenerator()
     minCutTree = MinCutTree()
     initialNode = CompoundNode.getInstance(vertexId.next(), graph.nodes())
     setMincutTreeNode(graph.nodes(), initialNode)
     minCutTree.add_node(initialNode)
     nodeToSplit = initialNode
-    
     while nodeToSplit!=None:
-        print '\n\n\n'
         s, t = nodeToSplit.getRandomPairOfVertices()
-#        s, t = 6,1
-#        print s, t
         neigboringNodes = []
         reducedGraph = getReducedGraphForMincutTreeNode(nodeToSplit)
-#        a,b,c = mincutMethod(reducedGraph, s, t)
-#        print s, t
-        print s, t, nodeToSplit
-        mincutWeight, _, (sComponent, tComponent) = mincutMethod(reducedGraph, s, t)
+        mincutWeight, (sComponent, tComponent) = mincutMethod(reducedGraph, s, t)
         sCompoundNode = CompoundNode.getInstance(vertexId.next(), sComponent)
         tCompoundNode = CompoundNode.getInstance(vertexId.next(), tComponent)
         for componentNode in [sCompoundNode, tCompoundNode]:
-            print componentNode, componentNode.vertices
             for v in componentNode.vertices[:]: 
                 if type(v) is CompoundNode: 
                     if v in minCutTree[nodeToSplit] and minCutTree[nodeToSplit][v]: neigboringNodes.append((componentNode, v, minCutTree[nodeToSplit][v][CAPACITY]))
                     componentNode.vertices.remove(v)
             setMincutTreeNode(componentNode.vertices, componentNode)
         minCutTree.splitNode(nodeToSplit, (sCompoundNode, tCompoundNode, mincutWeight), neigboringNodes)
-        print [(n, n.vertices) for n in minCutTree.nodes() if type(n) is CompoundNode ]
-        plot(minCutTree, draw_edge_labels= True)
-#        exit()
         nodeToSplit = minCutTree.getNextNonSingletonNode()
-    
     graphToReturn = nx.Graph()
     for u, v, data in minCutTree.edges_iter(data=True): graphToReturn.add_edge(u.vertices[0], v.vertices[0], data)
     return graphToReturn
@@ -79,7 +66,7 @@ class MinCutTree(nx.Graph):
         self.remove_node(nodeToSplit)
 
 class CompoundNode(str):
-    def __init__(self, label): self.value=label#; self.metaInfo = {}
+    def __init__(self, label): self.value=label
     def getRandomPairOfVertices(self): return sample(self.vertices, 2)
     @staticmethod
     def getInstance(label, vertices): cn = CompoundNode(label); cn.vertices = vertices; return cn

@@ -4,6 +4,7 @@ Created on Sep 5, 2011
 @author: kykamath
 '''
 import sys
+from networkx.algorithms.traversal.depth_first_search import dfs_tree
 sys.path.append('../../')
 import unittest
 import networkx as nx
@@ -40,10 +41,6 @@ graph3.add_edge(7, 6, capacity=1)
 graph3.add_edge(8, 6, capacity=1)
 graph3.add_edge(7, 8, capacity=10)
 
-
-#plot(graph3, draw_edge_labels=True)
-print getMincutTree(graph3)
-exit()
 
 class GraphTests(unittest.TestCase):
 #    def setUp(self):
