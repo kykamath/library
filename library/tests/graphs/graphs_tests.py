@@ -8,7 +8,9 @@ from networkx.algorithms.traversal.depth_first_search import dfs_tree
 sys.path.append('../../')
 import unittest
 import networkx as nx
-from graphs import plot, CompoundNode, getMincutTree, MinCutTree
+from graphs import plot, CompoundNode, getMincutTree, MinCutTree,\
+    CompoundNodeForTreeCutClustering, CUT_CLUSTERING_T_NODE,\
+    totalIncidentEdgeWeights
 import matplotlib.pyplot as plt
 
 graph = nx.Graph()
@@ -54,7 +56,9 @@ class GraphTests(unittest.TestCase):
         mincutTree = getMincutTree(graph2)
         self.assertEqual([1, 2, 3], mincutTree.nodes())
         self.assertEqual([(1, 3, {'capacity': 22}), (2, 3, {'capacity': 23})], mincutTree.edges(data=True))
-#        plot(getMincutTree(graph3), draw_edge_labels=True)
+    def test_totalIncidentEdgeWeights(self):
+        self.assertEqual(22, totalIncidentEdgeWeights(graph2,1))
+        self.assertEqual(18, totalIncidentEdgeWeights(graph,1))
     
 class MinCutTreeTests(unittest.TestCase):
     def setUp(self):
@@ -87,7 +91,16 @@ class CompoundVertexTests(unittest.TestCase):
         self.assertEqual([('S2', 'S1', {'capacity': 17})], graph.edges(data=True))
         self.assertEqual([1,2], self.S1.vertices), self.assertEqual([3, 4, 5, 6], self.S2.vertices)
     def test_getRandomPairOfVertices(self): self.assertEqual(set([1, 2]), set(self.S1.getRandomPairOfVertices()))
-        
+    
+class CompoundNodeForTreeCutClusteringTests(unittest.TestCase):
+    def setUp(self):
+        self.S1 = CompoundNodeForTreeCutClustering.getInstance('S1', [1, 2])
+        self.S2 = CompoundNodeForTreeCutClustering.getInstance('S2', [3, 4, 5, 6])
+        self.S3 = CompoundNodeForTreeCutClustering.getInstance('S3', [CUT_CLUSTERING_T_NODE, 4, 5, 6])
+    def test_getNextSourceAndSink(self): 
+        self.assertEqual((1, CUT_CLUSTERING_T_NODE), self.S1.getNextSourceAndSink())
+        self.assertEqual((3, CUT_CLUSTERING_T_NODE), self.S2.getNextSourceAndSink())
+        self.assertEqual((4, CUT_CLUSTERING_T_NODE), self.S3.getNextSourceAndSink())
 
 if __name__ == '__main__':
     unittest.main()
