@@ -3,6 +3,8 @@ Library
 ========
 A collection of modules used by different projects.
 
+To install it run ``sudo python setup.py install``
+
 Dependancies
 ============
 * `Python-cjson <http://pypi.python.org/pypi/python-cjson>`_ - Better install this. Multiple modules use this.
