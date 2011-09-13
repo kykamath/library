@@ -3,7 +3,9 @@ Library
 ========
 A collection of modules used by different projects.
 
-To install it run ``sudo python setup.py install``
+To install it run :
+
+             ``sudo python setup.py install``
 
 Dependancies
 ============
