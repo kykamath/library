@@ -5,15 +5,15 @@ Created on Jul 14, 2011
 '''
 import sys, unittest
 sys.path.append('../../../')
-from mr_algorithms.demo.word_count import WordCountMRJob
+from mr_algorithms.demo.word_count import WordCountModifiedMRJob
 from mrjobwrapper import CJSONProtocol
 
 test_document='Sachin Tendulkar is one century away from reaching 100 international'
 log1 = '../../../data/log1'
 with open(log1, 'w') as f: f.write(CJSONProtocol.write('doc_id_1', test_document)+'\n')
 
-class WordCountTests(unittest.TestCase):
-    def setUp(self): self.wordCount = WordCountMRJob(args='-r inline'.split())
+class WordCountModifiedTests(unittest.TestCase):
+    def setUp(self): self.wordCount = WordCountModifiedMRJob(args='-r inline'.split())
     def test_mapper(self): self.assertEqual([(w,1)for w in test_document.split()], list(self.wordCount.mapper('doc_id_1', test_document)))
     def test_reducer(self): self.assertEqual([('foo', 2)], list(self.wordCount.reducer('foo', [1, 1])))
     def test_runJob(self): 
