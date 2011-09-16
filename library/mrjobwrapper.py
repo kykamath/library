@@ -11,6 +11,29 @@ from mrjob.conf import dump_mrjob_conf, combine_dicts
 from mrjob.protocol import HadoopStreamingProtocol
 from mrjob.job import MRJob
 
+class MRJobWrapper():
+    ''' MARKED FOR REMOVAL. DO NOT USE THIS.
+    '''
+    def _setOptions(self, **kwargs):
+        self.mrjob.args = kwargs.get('inputFileList', self.mrjob.args)
+        self.mrjob.options.jobconf = combine_dicts(self.mrjob.options.jobconf, kwargs.get('jobconf', self.mrjob.options.jobconf))
+    def runJob(self, **kwargs):
+        self._setOptions(**kwargs)
+        with self.mrjob.make_runner() as runner:
+            runner.run()
+            for line in runner.stream_output(): yield self.mrjob.parse_output_line(line)
+    def runMapper(self, **kwargs):
+        self._setOptions(**kwargs)
+        reader = self.mrjob.protocols()[self.mrjob.DEFAULT_OUTPUT_PROTOCOL or self.mrjob.DEFAULT_PROTOCOL]
+        mapperOutput = WritableObject()
+        self.mrjob.stdout = mapperOutput
+        self.mrjob.run_mapper()
+        sys.stdout = sys.__stdout__ 
+        for i in filter (lambda a: a != '\n', mapperOutput.content): yield reader.read(i)
+    def mapper(self, key, value): return self.mrjob.mapper(key, value)
+    def reducer(self, key, values): return self.mrjob.reducer(key, values)
+
+
 class WritableObject:
     def __init__(self):
         self.content = []
