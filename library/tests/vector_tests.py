@@ -54,6 +54,9 @@ class VectorTests(unittest.TestCase):
         self.assertEqual({2:3, 1:1},self.v1.getTopDimensions(2))
         self.assertEqual({2:8},self.v2.getTopDimensions(1))
         
+    def test_euclideanDistance(self):
+        self.assertEqual('%0.2f'%math.sqrt(9+25), '%0.2f'%Vector.euclideanDistance(self.v1, self.v2))
+        
     def test_mod(self):
         v1 = Vector()
         v1[1]=4;v1[2]=3
