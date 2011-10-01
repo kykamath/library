@@ -34,7 +34,9 @@ class Vector(dict):
     def dotWithSmallerVectorWithSubsetDimensions(self, smallerVector): return reduce(lambda total, k: total+(self[k]*smallerVector[k]), smallerVector,0)
     
     @staticmethod
-    def euclideanDistance(v1, v2): return  math.sqrt(v1.mod()**2+v2.mod()**2-2*v1.dot(v2))
+    def euclideanDistance(v1, v2): 
+        print v1.mod()**2+v2.mod()**2-2*v1.dot(v2)
+        return  math.sqrt(v1.mod()**2+v2.mod()**2-2*v1.dot(v2))
     
     def divideByScalar(self, scalar):
         for k in self.keys(): self[k]/=scalar
