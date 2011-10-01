@@ -35,8 +35,9 @@ class Vector(dict):
     
     @staticmethod
     def euclideanDistance(v1, v2): 
-        print v1.mod()**2+v2.mod()**2-2*v1.dot(v2)
-        return  math.sqrt(v1.mod()**2+v2.mod()**2-2*v1.dot(v2))
+        val = v1.mod()**2+v2.mod()**2-2*v1.dot(v2)
+        if val<0: val = 0
+        return  math.sqrt(val)
     
     def divideByScalar(self, scalar):
         for k in self.keys(): self[k]/=scalar
