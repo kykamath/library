@@ -46,9 +46,9 @@ graph3.add_edge(7, 8, capacity=10)
 
 class GraphTests(unittest.TestCase):
 #    def setUp(self):
-#    def test_plot(self):
-#        colors=range(20)
-#        plot(nx.star_graph(20), draw_edge_labels=True, node_color='#A0CBE2',edge_color=colors,width=4,edge_cmap=plt.cm.Blues,with_labels=False)
+    def test_plot(self):
+        colors=range(20)
+        plot(nx.star_graph(20), draw_edge_labels=True, node_color='#A0CBE2',edge_color=colors,width=4,edge_cmap=plt.cm.Blues,with_labels=False)
     def test_getMincutTree(self):
         mincutTree = getMincutTree(graph)
         self.assertEqual([1, 2, 3, 4, 5, 6], mincutTree.nodes())
