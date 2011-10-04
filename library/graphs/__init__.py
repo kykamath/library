@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from random import sample
-from graphs.maxflow import ford_fulkerson
+from maxflow import ford_fulkerson
 from operator import itemgetter
 
 MINCUT_TREE_NODE = 'mincut_tree_node'
