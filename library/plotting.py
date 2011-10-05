@@ -6,6 +6,7 @@ Created on Jul 5, 2011
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.optimize
+from collections import defaultdict
 from numpy.ma.core import exp, log
 
 def getLatexForString(str): return '$'+str.replace(' ', '\\ ')+'$'
@@ -65,6 +66,12 @@ def getInverseCumulativeDistribution(probabilityDistribution):
     cumulativeDistribution, cumulative_value = [], 1
     for v in probabilityDistribution: cumulativeDistribution.append(cumulative_value); cumulative_value-=v
     return cumulativeDistribution
+
+def getDataDistribution(data):
+    dataToPlot = defaultdict(int)
+    for i in data: dataToPlot[i]+=1
+    dataX = sorted(dataToPlot)
+    return dataX, [dataToPlot[i] for i in dataX]
 
 class Map():
     def __init__(self, boundary=[[24.527135,-127.792969], [49.61071,-59.765625]], default=True):
