@@ -78,3 +78,5 @@ def convexHull(points, smidgen=0.0075):
             n_pts = len(pts)
         k += 1
     return n.asarray(pts)
+
+def geometricConvexHull(points): return convexHull(n.array(zip(*points)))
