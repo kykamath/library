@@ -6,7 +6,9 @@ Created on Jul 5, 2011
 import unittest
 import scipy
 from plotting import CurveFit, getCumulativeDistribution,\
-    getInverseCumulativeDistribution
+    getInverseCumulativeDistribution, Map
+import matplotlib.pyplot as plt
+from classes import GeneralMethods
 
 class CurveFitTests(unittest.TestCase):
     def test_curveFitdemo(self):
@@ -32,5 +34,13 @@ class GlobalMethodTests(unittest.TestCase):
         pd = [0.5,0.25, 0.1, 0.1, 0.05]
         cd = [1, 0.5, 0.25, 0.14999999999999999, 0.049999999999999989]
         self.assertEqual(cd,getInverseCumulativeDistribution(pd))
+
+class MapTests(unittest.TestCase):
+    def test_map(self):
+        usMap = Map()
+        usMap.plotPoints([-105.16, -117.16, -77.00], [40.02, 32.73, 38.55], color=GeneralMethods.getRandomColor())
+        usMap.plotPoints([-114.21, -88.10], [48.25, 17.29], color=GeneralMethods.getRandomColor())
+        plt.show()
+    
 if __name__ == '__main__':
     unittest.main()
