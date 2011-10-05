@@ -19,3 +19,10 @@ def convertMilesToRadians(miles): return miles/earthRadiusMiles
 def convertRadiansToMiles(radians): return radians*earthRadiusMiles
 def convertKMsToRadians(kms): return kms/earthRadiusKMs
 def convertRadiansToKMs(radians): return radians*earthRadiusKMs
+def isWithinBoundingBox(point, boundingBox):
+    '''
+    point [x,y]
+    boundingBox = [[lower left][upper right]]
+    '''
+    lowerLeftPoint, upperRightPoint = boundingBox
+    return lowerLeftPoint[0]<=point[0]<=upperRightPoint[0] and lowerLeftPoint[1]<=point[1]<=upperRightPoint[1]
