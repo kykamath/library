@@ -28,7 +28,7 @@ def isWithinBoundingBox(point, boundingBox):
     lowerLeftPoint, upperRightPoint = boundingBox
     return lowerLeftPoint[0]<=point[0]<=upperRightPoint[0] and lowerLeftPoint[1]<=point[1]<=upperRightPoint[1]
 
-def convex_hull(points, smidgen=0.0075):
+def convexHull(points, smidgen=0.0075):
     '''Calculate subset of points that make a convex hull around points
 
         Recursively eliminates points that lie inside two neighbouring points until only convex hull is remaining.
