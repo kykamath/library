@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.optimize
 from numpy.ma.core import exp, log
+from classes import GeneralMethods
 
 def getLatexForString(str): return '$'+str.replace(' ', '\\ ')+'$'
 
@@ -64,4 +65,20 @@ def getCumulativeDistribution(probabilityDistribution):
 def getInverseCumulativeDistribution(probabilityDistribution):
     cumulativeDistribution, cumulative_value = [], 1
     for v in probabilityDistribution: cumulativeDistribution.append(cumulative_value); cumulative_value-=v
-    return cumulativeDistribution    
+    return cumulativeDistribution
+
+class Map():
+    def __init__(self, boundary=[[24.527135,-127.792969], [49.61071,-59.765625]], default=True):
+        from mpl_toolkits.basemap import Basemap
+        minLat, minLon, maxLat, maxLon = [item for t in boundary for item in t]
+        self.m = Basemap(llcrnrlon=minLon, llcrnrlat=minLat, urcrnrlon=maxLon, urcrnrlat = maxLat,  resolution = 'c', projection = 'merc', lon_0 = minLon+(maxLon-minLon)/2, lat_0 = minLat+(maxLat-minLat)/2)
+        if default: self.configure()
+    def configure(self):
+        self.m.drawcoastlines(linewidth=1.0)
+        self.m.drawcountries(linewidth=1.0)
+        self.m.fillcontinents(color='#FFFFFF',lake_color='#FFFFFF')
+        self.m.drawstates(linewidth=0.5)
+        self.m.drawmapboundary(fill_color='#FFFFFF')
+    def plotPoints(self, longitude, latitudes, color=GeneralMethods.getRandomColor(), lw=0, marker='o', *args, **kwargs):
+        mlon, mlat = self.m(longitude,latitudes)
+        self.m.plot(mlon,mlat,color=color, lw=lw, marker=marker, *args, **kwargs)
