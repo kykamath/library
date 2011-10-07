@@ -57,7 +57,7 @@ class GeneralMethods:
         if len(dictToReturn)!=len(map): raise Exception()
         return dictToReturn
     @staticmethod
-    def runCommand(command): print command; os.system(command)
+    def runCommand(command): print '=> ',command; os.system(command)
     @staticmethod
     def getEpochFromDateTimeObject(dateTimeObject): return time.mktime(dateTimeObject.timetuple())
     @staticmethod
