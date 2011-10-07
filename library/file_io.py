@@ -18,6 +18,13 @@ class FileIO:
         f = open('%s'%file, 'a')
         f.write(cjson.encode(data)+'\n')
         f.close()
+        
+    @staticmethod
+    def writeToFile(data, file):
+        FileIO.createDirectoryForFile(file)
+        f = open('%s'%file, 'a')
+        f.write(data+'\n')
+        f.close()
     
     @staticmethod
     def iterateJsonFromFile(file):
