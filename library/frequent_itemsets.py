@@ -53,8 +53,9 @@ class Itemset:
 
 
 
-class Eclat:
+class FIByEclat:
     """Eclat Class
+    Modified the implementation of this algorithm by Michael Mampaey (http://adrem.ua.ac.be/michael.mampaey/implementations)
     """
     def __init__(self, transactionIterator, minsup, maxdepth=0):
 #    def __init__(self, filename, minsup, output=False, outfilename=None, maxdepth=0, verbose=False):
