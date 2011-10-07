@@ -82,6 +82,16 @@ def convexHull(points, smidgen=0.0075):
 def geographicConvexHull(points): return convexHull(n.array(zip(*points)))
 
 def getHaversineDistance((lon1, lat1), (lon2, lat2), radius=earthRadiusMiles):
+    '''
+    Got this code from
+    '''
     p1lat, p1lon = math.radians(lat1), math.radians(lon1)
     p2lat, p2lon = math.radians(lat2), math.radians(lon2)
     return radius * math.acos(math.sin(p1lat) * math.sin(p2lat) + math.cos(p1lat) * math.cos(p2lat) * math.cos(p2lon - p1lon))
+
+def getCenterOfMass(points): return n.mean(points,0)
+
+def getRadiusOfGyration(points):
+    if not points: return None
+    centerOfMass = getCenterOfMass(points)
+    return math.sqrt((sum(getHaversineDistance(centerOfMass, point)**2 for point in points))/len(points))
