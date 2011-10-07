@@ -4,7 +4,7 @@ Created on Jun 22, 2011
 @author: kykamath
 '''
 from datetime import timedelta, datetime
-import time, random
+import time, random, os
 from collections import defaultdict
 
 def timeit(method):
@@ -56,6 +56,8 @@ class GeneralMethods:
         dictToReturn = dict([(v,k) for k,v in map.iteritems()])
         if len(dictToReturn)!=len(map): raise Exception()
         return dictToReturn
+    @staticmethod
+    def runCommand(command): print command; os.system(command)
     @staticmethod
     def getEpochFromDateTimeObject(dateTimeObject): return time.mktime(dateTimeObject.timetuple())
     @staticmethod
