@@ -8,7 +8,7 @@ sys.path.append('../')
 import unittest
 from geo import getLidFromLocation, getLocationFromLid, convertMilesToRadians,\
     convertRadiansToMiles, convertKMsToRadians, convertRadiansToKMs,\
-    isWithinBoundingBox
+    isWithinBoundingBox,getHaversineDistanceForLids, getHaversineDistance
 
 class GeoTests(unittest.TestCase):
     def test_getLidFromLocation(self): self.assertEqual('38.930 -77.028', getLidFromLocation([38.929854, -77.027976]))
@@ -26,6 +26,7 @@ class GeoTests(unittest.TestCase):
         self.assertTrue(isWithinBoundingBox([44.024422, -105.908203], boundary))
         self.assertTrue(isWithinBoundingBox([37.788081,-73.037109], boundary))
         self.assertTrue(isWithinBoundingBox([25.562265, -80.595703], boundary))
+    def test_getHaversineDistanceForLids(self): self.assertEqual(553.86484760274641, getHaversineDistanceForLids(getLidFromLocation([25.562265, -80.595703]), getLidFromLocation([37.788081,-73.037109])))
     
 if __name__ == '__main__':
     unittest.main()

@@ -81,6 +81,7 @@ def convexHull(points, smidgen=0.0075):
 
 def geographicConvexHull(points): return convexHull(n.array(zip(*points)))
 
+def getHaversineDistanceForLids(lid1, lid2, radius=earthRadiusMiles): return getHaversineDistance(getLocationFromLid(lid1), getLocationFromLid(lid2))
 def getHaversineDistance((lon1, lat1), (lon2, lat2), radius=earthRadiusMiles):
     '''
     Got this code from
