@@ -8,7 +8,7 @@ sys.path.append('../')
 import unittest
 from geo import getLidFromLocation, getLocationFromLid, convertMilesToRadians,\
     convertRadiansToMiles, convertKMsToRadians, convertRadiansToKMs,\
-    isWithinBoundingBox,getHaversineDistanceForLids, getHaversineDistance
+    isWithinBoundingBox,getHaversineDistanceForLids
 
 class GeoTests(unittest.TestCase):
     def test_getLidFromLocation(self): self.assertEqual('38.930 -77.028', getLidFromLocation([38.929854, -77.027976]))

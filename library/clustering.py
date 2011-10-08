@@ -15,6 +15,59 @@ from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
 from library.file_io import FileIO
 
+def getItemClustersFromItemsets(itemsetIterator, itemDistanceFunction):
+    '''
+    => Every clustering is associated with a clusterid.
+    => A cluster id is said to be a majority cluster id, if the cluster corresponding to this id contains more than half locations in the current itemset.
+    => itemDistanceFunction: This function takes two item objects and returns a floating point number, such that
+        greater the returned number's value, farer the items are.
+    for every itemset in the iterator
+        Check if a majority cluster id exists:
+            If it exists add it is UN_ASSIGNED. Create a new cluster for all un-assigned items.
+            Else add all un-assigned items in current itemset to this cluster.
+        If majority cluster id does not exist:
+            Add all un-assigned items to the cluster containing their respective closest item im the itemset. 
+    '''
+    currentClusters, itemToClusterMap, UN_ASSIGNED = defaultdict(set), {}, ':ilab:'
+    def getCandidateClusters(itemset):
+        candidateClusters = defaultdict(set)
+        [candidateClusters[itemToClusterMap.get(item, UN_ASSIGNED)].add(item) for item in itemset]
+        return candidateClusters
+    def addItemToCluster(item, clusterId):
+        currentClusters[clusterId].add(item)
+        itemToClusterMap[item] = clusterId
+    def addNewCluster(itemset):
+        newClusterId = len(currentClusters)
+        for item in itemset: 
+            assert item not in itemToClusterMap
+            addItemToCluster(item, newClusterId)
+    def getMajorityCandidateClusterId(candidateClusters, itemsetLength):
+        itemsDistribution = sorted(candidateClusters.iteritems(), key=lambda t: len(t[1]), reverse=True)
+        if len(itemsDistribution[0][1]) > itemsetLength/2: return itemsDistribution[0][0]
+    def getClosestItem(item, itemset):
+        closestItem, currentDistance = None, ()
+        for i in itemset:
+            d = itemDistanceFunction(item, i)
+            if currentDistance>d: 
+                closestItem = i
+                currentDistance=d
+        return closestItem
+    for itemset in itemsetIterator:
+        candidateClusters = getCandidateClusters(itemset) # Get the distribution of existing spots for current itemset.
+        majorityCandidateClusterId = getMajorityCandidateClusterId(candidateClusters, len(itemset))
+        if majorityCandidateClusterId:
+            if majorityCandidateClusterId==UN_ASSIGNED: addNewCluster(item for item in itemset if item not in itemToClusterMap)
+            else: [addItemToCluster(item, majorityCandidateClusterId) for item in itemset if item not in itemToClusterMap]
+        else:
+            itemsWithClusters=[]
+            for clusterId in candidateClusters: 
+                if clusterId!=UN_ASSIGNED: itemsWithClusters+=list(candidateClusters[clusterId])
+            for item in candidateClusters[UN_ASSIGNED]:
+                closestItem = getClosestItem(item, itemsWithClusters)
+                addItemToCluster(item, itemToClusterMap[closestItem])
+        for item in itemset: assert item in itemToClusterMap
+    return currentClusters.values()
+    
 class EvaluationMetrics:
     '''
     The implementation for many of these metrics was obtained at
