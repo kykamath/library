@@ -43,7 +43,7 @@ def getItemClustersFromItemsets(itemsetIterator, itemDistanceFunction):
             addItemToCluster(item, newClusterId)
     def getMajorityCandidateClusterId(candidateClusters, itemsetLength):
         itemsDistribution = sorted(candidateClusters.iteritems(), key=lambda t: len(t[1]), reverse=True)
-        if len(itemsDistribution[0][1]) > itemsetLength/2: return itemsDistribution[0][0]
+        if len(itemsDistribution[0][1]) >= itemsetLength/2: return itemsDistribution[0][0]
     def getClosestItem(item, itemset):
         closestItem, currentDistance = None, ()
         for i in itemset:
