@@ -41,7 +41,7 @@ def getSmallestPrimeNumberGreaterThan(number):
 def getMAD(l):
     '''Median Absolute Deviation (MAD)
     '''
-    print numpy.median(numpy.abs(l-numpy.median(l)))
+    return numpy.median(numpy.abs(l-numpy.median(l)))
         
 
 class ModularArithmetic:
