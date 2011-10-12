@@ -10,8 +10,6 @@ def modified_log(i):
     if i==0: return 1
     else: return math.log(i)
     
-def 
-    
 def exponentialDecay(currentValue, decayCoefficient, timeDifference):
     '''
     The function V_n = V_o*D**t
