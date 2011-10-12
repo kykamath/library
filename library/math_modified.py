@@ -10,6 +10,8 @@ def modified_log(i):
     if i==0: return 1
     else: return math.log(i)
     
+def 
+    
 def exponentialDecay(currentValue, decayCoefficient, timeDifference):
     '''
     The function V_n = V_o*D**t
@@ -37,6 +39,11 @@ def getSmallestPrimeNumberGreaterThan(number):
     '''
     while not isPrime(number): number+=1
     return number
+
+def getMAD(l):
+    '''Median Absolute Deviation (MAD)
+    '''
+    print numpy.median(numpy.abs(l-numpy.median(l)))
         
 
 class ModularArithmetic:
@@ -64,7 +71,7 @@ class ModularArithmetic:
         (d_, x_, y_) = ModularArithmetic.gcdExtended(b, a%b)
         (d,x,y)=(d_, y_, x_-(a//b)*y_)
         return (d,x,y)
-    
+
 class DateTimeAirthematic:
     @staticmethod
     def getDifferenceInTimeUnits(time1, time2, timeUnitInSeconds):
