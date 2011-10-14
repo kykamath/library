@@ -60,8 +60,7 @@ class GraphTests(unittest.TestCase):
         self.assertEqual(18, totalIncidentEdgeWeights(graph,1))
     def test_clusterUsingMCLClustering(self):
         G=nx.random_geometric_graph(200,0.125)
-        plot(G)
-        clusterUsingMCLClustering(G, plotClusters=True)
+        print clusterUsingMCLClustering(G)
     
 class MinCutTreeTests(unittest.TestCase):
     def setUp(self):

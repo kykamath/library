@@ -119,7 +119,7 @@ def _getReducedGraphForMincutTreeNode(graph, mincutTreeNode):
         else: reducedGraph.add_edge(uVertexInReducedGraph, vVertexInReducedGraph, capacity=graph[u][v][CAPACITY])
     return reducedGraph
 
-def clusterUsingMCLClustering(graph, plotClusters=False, graphClass=nx.Graph, inflation=1.4, **kwargs):
+def clusterUsingMCLClustering(graph, inflation=1.4, **kwargs):
     ''' Uses Markov Cluster Algorithm described in http://micans.org/mcl/.
     '''
     def getClusters(data, inflation=1.4):
@@ -141,13 +141,14 @@ def clusterUsingMCLClustering(graph, plotClusters=False, graphClass=nx.Graph, in
         if 'w' in e[2]: edges.append((e[0], e[1], e[2]['w']))
         else: edges.append((e[0], e[1], 1))
     clusterId = 0
-    for cluster in getClusters(edges, inflation=inflation):
-        for n in cluster: nodeToCluster[n]=clusterId
-        clusterId+=1
-    clusterdGraph = graphClass()
-    for n, data in graph.nodes_iter(data=True): clusterdGraph.add_node(n, data)
-    for u, v, data in graph.edges_iter(data=True):
-        if nodeToCluster[str(u)]==nodeToCluster[str(v)]: clusterdGraph.add_edge(u, v, data)
-    if plotClusters: plot(clusterdGraph, **kwargs)
-    return clusterdGraph
+    return getClusters(edges, inflation=inflation)
+#    for cluster in getClusters(edges, inflation=inflation):
+#        for n in cluster: nodeToCluster[n]=clusterId
+#        clusterId+=1
+#    clusterdGraph = graphClass()
+#    for n, data in graph.nodes_iter(data=True): clusterdGraph.add_node(n, data)
+#    for u, v, data in graph.edges_iter(data=True):
+#        if nodeToCluster[str(u)]==nodeToCluster[str(v)]: clusterdGraph.add_edge(u, v, data)
+#    if plotClusters: plot(clusterdGraph, **kwargs)
+#    return clusterdGraph
     
