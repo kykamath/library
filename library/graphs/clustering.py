@@ -3,6 +3,8 @@ Created on Sep 5, 2011
 
 @author: kykamath
 '''
+import sys
+sys.path.append('../')
 from graphs import plot, getMincutTree, CUT_CLUSTERING_T_NODE,\
     getMincutTreeForCutClustering
 from networkx.algorithms.components.connected import connected_components
