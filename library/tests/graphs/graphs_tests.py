@@ -10,7 +10,7 @@ import unittest
 import networkx as nx
 from graphs import plot, CompoundNode, getMincutTree, MinCutTree,\
     CompoundNodeForTreeCutClustering, CUT_CLUSTERING_T_NODE,\
-    totalIncidentEdgeWeights
+    totalIncidentEdgeWeights, clusterUsingMCLClustering
 import matplotlib.pyplot as plt
 
 graph = nx.Graph()
@@ -45,7 +45,6 @@ graph3.add_edge(7, 8, capacity=10)
 
 
 class GraphTests(unittest.TestCase):
-#    def setUp(self):
     def test_plot(self):
         colors=range(20)
         plot(nx.star_graph(20), draw_edge_labels=True, node_color='#A0CBE2',edge_color=colors,width=4,edge_cmap=plt.cm.Blues,with_labels=False)
@@ -59,6 +58,10 @@ class GraphTests(unittest.TestCase):
     def test_totalIncidentEdgeWeights(self):
         self.assertEqual(22, totalIncidentEdgeWeights(graph2,1))
         self.assertEqual(18, totalIncidentEdgeWeights(graph,1))
+    def test_clusterUsingMCLClustering(self):
+        G=nx.random_geometric_graph(200,0.125)
+        plot(G)
+        clusterUsingMCLClustering(G, plotClusters=True)
     
 class MinCutTreeTests(unittest.TestCase):
     def setUp(self):

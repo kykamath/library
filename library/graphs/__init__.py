@@ -1,3 +1,4 @@
+import os
 import networkx as nx
 import matplotlib.pyplot as plt
 from random import sample
@@ -117,5 +118,36 @@ def _getReducedGraphForMincutTreeNode(graph, mincutTreeNode):
         if reducedGraph.has_edge(uVertexInReducedGraph, vVertexInReducedGraph): reducedGraph[uVertexInReducedGraph][vVertexInReducedGraph][CAPACITY]+=graph[u][v][CAPACITY]
         else: reducedGraph.add_edge(uVertexInReducedGraph, vVertexInReducedGraph, capacity=graph[u][v][CAPACITY])
     return reducedGraph
-    
+
+def clusterUsingMCLClustering(graph, plotClusters=False, graphClass=nx.Graph, inflation=1.4, **kwargs):
+    ''' Uses Markov Cluster Algorithm described in http://micans.org/mcl/.
+    '''
+    def getClusters(data, inflation=1.4):
+        clusters = []
+        if data:
+            os.environ["PATH"] = os.environ["PATH"]+os.pathsep+'/opt/local/bin'
+            mcl_folder = '/tmp/mcl_dir/'
+            if not os.path.exists(mcl_folder): os.mkdir(mcl_folder)
+            os.chdir(mcl_folder)
+            graph_file = open('graph', 'w')
+            for edge in data: graph_file.write('%s %s %d\n'%(edge))
+            graph_file.close()
+            os.system('mcl graph -q x -V all -I %s --abc -o graph.out'%inflation)
+            for l in open('graph.out'): clusters.append(l.strip().split())
+            os.system('rm -rf /tmp/mcl_dir/*')
+        return clusters
+    edges, nodeToCluster = [], {}
+    for e in graph.edges_iter(data=True):
+        if 'w' in e[2]: edges.append((e[0], e[1], e[2]['w']))
+        else: edges.append((e[0], e[1], 1))
+    clusterId = 0
+    for cluster in getClusters(edges, inflation=inflation):
+        for n in cluster: nodeToCluster[n]=clusterId
+        clusterId+=1
+    clusterdGraph = graphClass()
+    for n, data in graph.nodes_iter(data=True): clusterdGraph.add_node(n, data)
+    for u, v, data in graph.edges_iter(data=True):
+        if nodeToCluster[str(u)]==nodeToCluster[str(v)]: clusterdGraph.add_edge(u, v, data)
+    if plotClusters: plot(clusterdGraph, **kwargs)
+    return clusterdGraph
     
