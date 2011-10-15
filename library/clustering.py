@@ -15,6 +15,7 @@ from classes import TwoWayMap
 from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
 from library.file_io import FileIO
+from twisted.python._release import commonItems
 
 UN_ASSIGNED = ':ilab:'
 
@@ -105,7 +106,8 @@ class MultistepItemsetClustering:
         del self.currentClusters[clusterIdToRemove]
         self.transferNewlyMergedItemsFromOverlaps(clusterIdToRemove, mergedClusterId)
     def mergeCondition(self, clusterId1, clusterId2):
-        commonItems = self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))]
+#        commonItems = self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))]
+        commonItems = self.currentClusters[clusterId1].intersection(self.currentClusters[clusterId2])
         smallerClusterLength = min([len(self.currentClusters[clusterId1]), len(self.currentClusters[clusterId2])])
         if len(commonItems)/float(smallerClusterLength)>1.0:
             print len(commonItems), commonItems
