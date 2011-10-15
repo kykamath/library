@@ -121,7 +121,7 @@ class MultistepItemsetClustering:
                         if self.mergeCondition(clusterId1, clusterId2) :
                             self.mergeCluster(clusterId1, clusterId2)
                             flag=True
-        return self.currentClusters.values()
+        return [list(c) for c in self.currentClusters.values()]
     def getInitialClusters(self, itemsetIterator, itemDistanceFunction):
         self.itemDistanceFunction = itemDistanceFunction
         def getCandidateClusters(itemset):
