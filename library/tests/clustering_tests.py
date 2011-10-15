@@ -7,7 +7,8 @@ import sys
 sys.path.append('../')
 import unittest
 from clustering import EvaluationMetrics, EMTextClustering, KMeansClustering,\
-    MRKmeansClustering, Clustering, getItemClustersFromItemsets
+    MRKmeansClustering, Clustering, getItemClustersFromItemsets,\
+    MultistepItemsetClustering
 
 class ItemsetClusterTests(unittest.TestCase):
     def setUp(self):
@@ -28,6 +29,32 @@ class ItemsetClusterTests(unittest.TestCase):
     def test_getItemClustersFromItemsetsWithoutMajority2(self):
         itemsets = [[1,2], [7,8], [1,7,3,6]]
         self.assertEqual([set([1, 2, 3]), set([ 6, 7, 8])], getItemClustersFromItemsets(itemsets, self.distanceFunction))
+        
+class MultistepClusteringTests(unittest.TestCase):
+    def setUp(self):
+        def compare(i,j):
+            d = i-j
+            if d<0: return d*-1
+            else: return d
+        self.distanceFunction = compare
+    def test_getItemClustersFromItemsetsVanilla(self):
+        itemsets = [[1,2,3,4], [5,6,7,8]]
+        self.assertEqual([set([1, 2, 3, 4]), set([8, 5, 6, 7])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+    def test_getItemClustersFromItemsetsWithMajority(self):
+        itemsets = [[1,2,3,4], [1,2,3,8]]
+        self.assertEqual([set([1, 2, 3, 4, 8])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+    def test_getItemClustersFromItemsetsWithoutMajority1(self):
+        itemsets = [[1,2,3,4], [1,2,7,8]]
+        self.assertEqual([set([1, 2, 3, 4, 7, 8])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+    def test_getItemClustersFromItemsetsWithoutMajority2(self):
+        itemsets = [[1,2], [7,8], [1,7,3,6]]
+        self.assertEqual([set([1, 2, 3, 6, 7, 8])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+    def test_getItemClustersFromItemsetsWithoutMajority3(self):
+        itemsets = [[1,2], [7,8], [1,7,3,6], [9,10], [7,9]]
+        self.assertEqual([set([1, 2, 3, 6, 7, 8, 9, 10])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+    def test_getItemClustersFromItemsetsWithoutMajority4(self):
+        itemsets = [[1,2], [7,8], [1,7,3,6], [9,10]]
+        self.assertEqual([set([1, 2, 3, 6, 7, 8]), set([9, 10])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
 
 class EvaluationMetricsTests(unittest.TestCase):
     def setUp(self):

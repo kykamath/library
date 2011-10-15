@@ -142,13 +142,4 @@ def clusterUsingMCLClustering(graph, inflation=1.4, **kwargs):
         else: edges.append((e[0], e[1], 1))
     clusterId = 0
     return getClusters(edges, inflation=inflation)
-#    for cluster in getClusters(edges, inflation=inflation):
-#        for n in cluster: nodeToCluster[n]=clusterId
-#        clusterId+=1
-#    clusterdGraph = graphClass()
-#    for n, data in graph.nodes_iter(data=True): clusterdGraph.add_node(n, data)
-#    for u, v, data in graph.edges_iter(data=True):
-#        if nodeToCluster[str(u)]==nodeToCluster[str(v)]: clusterdGraph.add_edge(u, v, data)
-#    if plotClusters: plot(clusterdGraph, **kwargs)
-#    return clusterdGraph
     

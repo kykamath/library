@@ -10,10 +10,13 @@ from scipy.stats import mode
 from nltk import cluster
 from collections import defaultdict
 from operator import itemgetter
+from itertools import groupby, combinations
 from classes import TwoWayMap
 from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
 from library.file_io import FileIO
+
+UN_ASSIGNED = ':ilab:'
 
 def getItemClustersFromItemsets(itemsetIterator, itemDistanceFunction):
     '''
@@ -67,6 +70,91 @@ def getItemClustersFromItemsets(itemsetIterator, itemDistanceFunction):
                 addItemToCluster(item, itemToClusterMap[closestItem])
         for item in itemset: assert item in itemToClusterMap
     return currentClusters.values()
+
+class MultistepItemsetClustering:
+    def __init__(self):
+        self.itemToClusterMap = {}
+        self.currentClusters = defaultdict(set)
+        self.clusterOverlapMappings = defaultdict(set)
+        self.clusterOverlaps = defaultdict(set)
+    def addItem(self, item, clusterId): 
+        self.currentClusters[clusterId].add(item)
+        self.itemToClusterMap[item] = clusterId
+    def addItemsToNewCluster(self, items): 
+        newClusterId = len(self.currentClusters)
+        for item in items: 
+            assert item not in self.itemToClusterMap
+            self.addItem(item, newClusterId)
+    def noteItemOverlaps(self, clusterId1, clusterId2, items): 
+        self.clusterOverlapMappings[clusterId1].add(clusterId2); self.clusterOverlapMappings[clusterId2].add(clusterId1)
+        self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))]=self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))].union(set(items))
+    def transferNewlyMergedItemsFromOverlaps(self, oldClusterId, newClusterId):
+        # Move overlaps from old to overlaps to new and change mappping in the process
+        for k in self.clusterOverlapMappings[oldClusterId]:
+            if k!=newClusterId:
+                self.clusterOverlapMappings[newClusterId].add(k), self.clusterOverlapMappings[k].add(newClusterId)
+                self.clusterOverlapMappings[k].remove(oldClusterId)
+                self.clusterOverlaps['_'.join(sorted([str(newClusterId), str(k)]))]=self.clusterOverlaps['_'.join(sorted([str(newClusterId), str(k)]))].union(self.clusterOverlaps['_'.join(sorted([str(oldClusterId), str(k)]))])
+                del self.clusterOverlaps['_'.join(sorted([str(oldClusterId), str(k)]))]
+        print newClusterId, self.clusterOverlapMappings
+        self.clusterOverlapMappings[newClusterId].remove(oldClusterId)
+        del self.clusterOverlapMappings[oldClusterId]
+    def mergeCluster(self, clusterId1, clusterId2): 
+        mergedClusterId = min([clusterId1, clusterId2])
+        clusterIdToRemove = max([clusterId1, clusterId2])
+        for item in self.currentClusters[clusterIdToRemove]: self.addItem(item, mergedClusterId)
+        del self.currentClusters[clusterIdToRemove]
+        self.transferNewlyMergedItemsFromOverlaps(clusterIdToRemove, mergedClusterId)
+    def cluster(self, itemsetIterator, itemDistanceFunction):
+        self.getInitialClusters(itemsetIterator, itemDistanceFunction)
+        flag=True
+        while flag:
+            flag=False
+            for clusterId1 in self.clusterOverlapMappings.keys()[:]:
+                for clusterId2 in list(self.clusterOverlapMappings[clusterId1])[:]:
+                    tempId = '_'.join(sorted([str(clusterId1), str(clusterId2)]))
+                    if tempId in self.clusterOverlaps:
+                        commonItems = self.clusterOverlaps[tempId]
+                        if commonItems :
+                            self.mergeCluster(clusterId1, clusterId2)
+                            flag=True
+                        
+        return self.currentClusters.values()
+    def getInitialClusters(self, itemsetIterator, itemDistanceFunction):
+        self.itemDistanceFunction = itemDistanceFunction
+        def getCandidateClusters(itemset):
+            candidateClusters = defaultdict(set)
+            [candidateClusters[self.itemToClusterMap.get(item, UN_ASSIGNED)].add(item) for item in itemset]
+            return candidateClusters
+        def getMajorityCandidateClusterId(candidateClusters, noOfItems):
+            itemsDistribution = sorted(candidateClusters.iteritems(), key=lambda t: len(t[1]), reverse=True)
+            if len(itemsDistribution[0][1]) > noOfItems/2: return itemsDistribution[0][0]
+        def getClosestItem(item, itemset):
+            closestItem, currentDistance = None, ()
+            for i in itemset:
+                d = self.itemDistanceFunction(item, i)
+                if currentDistance>d: 
+                    closestItem = i
+                    currentDistance=d
+            return closestItem
+        for itemset in itemsetIterator:
+            candidateClusters = getCandidateClusters(itemset) # Get the distribution of existing spots for current itemset.
+            majorityCandidateClusterId = getMajorityCandidateClusterId(candidateClusters, len(itemset))
+            if majorityCandidateClusterId:
+                if majorityCandidateClusterId==UN_ASSIGNED: self.addItemsToNewCluster(item for item in itemset if item not in self.itemToClusterMap)
+                else: [self.addItem(item, majorityCandidateClusterId) for item in itemset if item not in self.itemToClusterMap]
+            else:
+                itemsWithClusters=[]
+                for clusterId in candidateClusters: 
+                    if clusterId!=UN_ASSIGNED: itemsWithClusters+=list(candidateClusters[clusterId])
+                for item in candidateClusters[UN_ASSIGNED]:
+                    closestItem = getClosestItem(item, itemsWithClusters)
+                    self.addItem(item, self.itemToClusterMap[closestItem])
+            clusterIdToItemsMap=dict((k, zip(*list(i))[1]) for k, i in groupby(sorted([(self.itemToClusterMap[i],i) for i in itemset], key=itemgetter(0)), key=itemgetter(0)))
+            if len(clusterIdToItemsMap)>1:
+                for clusterId1, clusterId2 in combinations(clusterIdToItemsMap,2):
+                    self.noteItemOverlaps(clusterId1, clusterId2, clusterIdToItemsMap[clusterId1]+clusterIdToItemsMap[clusterId2])
+            for item in itemset: assert item in self.itemToClusterMap
     
 class EvaluationMetrics:
     '''
