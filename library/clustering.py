@@ -107,6 +107,10 @@ class MultistepItemsetClustering:
     def mergeCondition(self, clusterId1, clusterId2):
         commonItems = self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))]
         smallerClusterLength = min([len(self.currentClusters[clusterId1]), len(self.currentClusters[clusterId2])])
+        if len(commonItems)/float(smallerClusterLength)<=1.0:
+            print len(commonItems)
+            print len(self.currentClusters[clusterId1]), self.currentClusters[clusterId1]
+            print len(self.currentClusters[clusterId2]), self.currentClusters[clusterId2]
         assert len(commonItems)/float(smallerClusterLength)<=1.0
         if len(commonItems)/float(smallerClusterLength)>self.mergeThreshold: return True
         return False
