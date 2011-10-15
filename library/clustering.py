@@ -121,16 +121,16 @@ class MultistepItemsetClustering:
         return False
     def cluster(self, itemsetIterator, itemDistanceFunction, mergeThreshold):
         self.getInitialClusters(itemsetIterator, itemDistanceFunction)
-#        self.mergeThreshold=mergeThreshold
-#        flag=True
-#        while flag:
-#            flag=False
-#            for clusterId1 in self.clusterOverlapMappings.keys()[:]:
-#                for clusterId2 in list(self.clusterOverlapMappings[clusterId1])[:]:
-#                    if '_'.join(sorted([str(clusterId1), str(clusterId2)])) in self.clusterOverlaps:
-#                        if self.mergeCondition(clusterId1, clusterId2) :
-#                            self.mergeCluster(clusterId1, clusterId2)
-#                            flag=True
+        self.mergeThreshold=mergeThreshold
+        flag=True
+        while flag:
+            flag=False
+            for clusterId1 in self.clusterOverlapMappings.keys()[:]:
+                for clusterId2 in list(self.clusterOverlapMappings[clusterId1])[:]:
+                    if '_'.join(sorted([str(clusterId1), str(clusterId2)])) in self.clusterOverlaps:
+                        if self.mergeCondition(clusterId1, clusterId2) :
+                            self.mergeCluster(clusterId1, clusterId2)
+                            flag=True
         return [list(c) for c in self.currentClusters.values()]
     def getInitialClusters(self, itemsetIterator, itemDistanceFunction):
         self.itemDistanceFunction = itemDistanceFunction
@@ -162,11 +162,12 @@ class MultistepItemsetClustering:
 #                for item in candidateClusters[UN_ASSIGNED]:
 #                    closestItem = getClosestItem(item, itemsWithClusters)
 #                    self.addItem(item, self.itemToClusterMap[closestItem])
-#            clusterIdToItemsMap=dict((k, zip(*list(i))[1]) for k, i in groupby(sorted([(self.itemToClusterMap[i],i) for i in itemset], key=itemgetter(0)), key=itemgetter(0)))
-#            if len(clusterIdToItemsMap)>1:
-#                for clusterId1, clusterId2 in combinations(clusterIdToItemsMap,2):
-#                    self.noteItemOverlaps(clusterId1, clusterId2, clusterIdToItemsMap[clusterId1]+clusterIdToItemsMap[clusterId2])
-#            for item in itemset: assert item in self.itemToClusterMap
+
+                clusterIdToItemsMap=dict((k, zip(*list(i))[1]) for k, i in groupby(sorted([(self.itemToClusterMap[i],i) for i in itemset], key=itemgetter(0)), key=itemgetter(0)))
+                if len(clusterIdToItemsMap)>1:
+                    for clusterId1, clusterId2 in combinations(clusterIdToItemsMap,2):
+                        self.noteItemOverlaps(clusterId1, clusterId2, clusterIdToItemsMap[clusterId1]+clusterIdToItemsMap[clusterId2])
+                for item in itemset: assert item in self.itemToClusterMap
     
 class EvaluationMetrics:
     '''
