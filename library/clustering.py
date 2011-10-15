@@ -117,6 +117,7 @@ class MultistepItemsetClustering:
             print len(commonItems), float(smallerClusterLength), len(commonItems)/float(smallerClusterLength)
         assert len(commonItems)/float(smallerClusterLength)<=1.0
         if commonItems: print len(commonItems), float(smallerClusterLength), len(commonItems)/float(smallerClusterLength), self.mergeThreshold
+        else: print len(commonItems), float(smallerClusterLength), len(commonItems)/float(smallerClusterLength), self.mergeThreshold
         if len(commonItems)/float(smallerClusterLength)>=self.mergeThreshold: return True
         return False
     def cluster(self, itemsetIterator, itemDistanceFunction, mergeThreshold):
