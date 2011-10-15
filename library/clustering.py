@@ -109,7 +109,6 @@ class MultistepItemsetClustering:
         flag=True
         while flag:
             flag=False
-            print self.clusterOverlapMappings.keys()
             for clusterId1 in self.clusterOverlapMappings.keys()[:]:
                 for clusterId2 in list(self.clusterOverlapMappings[clusterId1])[:]:
                     tempId = '_'.join(sorted([str(clusterId1), str(clusterId2)]))
