@@ -39,22 +39,22 @@ class MultistepClusteringTests(unittest.TestCase):
         self.distanceFunction = compare
     def test_getItemClustersFromItemsetsVanilla(self):
         itemsets = [[1,2,3,4], [5,6,7,8]]
-        self.assertEqual([set([1, 2, 3, 4]), set([8, 5, 6, 7])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+        self.assertEqual([[1, 2, 3, 4], [8, 5, 6, 7]], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction, mergeThreshold=0.0))
     def test_getItemClustersFromItemsetsWithMajority(self):
         itemsets = [[1,2,3,4], [1,2,3,8]]
-        self.assertEqual([set([1, 2, 3, 4, 8])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+        self.assertEqual([[8, 1, 2, 3, 4]], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction, mergeThreshold=0.0))
     def test_getItemClustersFromItemsetsWithoutMajority1(self):
         itemsets = [[1,2,3,4], [1,2,7,8]]
-        self.assertEqual([set([1, 2, 3, 4, 7, 8])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+        self.assertEqual([[1, 2, 3, 4, 7, 8]], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction, mergeThreshold=0.0))
     def test_getItemClustersFromItemsetsWithoutMajority2(self):
         itemsets = [[1,2], [7,8], [1,7,3,6]]
-        self.assertEqual([set([1, 2, 3, 6, 7, 8])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+        self.assertEqual([[1, 2, 3, 6, 7, 8]], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction, mergeThreshold=0.0))
     def test_getItemClustersFromItemsetsWithoutMajority3(self):
         itemsets = [[1,2], [7,8], [1,7,3,6], [9,10], [7,9]]
-        self.assertEqual([set([1, 2, 3, 6, 7, 8, 9, 10])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+        self.assertEqual([[1, 2, 3, 6, 7, 8, 9, 10]], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction, mergeThreshold=0.0))
     def test_getItemClustersFromItemsetsWithoutMajority4(self):
         itemsets = [[1,2], [7,8], [1,7,3,6], [9,10]]
-        self.assertEqual([set([1, 2, 3, 6, 7, 8]), set([9, 10])], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction))
+        self.assertEqual([[1, 2, 3, 6, 7, 8], [9, 10]], MultistepItemsetClustering().cluster(itemsets, self.distanceFunction, mergeThreshold=0.0))
 
 class EvaluationMetricsTests(unittest.TestCase):
     def setUp(self):
