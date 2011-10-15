@@ -104,6 +104,10 @@ class MultistepItemsetClustering:
         for item in self.currentClusters[clusterIdToRemove]: self.addItem(item, mergedClusterId)
         del self.currentClusters[clusterIdToRemove]
         self.transferNewlyMergedItemsFromOverlaps(clusterIdToRemove, mergedClusterId)
+    def mergeCondition(self, clusterId1, clusterId2):
+        commonItems = self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))]
+        if commonItems: return True
+        return False
     def cluster(self, itemsetIterator, itemDistanceFunction):
         self.getInitialClusters(itemsetIterator, itemDistanceFunction)
         flag=True
@@ -111,13 +115,10 @@ class MultistepItemsetClustering:
             flag=False
             for clusterId1 in self.clusterOverlapMappings.keys()[:]:
                 for clusterId2 in list(self.clusterOverlapMappings[clusterId1])[:]:
-                    tempId = '_'.join(sorted([str(clusterId1), str(clusterId2)]))
-                    if tempId in self.clusterOverlaps:
-                        commonItems = self.clusterOverlaps[tempId]
-                        if commonItems :
+                    if '_'.join(sorted([str(clusterId1), str(clusterId2)])) in self.clusterOverlaps:
+                        if self.mergeCondition(clusterId1, clusterId2) :
                             self.mergeCluster(clusterId1, clusterId2)
                             flag=True
-                        
         return self.currentClusters.values()
     def getInitialClusters(self, itemsetIterator, itemDistanceFunction):
         self.itemDistanceFunction = itemDistanceFunction
