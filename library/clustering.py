@@ -106,10 +106,12 @@ class MultistepItemsetClustering:
         self.transferNewlyMergedItemsFromOverlaps(clusterIdToRemove, mergedClusterId)
     def mergeCondition(self, clusterId1, clusterId2):
         commonItems = self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))]
-        if commonItems: return True
+        smallerClusterLength = min([len(self.currentClusters[clusterId1]), len(self.currentClusters[clusterId2])])
+        if commonItems/smallerClusterLength>self.mergeThreshold: return True
         return False
-    def cluster(self, itemsetIterator, itemDistanceFunction):
+    def cluster(self, itemsetIterator, itemDistanceFunction, mergeThreshold):
         self.getInitialClusters(itemsetIterator, itemDistanceFunction)
+        self.mergeThreshold=mergeThreshold
         flag=True
         while flag:
             flag=False
