@@ -15,7 +15,6 @@ from classes import TwoWayMap
 from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
 from library.file_io import FileIO
-from twisted.python._release import commonItems
 
 UN_ASSIGNED = ':ilab:'
 
