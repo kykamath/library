@@ -96,7 +96,6 @@ class MultistepItemsetClustering:
                 self.clusterOverlapMappings[k].remove(oldClusterId)
                 self.clusterOverlaps['_'.join(sorted([str(newClusterId), str(k)]))]=self.clusterOverlaps['_'.join(sorted([str(newClusterId), str(k)]))].union(self.clusterOverlaps['_'.join(sorted([str(oldClusterId), str(k)]))])
                 del self.clusterOverlaps['_'.join(sorted([str(oldClusterId), str(k)]))]
-        print newClusterId, self.clusterOverlapMappings
         self.clusterOverlapMappings[newClusterId].remove(oldClusterId)
         del self.clusterOverlapMappings[oldClusterId]
     def mergeCluster(self, clusterId1, clusterId2): 
@@ -110,6 +109,7 @@ class MultistepItemsetClustering:
         flag=True
         while flag:
             flag=False
+            print self.clusterOverlapMappings.keys()
             for clusterId1 in self.clusterOverlapMappings.keys()[:]:
                 for clusterId2 in list(self.clusterOverlapMappings[clusterId1])[:]:
                     tempId = '_'.join(sorted([str(clusterId1), str(clusterId2)]))
