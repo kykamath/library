@@ -109,7 +109,7 @@ class MultistepItemsetClustering:
         smallerClusterLength = min([len(self.currentClusters[clusterId1]), len(self.currentClusters[clusterId2])])
         if commonItems/smallerClusterLength>self.mergeThreshold: return True
         return False
-    def cluster(self, itemsetIterator, itemDistanceFunction, mergeThreshold):
+    def cluster(self, itemsetIterator, itemDistanceFunction, mergeThreshold=0.5):
         self.getInitialClusters(itemsetIterator, itemDistanceFunction)
         self.mergeThreshold=mergeThreshold
         flag=True
