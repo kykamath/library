@@ -108,7 +108,7 @@ class MultistepItemsetClustering:
         commonItems = self.clusterOverlaps['_'.join(sorted([str(clusterId1), str(clusterId2)]))]
 #        commonItems = self.currentClusters[clusterId1].intersection(self.currentClusters[clusterId2])
         if len(self.currentClusters[clusterId1])>len(self.currentClusters[clusterId2]): commonItems=commonItems.intersection(self.currentClusters[clusterId2])
-        else: commonItems=commonItems.intersection(self.currentClusters[clusterId2])
+        else: commonItems=commonItems.intersection(self.currentClusters[clusterId1])
         smallerClusterLength = min([len(self.currentClusters[clusterId1]), len(self.currentClusters[clusterId2])])
         if len(commonItems)/float(smallerClusterLength)>1.0:
             print len(commonItems), commonItems
@@ -119,7 +119,7 @@ class MultistepItemsetClustering:
         if commonItems: print len(commonItems), float(smallerClusterLength), len(commonItems)/float(smallerClusterLength), self.mergeThreshold
         if len(commonItems)/float(smallerClusterLength)>self.mergeThreshold: return True
         return False
-    def cluster(self, itemsetIterator, itemDistanceFunction, mergeThreshold=0.5):
+    def cluster(self, itemsetIterator, itemDistanceFunction, mergeThreshold):
         self.getInitialClusters(itemsetIterator, itemDistanceFunction)
         self.mergeThreshold=mergeThreshold
         flag=True
