@@ -15,6 +15,7 @@ from classes import TwoWayMap
 from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
 from library.file_io import FileIO
+from scipy.cluster.vq import kmeans2
 
 UN_ASSIGNED = ':ilab:'
 
@@ -323,7 +324,3 @@ class KMeansClustering(Clustering):
     def cluster(self, **kwargs):
         clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance, **kwargs)
         return clusterer.cluster(self.vectors, True)
-
-class MRKmeansClustering(Clustering):
-    def cluster(self, **kwargs):
-        print self.vectors

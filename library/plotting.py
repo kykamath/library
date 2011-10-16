@@ -13,6 +13,11 @@ def getLatexForString(str): return '$'+str.replace(' ', '\\ ')+'$'
 
 def plotMethods(methods): map(lambda method: method(returnAxisValuesOnly=False), methods), plt.show()
 
+def plotNorm(mu, sigma):
+    s = np.random.normal(mu, sigma, 1000)
+    count, bins = np.histogram(s, 1000, normed=True)
+    plt.fill_between(bins, 1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ), linewidth=2, color='r', alpha=0.6)
+
 class CurveFit():
     @staticmethod
     def decreasingExponentialFunction(p, x): 
