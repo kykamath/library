@@ -70,7 +70,7 @@ class GeneralMethods:
         for v in itemList: distribution[valueFunction(v, *args)]+=1
         return distribution
     @staticmethod
-    def isTrueWith(p): return True if random.random() < p else False
+    def trueWith(p): return True if random.random() < p else False
         
 class TwoWayMap:
     '''
