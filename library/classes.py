@@ -6,6 +6,7 @@ Created on Jun 22, 2011
 from datetime import timedelta, datetime
 import time, random, os
 from collections import defaultdict
+import numpy as np
 
 def timeit(method):
     '''
@@ -71,6 +72,16 @@ class GeneralMethods:
         return distribution
     @staticmethod
     def trueWith(p): return True if random.random() < p else False
+    @staticmethod
+    def weightedChoice(weights):
+        ''' 
+        Got this code from a comment by Evan Friis http://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/#comment-253694
+        Usage: GeneralMethods.weightedChoice([0.8,0.1,0.1])
+        '''
+        totals = np.cumsum(weights)
+        norm = totals[-1]
+        throw = np.random.rand()*norm
+        return np.searchsorted(totals, throw)
         
 class TwoWayMap:
     '''
