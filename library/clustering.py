@@ -325,13 +325,13 @@ class EMTextClustering(Clustering):
         return clusterer.cluster(self.vectors, True, trace=True)
 
 class KMeansClustering(Clustering):
-    def cluster(self, assignAndReturnDetails=False, **kwargs):
+    def cluster(self, assignAndReturnDetails=False, numberOfTopFeatures = 5, **kwargs):
         clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance, **kwargs)
         clusters = clusterer.cluster(self.vectors, True)
         if assignAndReturnDetails: 
             means = clusterer.means()
             bestFeatures = {}
-            for id, mean in zip(clusterer.cluster_names(), means): bestFeatures[id]=[(dimension, score) for dimension, score in sorted(zip([self.dimensions.get(Clustering.DIMENSION_TO_PHRASE, i) for i in range(len(mean))], mean), key=itemgetter(1), reverse=True)[:5] if score>0]
+            for id, mean in zip(clusterer.cluster_names(), means): bestFeatures[id]=[(dimension, score) for dimension, score in sorted(zip([self.dimensions.get(Clustering.DIMENSION_TO_PHRASE, i) for i in range(len(mean))], mean), key=itemgetter(1), reverse=True)[:numberOfTopFeatures] if score>0]
             documentAssignments=sorted([(docId, clusterId)for docId, clusterId in zip(self.docIds, clusters)], key=itemgetter(1))
             clusters = dict((clusterId, [t[0] for t in documents]) for clusterId, documents in groupby(documentAssignments, key=itemgetter(1)))
             return {'clusters': clusters, 'bestFeatures': bestFeatures}
