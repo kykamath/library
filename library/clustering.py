@@ -329,7 +329,7 @@ class EMTextClustering(Clustering):
 
 class KMeansClustering(Clustering):
     def cluster(self, assignAndReturnDetails=False, numberOfTopFeatures = 5, algorithmSource='nltk', **kwargs):
-        bestFeatures = {}
+        bestFeatures, error = {}, None
         if algorithmSource=='nltk':
             clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance, **kwargs)
             clusters = clusterer.cluster(self.vectors, True)
@@ -337,12 +337,12 @@ class KMeansClustering(Clustering):
             for id, mean in zip(clusterer.cluster_names(), means): bestFeatures[id]=[(dimension, score) for dimension, score in sorted(zip([self.dimensions.get(Clustering.DIMENSION_TO_PHRASE, i) for i in range(len(mean))], mean), key=itemgetter(1), reverse=True)[:numberOfTopFeatures] if score>0]
         elif algorithmSource=='biopython':
             from Bio.Cluster import kcluster, clustercentroids
-            clusters, _, _ = kcluster(self.vectors, nclusters=self.numberOfClusters, npass=kwargs['repeats'])
+            clusters, error, _ = kcluster(self.vectors, nclusters=self.numberOfClusters, npass=kwargs['repeats'])
             means, _ = clustercentroids(self.vectors, self.masks, clusters)
             means = [unitVector(c) for c in means]
             for id, mean in zip(range(len(means)), means): bestFeatures[id]=[(dimension, score) for dimension, score in sorted(zip([self.dimensions.get(Clustering.DIMENSION_TO_PHRASE, i) for i in range(len(mean))], mean), key=itemgetter(1), reverse=True)[:numberOfTopFeatures] if score>0]
         if assignAndReturnDetails: 
             documentAssignments=sorted([(docId, clusterId)for docId, clusterId in zip(self.docIds, clusters)], key=itemgetter(1))
             clusters = dict((clusterId, [t[0] for t in documents]) for clusterId, documents in groupby(documentAssignments, key=itemgetter(1)))
-            return {'clusters': clusters, 'bestFeatures': bestFeatures}
+            return {'clusters': clusters, 'bestFeatures': bestFeatures, 'error': error}
         return clusters
