@@ -16,8 +16,10 @@ from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
 from library.file_io import FileIO
 from scipy.cluster.vq import kmeans2
+import numpy as np
 
 UN_ASSIGNED = ':ilab:'
+def unitVector(vector): return vector / math.sqrt(np.dot(vector, vector))
 
 def getItemClustersFromItemsets(itemsetIterator, itemDistanceFunction):
     '''
@@ -303,7 +305,7 @@ class Clustering(object):
         if self.vectors==None: self._convertDocumentsToVector()
     def _convertDictToDocuments(self): self.documents = [(docId, ' '.join([str(k) for k, v in documentVector.iteritems() for i in range(v)])) for docId, documentVector in self.documents]
     def _convertDocumentsToVector(self):
-        self.vectors, self.docIds = [], []
+        self.vectors, self.masks, self.docIds = [], [], []
         dimensions = TwoWayMap()
         for docId, document in self.documents:
             for w in document.split(): 
@@ -312,6 +314,7 @@ class Clustering(object):
             vector = zeros(len(dimensions))
             for w in document.split(): vector[dimensions.get(Clustering.PHRASE_TO_DIMENSION, w)]+=1 
             self.vectors.append(vector)
+            self.masks.append(ones(len(dimensions)))
             self.docIds.append(docId)
         self.dimensions = dimensions
     def dumpDocumentVectorsToFile(self, fileName):
@@ -325,13 +328,20 @@ class EMTextClustering(Clustering):
         return clusterer.cluster(self.vectors, True, trace=True)
 
 class KMeansClustering(Clustering):
-    def cluster(self, assignAndReturnDetails=False, numberOfTopFeatures = 5, **kwargs):
-        clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance, **kwargs)
-        clusters = clusterer.cluster(self.vectors, True)
-        if assignAndReturnDetails: 
+    def cluster(self, assignAndReturnDetails=False, numberOfTopFeatures = 5, algorithmSource='nltk', **kwargs):
+        bestFeatures = {}
+        if algorithmSource=='nltk':
+            clusterer = cluster.KMeansClusterer(self.numberOfClusters, euclidean_distance, **kwargs)
+            clusters = clusterer.cluster(self.vectors, True)
             means = clusterer.means()
-            bestFeatures = {}
             for id, mean in zip(clusterer.cluster_names(), means): bestFeatures[id]=[(dimension, score) for dimension, score in sorted(zip([self.dimensions.get(Clustering.DIMENSION_TO_PHRASE, i) for i in range(len(mean))], mean), key=itemgetter(1), reverse=True)[:numberOfTopFeatures] if score>0]
+        elif algorithmSource=='biopython':
+            from Bio.Cluster import kcluster, clustercentroids
+            clusters, _, _ = kcluster(self.vectors, nclusters=self.numberOfClusters, npass=kwargs['repeats'])
+            means, _ = clustercentroids(self.vectors, self.masks, clusters)
+            means = [unitVector(c) for c in means]
+            for id, mean in zip(range(len(means)), means): bestFeatures[id]=[(dimension, score) for dimension, score in sorted(zip([self.dimensions.get(Clustering.DIMENSION_TO_PHRASE, i) for i in range(len(mean))], mean), key=itemgetter(1), reverse=True)[:numberOfTopFeatures] if score>0]
+        if assignAndReturnDetails: 
             documentAssignments=sorted([(docId, clusterId)for docId, clusterId in zip(self.docIds, clusters)], key=itemgetter(1))
             clusters = dict((clusterId, [t[0] for t in documents]) for clusterId, documents in groupby(documentAssignments, key=itemgetter(1)))
             return {'clusters': clusters, 'bestFeatures': bestFeatures}

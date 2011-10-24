@@ -87,6 +87,9 @@ class ClusteringTests(unittest.TestCase):
     def test_kmeansClustering(self):
         clusters = KMeansClustering(self.vectors,2,documentsAsDict=True).cluster(normalise=True, assignAndReturnDetails=True, repeats=5)
         self.assertEqual(2, len(clusters['clusters']))
+    def test_kmeansClusteringBioPython(self):
+        clusters = KMeansClustering(self.vectors,2,documentsAsDict=True).cluster(normalise=True, assignAndReturnDetails=True, repeats=5, algorithmSource='biopython')
+        self.assertEqual(2, len(clusters['clusters']))
         
 if __name__ == '__main__':
     unittest.main()
