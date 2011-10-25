@@ -19,7 +19,7 @@ from scipy.cluster.vq import kmeans2
 import numpy as np
 
 UN_ASSIGNED = ':ilab:'
-def unitVector(vector): return vector / math.sqrt(np.dot(vector, vector))
+def unitVector(vector): return vector / sum(vector)
 
 def getItemClustersFromItemsets(itemsetIterator, itemDistanceFunction):
     '''
