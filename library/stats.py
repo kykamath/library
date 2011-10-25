@@ -17,5 +17,6 @@ def getWeitzmanOVL(mu1, mu2, sd1, sd2):
                 pmin(f1, f2)
             }
             ''')
+    if mu1==1 and mu2==1 and sd1==1 and sd2==1: return (0.0, 0.0)
     value = str(r.integrate(robjects.r['min.f1f2'], float('-inf'), float('inf'), mu1=mu1, mu2=mu2, sd1=sd1, sd2=sd2)).split()
     return (float(value[0]), float(value[-1]))
