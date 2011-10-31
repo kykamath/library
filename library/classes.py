@@ -83,7 +83,7 @@ class GeneralMethods:
         throw = np.random.rand()*norm
         return np.searchsorted(totals, throw)
     @staticmethod
-    def simplePowerlawDistribution(numberOfBins=10):
+    def getRandomNumberFromSimplePowerlawDistribution(numberOfBins=10):
         values = range(1,11)[::-1]
         return 1./values[GeneralMethods.weightedChoice(values)]
 
