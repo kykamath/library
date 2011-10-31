@@ -82,6 +82,11 @@ class GeneralMethods:
         norm = totals[-1]
         throw = np.random.rand()*norm
         return np.searchsorted(totals, throw)
+    @staticmethod
+    def simplePowerlawDistribution(numberOfBins=10):
+        values = range(1,11)[::-1]
+        return 1./values[GeneralMethods.weightedChoice(values)]
+
         
 class TwoWayMap:
     '''

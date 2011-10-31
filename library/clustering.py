@@ -15,7 +15,7 @@ from classes import TwoWayMap
 from vector import VectorGenerator
 from nltk.cluster import euclidean_distance
 from library.file_io import FileIO
-from scipy.cluster.vq import kmeans2
+from scipy.cluster.vq import kmeans2, whiten
 import numpy as np
 
 UN_ASSIGNED = ':ilab:'
@@ -316,6 +316,7 @@ class Clustering(object):
             self.vectors.append(vector)
             self.masks.append(ones(len(dimensions)))
             self.docIds.append(docId)
+#        self.vectors = whiten(self.vectors)
         self.dimensions = dimensions
     def dumpDocumentVectorsToFile(self, fileName):
         for document, vector in zip(self.documents, self.vectors):
