@@ -21,6 +21,20 @@ def plotNorm(maxYValue, mu, sigma, color=None):
     plt.fill_between(bins, ((1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ))/4)*maxYValue, linewidth=1, color=color, alpha=0.3)
     plt.plot(bins, ((1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ))/4)*maxYValue, linewidth=3, color=color)
 
+def smooth(x,window_len=11,window='hanning'):
+    ''' Got this code from: http://www.scipy.org/Cookbook/SignalSmooth
+    '''
+    x=np.array(x)
+    if x.ndim != 1: raise ValueError, "smooth only accepts 1 dimension arrays."
+    if x.size < window_len: raise ValueError, "Input vector needs to be bigger than window size."
+    if window_len<3: return x
+    if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']: raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
+    s=np.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
+    if window == 'flat': w=np.ones(window_len,'d')
+    else: w=eval('np.'+window+'(window_len)')
+    y=np.convolve(w/w.sum(),s,mode='valid')
+    return y
+
 class CurveFit():
     @staticmethod
     def decreasingExponentialFunction(p, x): 
