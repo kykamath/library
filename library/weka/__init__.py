@@ -6,6 +6,7 @@ Created on Nov 9, 2011
 
 import os, commands, cjson
 from library.file_io import FileIO
+from operator import itemgetter
 
 if 'CLASSPATH' not in os.environ: os.environ['CLASSPATH']='/Applications/Weka/weka-3-6-6/weka.jar'
 wekaScriptsDirectory = __file__.rsplit(os.path.sep,1)[0]+os.path.sep
@@ -18,7 +19,7 @@ class ARFF:
     @staticmethod
     def getAttributeLine(attributeName): return '@ATTRIBUTE %s REAL'%attributeName
     @staticmethod
-    def getDataLine((docId, docVector), keyToIdMap): return  '{%s}'%', '.join(['%s %s'%(keyToIdMap[k], v) for k, v in docVector.iteritems()])
+    def getDataLine((docId, docVector), keyToIdMap): return '{%s}'%', '.join(['%s %s'%tuple for tuple in sorted([(keyToIdMap[k], v) for k, v in docVector.iteritems()], key=itemgetter(0))])
     @staticmethod
     def writeARFFForClustering(data, relationName):
         keyToIdMap = {}
