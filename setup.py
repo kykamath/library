@@ -10,7 +10,7 @@ setup(name='my_library',
       author='Krishna Y. Kamath',
       author_email='krishna.kamath@gmail.com',
       url='https://github.com/kykamath/library',
-      packages=['library', 'library.mr_algorithms', 'library.graphs'],
+      packages=['library', 'library.mr_algorithms', 'library.graphs', 'library.weka'],
 #      data_files=[('lib/python2.6/site-packages/library/data', ['library/data/stop_words.json'])]
       )
 
