@@ -3,7 +3,8 @@ Created on Nov 9, 2011
 
 @author: kykamath
 '''
-from library.file_io import FileIO
+from file_io import FileIO
+from classes import GeneralMethods
 
 class ARFF:
     @staticmethod
@@ -15,7 +16,8 @@ class ARFF:
     @staticmethod
     def writeARFFForClustering(data, relationName):
         keyToIdMap = {}
-        fileName = './'+relationName+'.arff'
+        fileName = '/tmp/'+relationName+'.arff'
+        GeneralMethods.runCommand('rm -rf %s'%fileName)
         for docId, docVector in data.iteritems():
             for k, v in docVector.iteritems():
                 if k not in keyToIdMap: keyToIdMap[k]=len(keyToIdMap)
@@ -23,10 +25,11 @@ class ARFF:
         for attributeName in keyToIdMap: FileIO.writeToFile(ARFF.getAttributeLine(attributeName), fileName)
         FileIO.writeToFile('@data', fileName)
         for d in data.iteritems(): FileIO.writeToFile(ARFF.getDataLine(d, keyToIdMap), fileName)
-            
+        return fileName
+    
 data = {1: {'a':10, 'b': 15},
         2: {'c':10},
         3: {'a':10, 'b': 15}}
 
 relationName = 'data'
-ARFF.writeARFFForClustering(data, relationName)
+print ARFF.writeARFFForClustering(data, relationName)
