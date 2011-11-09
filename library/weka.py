@@ -26,10 +26,10 @@ class ARFF:
         FileIO.writeToFile('@data', fileName)
         for d in data.iteritems(): FileIO.writeToFile(ARFF.getDataLine(d, keyToIdMap), fileName)
         return fileName
-    
-data = {1: {'a':10, 'b': 15},
-        2: {'c':10},
-        3: {'a':10, 'b': 15}}
 
-relationName = 'data'
-print ARFF.writeARFFForClustering(data, relationName)
+#data = {1: {'a':10, 'b': 15},
+#        2: {'c':10},
+#        3: {'a':10, 'b': 15}}
+#
+#relationName = 'data'
+#print ARFF.writeARFFForClustering(data, relationName)
