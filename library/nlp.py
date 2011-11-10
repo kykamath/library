@@ -94,17 +94,21 @@ def getCollocations():
     
     from collections import defaultdict
     
-    documents = [({'a':3}, 1), ({'b':3}, 2)]
-#    word_fd = nltk.FreqDist(feature for doc in documents for feature in doc[0].split())
-    word_fd, bigram_fd = defaultdict(int), defaultdict(int)
-    for docVector, clusterId in documents:
+    documents = [('a a a c c c', 1), ('b b b c c c', 2)]
+    word_fd = nltk.FreqDist(feature for doc in documents for feature in doc[0].split())
+    for document, clusterId in documents:
+        if clusterId not in word_fd: word_fd[clusterId]=0
         word_fd[clusterId]+=1
-        for feature, count in docVector.iteritems(): 
-            word_fd[feature]+=count
-            bigram_fd[(feature, clusterId)]+=count
-    print word_fd
-    print bigram_fd
-#    print nltk.FreqDist((feature, doc[1]) for doc in documents for feature in doc[0].split())
+    word_fd
+#    word_fd, bigram_fd = defaultdict(int), defaultdict(int)
+#    for docVector, clusterId in documents:
+#        word_fd[clusterId]+=1
+#        for feature, count in docVector.iteritems(): 
+#            word_fd[feature]+=count
+#            bigram_fd[(feature, clusterId)]+=count
+#    print word_fd
+#    print bigram_fd
+    bigram_fd = nltk.FreqDist((feature, doc[1]) for doc in documents for feature in doc[0].split())
 
     bigram_measures = nltk.collocations.BigramAssocMeasures()
 #    finder = BigramCollocationFinder.from_words(classGenerator1())
@@ -114,7 +118,8 @@ def getCollocations():
 #    bigram_fd = nltk.FreqDist([('a', 1), ('a', 1), ('b', 2), ('b', 2), ('b', 2)])
     finder = BigramCollocationFinder(word_fd, bigram_fd)
     scored = finder.score_ngrams(bigram_measures.pmi)
-    print sorted(bigram for bigram, score in scored)
+    print scored
+#    print sorted(bigram for bigram, score in scored)
 if __name__ == '__main__':
 #    StopWords.createStopWordsModule()
     getCollocations()
