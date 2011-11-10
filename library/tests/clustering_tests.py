@@ -7,7 +7,7 @@ import sys
 sys.path.append('../')
 import unittest
 from clustering import EvaluationMetrics, EMTextClustering, KMeansClustering, getItemClustersFromItemsets,\
-    MultistepItemsetClustering
+    MultistepItemsetClustering, getTopFeaturesForClass
 
 #class ItemsetClusterTests(unittest.TestCase):
 #    def setUp(self):
@@ -90,6 +90,9 @@ class ClusteringTests(unittest.TestCase):
     def test_kmeansClusteringBioPython(self):
         clusters = KMeansClustering(self.vectors,2,documentsAsDict=True).cluster(normalise=True, assignAndReturnDetails=True, repeats=5, algorithmSource='biopython')
         self.assertEqual(2, len(clusters['clusters']))
+    def test_getTopFeaturesForClass(self):
+        documents = [({'a':3, 'c': 3}, 1), ({'b':3, 'c': 3}, 2)]
+        self.assertEqual([(1, [('a', 3.8073549220576046), ('c', 2.8073549220576046)]), (2, [('b', 3.8073549220576046), ('c', 2.8073549220576046)])], getTopFeaturesForClass(documents))
         
 if __name__ == '__main__':
     unittest.main()

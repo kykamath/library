@@ -4,8 +4,9 @@ Created on Jun 15, 2011
 @author: kykamath
 '''
 
-import cjson, math
+import cjson, math, nltk
 from numpy import *
+from nltk.collocations import BigramCollocationFinder
 from scipy.stats import mode
 from nltk import cluster
 from collections import defaultdict
@@ -20,6 +21,25 @@ import numpy as np
 
 UN_ASSIGNED = ':ilab:'
 def unitVector(vector): return vector / sum(vector)
+
+
+def getTopFeaturesForClass(documents, noOfFeaturesPerClass=10):
+    ''' Feature values are in integer.
+    [{document vector}, classId]
+    '''
+    classToFeaturesMap = defaultdict(list)
+    word_fd = nltk.FreqDist(feature for doc in documents for feature, count in doc[0].iteritems() for i in range(count))
+    for document, clusterId in documents:
+        if clusterId not in word_fd: word_fd[clusterId]=0
+        word_fd[clusterId]+=1
+    bigram_fd = nltk.FreqDist((feature, doc[1]) for doc in documents for feature, count in doc[0].iteritems() for i in range(count))
+    bigram_measures = nltk.collocations.BigramAssocMeasures()
+    finder = BigramCollocationFinder(word_fd, bigram_fd)
+    scored = finder.score_ngrams(bigram_measures.pmi)
+    for (feature, classId), score in scored: classToFeaturesMap[classId].append((feature, score))
+    returnData = []
+    for classId, features in classToFeaturesMap.iteritems(): returnData.append((classId, features[:noOfFeaturesPerClass]))
+    return returnData
 
 def getItemClustersFromItemsets(itemsetIterator, itemDistanceFunction):
     '''
