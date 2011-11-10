@@ -6,6 +6,8 @@ Created on Jun 14, 2011
 
 import enchant, re, cjson, os, pprint
 from stop_words import stopWords
+from nltk.collocations import BigramCollocationFinder
+from nltk.probability import FreqDist
 
 current_directory = '/'.join(__file__.split('/')[:-1])
 twitter_stop_words_file=current_directory+'/data/stop_words.json'
@@ -59,5 +61,60 @@ def getWordsFromRawEnglishMessage(message, check_stop_words=True):
         else: return filter(lambda w: len(w)>2, returnWords)
     return returnWords
 
+def getCollocations():
+    class FeatureAndClassCollocationFinder(BigramCollocationFinder):
+        @classmethod
+        def from_words(cls, words, window_size=2):
+            """Construct a BigramCollocationFinder for all bigrams in the given
+            sequence.  By default, bigrams must be contiguous.
+            """
+            wfd = FreqDist()
+            bfd = FreqDist()
+    
+            if window_size < 2:
+                raise ValueError, "Specify window_size at least 2"
+    
+            for window in classGenerator():
+                w1 = window[0]
+                try:
+                    window = window[:list(window).index(w1, 1)]
+                except ValueError:
+                    pass
+                wfd.inc(w1)
+                for w2 in set(window[1:]):
+                    if w2 is not None:
+                        bfd.inc((w1, w2))
+            return cls(wfd, bfd)
+    def classGenerator():
+        return [('a', 1), ('a', 1), ('b', 2), ('b', 2), ('b', 2)]
+    def classGenerator1():
+        return ['a', 1, 'a', 1, 'b', 2, 'b', 2,'b', 2]
+    
+    import nltk
+    
+    from collections import defaultdict
+    
+    documents = [({'a':3}, 1), ({'b':3}, 2)]
+#    word_fd = nltk.FreqDist(feature for doc in documents for feature in doc[0].split())
+    word_fd, bigram_fd = defaultdict(int), defaultdict(int)
+    for docVector, clusterId in documents:
+        word_fd[clusterId]+=1
+        for feature, count in docVector.iteritems(): 
+            word_fd[feature]+=count
+            bigram_fd[(feature, clusterId)]+=count
+    print word_fd
+    print bigram_fd
+#    print nltk.FreqDist((feature, doc[1]) for doc in documents for feature in doc[0].split())
+
+    bigram_measures = nltk.collocations.BigramAssocMeasures()
+#    finder = BigramCollocationFinder.from_words(classGenerator1())
+#    print finder.nbest(bigram_measures.pmi, 10)  
+
+#    word_fd = nltk.FreqDist(['a', 'a', 'b', 'b', 'b', 1, 2])
+#    bigram_fd = nltk.FreqDist([('a', 1), ('a', 1), ('b', 2), ('b', 2), ('b', 2)])
+    finder = BigramCollocationFinder(word_fd, bigram_fd)
+    scored = finder.score_ngrams(bigram_measures.pmi)
+    print sorted(bigram for bigram, score in scored)
 if __name__ == '__main__':
-    StopWords.createStopWordsModule()
+#    StopWords.createStopWordsModule()
+    getCollocations()
