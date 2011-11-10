@@ -39,8 +39,8 @@ class Clustering:
     EM = 'em'
     KMeans = 'kmeans'
     @staticmethod
-    def cluster(algorithm, dataDict, options):
-        wekaCommand = 'jython %sclusterers.py -a %s -f %s -o "%s"'%(wekaScriptsDirectory, algorithm, ARFF.writeARFFForClustering(dataDict, 'clustering'), options)
+    def cluster(algorithm, fileName, dataDict, options):
+        wekaCommand = 'jython %sclusterers.py -a %s -f %s -o "%s"'%(wekaScriptsDirectory, algorithm, fileName, options)
         assignment = runWekaCommand(wekaCommand)
         returnDict = dict((docId, clusterId) for docId, clusterId in zip(sorted(dataDict), assignment))
         return returnDict
