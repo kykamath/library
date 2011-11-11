@@ -18,8 +18,8 @@ def plotNorm(maxYValue, mu, sigma, color=None, **kwargs):
     s = np.random.normal(mu, sigma, 1000)
     count, bins = np.histogram(s, 1000, normed=True)
     if not color: color=GeneralMethods.getRandomColor()
-    plt.fill_between(bins, ((1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ))/4)*maxYValue, linewidth=1, color=color, alpha=0.3, label='sasda')
-    plt.plot(bins, ((1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ))/4)*maxYValue, linewidth=3, color=color)
+    plt.fill_between(bins, ((1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ))/4)*maxYValue, linewidth=1, color=color, alpha=0.3)
+    plt.plot(bins, ((1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ))/4)*maxYValue, linewidth=3, color=color, label='sasda')
 
 def smooth(x,window_len=11,window='hanning'):
     ''' Got this code from: http://www.scipy.org/Cookbook/SignalSmooth
