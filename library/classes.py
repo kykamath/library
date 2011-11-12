@@ -86,6 +86,10 @@ class GeneralMethods:
     def getRandomNumberFromSimplePowerlawDistribution(numberOfBins=10):
         values = range(1,11)[::-1]
         return 1./values[GeneralMethods.weightedChoice(values)]
+    @staticmethod
+    def getElementsInWindow(l, window):
+        for i in range(len(l)):
+            if i+window<=len(l): yield l[i:i+window]
 
         
 class TwoWayMap:
