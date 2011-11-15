@@ -10,7 +10,7 @@ import unittest
 import networkx as nx
 from graphs import plot, CompoundNode, getMincutTree, MinCutTree,\
     CompoundNodeForTreeCutClustering, CUT_CLUSTERING_T_NODE,\
-    totalIncidentEdgeWeights, clusterUsingMCLClustering
+    totalIncidentEdgeWeights, clusterUsingMCLClustering, Networkx
 import matplotlib.pyplot as plt
 
 graph = nx.Graph()
@@ -45,9 +45,9 @@ graph3.add_edge(7, 8, capacity=10)
 
 
 class GraphTests(unittest.TestCase):
-    def test_plot(self):
-        colors=range(20)
-        plot(nx.star_graph(20), draw_edge_labels=True, node_color='#A0CBE2',edge_color=colors,width=4,edge_cmap=plt.cm.Blues,with_labels=False)
+#    def test_plot(self):
+#        colors=range(20)
+#        plot(nx.star_graph(20), draw_edge_labels=True, node_color='#A0CBE2',edge_color=colors,width=4,edge_cmap=plt.cm.Blues,with_labels=False)
     def test_getMincutTree(self):
         mincutTree = getMincutTree(graph)
         self.assertEqual([1, 2, 3, 4, 5, 6], mincutTree.nodes())
@@ -61,7 +61,13 @@ class GraphTests(unittest.TestCase):
     def test_clusterUsingMCLClustering(self):
         G=nx.random_geometric_graph(200,0.125)
         print clusterUsingMCLClustering(G)
-    
+    def test_graphToDict(self):
+        g = nx.Graph()
+        g.add_node(1, {'w':10}); g.add_node(2, {'w':10}), g.add_edge(1, 2, {'w':10})
+        gDict = Networkx.getDictForGraph(g)
+        gFromDict = Networkx.getGraphFromDict(gDict)
+        self.assertEqual({1: {'w': 10}, 2: {'w': 10}}, gFromDict.node)
+        self.assertEqual({1: {2: {'w': 10}}, 2: {1: {'w': 10}}}, gFromDict.edge)
 class MinCutTreeTests(unittest.TestCase):
     def setUp(self):
         self.S1 = CompoundNode.getInstance('S1', [1, 2])

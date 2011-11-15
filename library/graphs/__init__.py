@@ -18,6 +18,17 @@ def plot(graph, **kwargs):
     plt.show()
     
 def totalIncidentEdgeWeights(graph, node): return sum(graph[node][n]['capacity'] for n in graph.neighbors_iter(node))
+
+class Networkx:
+    @staticmethod
+    def getDictForGraph(graph):
+        return dict(nodes=graph.nodes(True), edges=graph.edges(data=True))
+    @staticmethod
+    def getGraphFromDict(data, graphClass=nx.Graph): 
+        graph = graphClass()
+        for node, nodeData in data['nodes']: graph.add_node(node, nodeData)
+        for u, v , edgeData in data['edges']: graph.add_edge(u, v, edgeData)
+        return graph
     
 def getMincutTree(graph, mincutMethod = ford_fulkerson):
     ''' Construciton of mincut tree as described in 
