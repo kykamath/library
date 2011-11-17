@@ -92,7 +92,52 @@ def getHaversineDistance((lon1, lat1), (lon2, lat2), radius=earthRadiusMiles):
 
 def getCenterOfMass(points): return n.mean(points,0)
 
+def breakIntoLattice(boundingBox, latticeDimensions):
+    '''latticeDimensions = [x,y] will break bounding box into x*y boxes
+    '''
+    lowerLeft, upperRight = boundingBox
+    numberOfX, numberOfY = latticeDimensions
+    y_length = n.abs(upperRight[0]-lowerLeft[0])
+    x_length = n.abs(upperRight[1]-lowerLeft[1])
+    yUnitLength, xUnitLength = y_length/float(numberOfY), x_length/float(numberOfX)
+    yCoords = [lowerLeft[1]]
+    for i in range(numberOfY): yCoords.append(yCoords[-1]+yUnitLength)
+    xCoords = [lowerLeft[0]]
+    for i in range(numberOfX): xCoords.append(xCoords[-1]+xUnitLength)
+    i = 0
+    ar = []
+    for x in xCoords:
+        tempAr = []
+        for y in yCoords:
+            tempAr.append([x,y])
+        ar.append(tempAr)
+    latticeBoundingBoxes = []
+    for i in range(len(xCoords)):
+        for j in range(len(yCoords)):
+            if i+1<len(xCoords) and j+1<len(yCoords): 
+                latticeBoundingBoxes.append([ar[i][j], ar[i+1][j+1]])
+    return (latticeBoundingBoxes, xUnitLength, yUnitLength)
+
+def getLatticeBoundingBoxFor(boundingBox, latticeDimensions, point):
+    lowerLeft, upperRight = boundingBox
+    numberOfX, numberOfY = latticeDimensions
+    x_length = n.abs(upperRight[1]-lowerLeft[1])
+    y_length = n.abs(upperRight[0]-lowerLeft[0])
+    yUnitLength, xUnitLength = y_length/float(numberOfY), x_length/float(numberOfX)
+    
 def getRadiusOfGyration(points):
     if not points: return None
     centerOfMass = getCenterOfMass(points)
     return math.sqrt((sum(getHaversineDistance(centerOfMass, point)**2 for point in points))/len(points))
+
+def getLatticeLid(point, accuracy=0.0075):
+    ''' Accuracy in miles getHaversineDistance([0, 0], [0, 0.0075])
+    '''
+    return '%0.4f_%0.4f'%(int(point[0]/accuracy)*accuracy, int(point[1]/accuracy)*accuracy)
+#print breakIntoLattice([[0,-10], [10,0]], [2,2])
+#getLatticeBoundingBoxFor([[0,-10], [10,0]], [2,2], [2.5, -7.5])
+#print convertRadiansToMiles(49-24)
+print getLatticeLid([37.065,-122.640381])
+print getLatticeLid([37.073,-122.640381])
+#print getHaversineDistance([0, 0], [0.005, 0])
+#print breakIntoLattice([[40.491, -74.356], [41.181, -72.612]], [250,100])[1:]
