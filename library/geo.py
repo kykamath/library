@@ -139,5 +139,7 @@ def getLatticeLid(point, accuracy=0.0075):
 #print convertRadiansToMiles(49-24)
 #print getLatticeLid([37.065,-122.640381])
 #print getLatticeLid([37.073,-122.640381])
-#print getHaversineDistance([0, 0], [0.005, 0])
+print getHaversineDistance([0, 0], [0.0075, 0])
+#print getHaversineDistance([-25.682299, -52.015061], [-25.682299, -51.089635])
+#print getHaversineDistance([-25.058973, -51.089635],[-25.058973, -52.015061])
 #print breakIntoLattice([[40.491, -74.356], [41.181, -72.612]], [250,100])[1:]

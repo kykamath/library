@@ -10,6 +10,8 @@ import sys, cjson
 from mrjob.conf import dump_mrjob_conf, combine_dicts
 from mrjob.protocol import HadoopStreamingProtocol
 from mrjob.job import MRJob
+from file_io import FileIO
+from classes import GeneralMethods
 
 class MRJobWrapper():
     ''' MARKED FOR REMOVAL. DO NOT USE THIS.
@@ -57,7 +59,12 @@ class CJSONProtocol(HadoopStreamingProtocol):
         return cjson.decode(key), cjson.decode(value)
     @classmethod
     def write(cls, key, value): return '%s\t%s' % (cjson.encode(key), cjson.encode(value))
-    
+
+def runMRJob(mrJobClass, outputFileName, inputFileList, args='-r hadoop'.split(), **kwargs):
+    mrJob = mrJobClass(args=args)
+    GeneralMethods.runCommand('rm -rf %s'%outputFileName)
+    for l in mrJob.runJob(inputFileList=inputFileList, **kwargs): FileIO.writeToFileAsJson(l[1], outputFileName)
+
 class ModifiedMRJob(MRJob):
     DEFAULT_INPUT_PROTOCOL=CJSONProtocol.ID
     DEFAULT_PROTOCOL=CJSONProtocol.ID
