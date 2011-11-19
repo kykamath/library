@@ -64,6 +64,7 @@ class ModifiedMRJob(MRJob):
     def _setOptions(self, **kwargs):
         self.args = kwargs.get('inputFileList', self.args)
         self.options.jobconf = combine_dicts(self.options.jobconf, kwargs.get('jobconf', self.options.jobconf))
+    def emptyMapper(self, key, line): yield key, line
     def runJob(self, **kwargs):
         self._setOptions(**kwargs)
         with self.make_runner() as runner:
