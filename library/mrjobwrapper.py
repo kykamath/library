@@ -78,6 +78,13 @@ class ModifiedMRJob(MRJob):
         self.run_mapper()
         sys.stdout = sys.__stdout__ 
         for i in filter (lambda a: a != '\n', mapperOutput.content): yield reader.read(i)
+    
+    ''' Jobs to count number of keys.
+    '''
+    def mapper_count_key(self, key, _): yield 1, key
+    def reducer_count_key(self, _, values): yield 1, {'total': len(list(values))}
+    def jobsToCountNumberOfKeys(self): return [self.mr(mapper=self.mapper_count_key, reducer=self.reducer_count_key)]
+            
     @classmethod
     def protocols(cls):
         protocol_dict = super(ModifiedMRJob, cls).protocols()
