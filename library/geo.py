@@ -144,7 +144,7 @@ def getLatticeLid(point, accuracy=0.0075):
 #getLatticeBoundingBoxFor([[0,-10], [10,0]], [2,2], [2.5, -7.5])
 #print convertRadiansToMiles(49-24)
 #print getLatticeLid([37.065,-122.640381])
-print getLattice([37.073,-122.640381], 1.45)
+#print getLattice([37.073,-122.640381], 1.45)
 #print getHaversineDistance([0, 0], [01.45, 0])
 #print getHaversineDistance([-115.29750900000001, 36.181283000000001], [-115.29750900000001, 36.186214])
 #print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]])
