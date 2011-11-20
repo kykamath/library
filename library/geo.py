@@ -91,7 +91,12 @@ def getHaversineDistance((lon1, lat1), (lon2, lat2), radius=earthRadiusMiles):
     p2lat, p2lon = math.radians(lat2), math.radians(lon2)
     return radius * math.acos(math.sin(p1lat) * math.sin(p2lat) + math.cos(p1lat) * math.cos(p2lat) * math.cos(p2lon - p1lon))
 
-def getCenterOfMass(points): return n.mean(points,0)
+def getCenterOfMass(points, accuracy=10**-6, error=False): 
+    com = getLattice(n.mean(points,0), accuracy=accuracy)
+    if not error: return com
+    else:
+        meanDistance = n.mean([getHaversineDistance(com, p) for p in points])
+        return (com, meanDistance)
 
 def breakIntoLattice(boundingBox, latticeDimensions):
     '''latticeDimensions = [x,y] will break bounding box into x*y boxes
@@ -144,9 +149,9 @@ def getLatticeLid(point, accuracy=0.0075):
 #getLatticeBoundingBoxFor([[0,-10], [10,0]], [2,2], [2.5, -7.5])
 #print convertRadiansToMiles(49-24)
 #print getLatticeLid([37.065,-122.640381])
-#print getLattice([37.073,-122.640381], 1.45)
-#print getHaversineDistance([0, 0], [01.45, 0])
+#print getLattice([37.073,-122.640381])
+#print getHaversineDistance([0, 0], [0.5, 0])
 #print getHaversineDistance([-115.29750900000001, 36.181283000000001], [-115.29750900000001, 36.186214])
-#print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]])
+#print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]], error=True, accuracy=0.5)
 #print getHaversineDistance([38.533449900000001, -121.4920635], [38.533449900000001, -121.4920635])
 #print breakIntoLattice([[40.491, -74.356], [41.181, -72.612]], [250,100])[1:]
