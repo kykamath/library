@@ -5,9 +5,31 @@ Created on Oct 4, 2011
 '''
 import datetime, math
 import numpy as n
+import matplotlib.pyplot as plt
 
 earthRadiusMiles = 3958.761
 earthRadiusKMs = 6371.009
+
+def plotPointsOnUSMap(points, pointLabels=[], pointSize=[], pointColor='b'):
+    from mpl_toolkits.basemap import Basemap
+    m = Basemap(llcrnrlon=-119, llcrnrlat=22, urcrnrlon=-64, urcrnrlat=49, projection='lcc', lat_1=33, lat_2=45, lon_0=-95, resolution='h', area_thresh=10000)
+    m.drawmapboundary(fill_color='#85A6D9')
+    
+    m.fillcontinents(color='white',lake_color='#85A6D9')
+    m.drawstates(color='#6D5F47', linewidth=.4)
+    m.drawcoastlines(color='#6D5F47', linewidth=.4)
+    m.drawcountries(color='#6D5F47', linewidth=.4)
+    
+    m.drawmeridians(n.arange(-180, 180, 30), color='#bbbbbb')
+    m.drawparallels(n.arange(-90, 90, 30), color='#bbbbbb')
+    lats, lngs = zip(*points)
+    
+    x,y = m(lngs,lats)
+    m.scatter(x, y, s=pointSize, c=pointColor, marker='o', alpha=0.25, zorder = 2)
+    
+    for population, xpt, ypt in zip(pointLabels, x, y):
+        label_txt = str(population)
+        plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
 
 def parseData(line):
     data = line.strip().split('\t')
