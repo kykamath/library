@@ -86,7 +86,7 @@ def getHaversineDistance((lon1, lat1), (lon2, lat2), radius=earthRadiusMiles):
     '''
     Got this code from
     '''
-    if lon1==lon2 and lat1==lat2: return 0.0
+    if str(lon1)==str(lon2) and str(lat1)==str(lat2): return 0.0
     p1lat, p1lon = math.radians(lat1), math.radians(lon1)
     p2lat, p2lon = math.radians(lat2), math.radians(lon2)
     return radius * math.acos(math.sin(p1lat) * math.sin(p2lat) + math.cos(p1lat) * math.cos(p2lat) * math.cos(p2lon - p1lon))
@@ -151,7 +151,7 @@ def getLatticeLid(point, accuracy=0.0075):
 #print getLatticeLid([37.065,-122.640381])
 #print getLattice([37.073,-122.640381])
 #print getHaversineDistance([0, 0], [0.5, 0])
-#print getHaversineDistance([-115.29750900000001, 36.181283000000001], [-115.29750900000001, 36.186214])
+print getHaversineDistance([37.699999999999996, -122.23499999999999], [37.700000000000003, -122.235])
 #print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]], error=True, accuracy=0.5)
 #print getHaversineDistance([38.533449900000001, -121.4920635], [38.533449900000001, -121.4920635])
 #print breakIntoLattice([[40.491, -74.356], [41.181, -72.612]], [250,100])[1:]
