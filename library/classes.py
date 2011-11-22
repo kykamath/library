@@ -66,6 +66,8 @@ class GeneralMethods:
     @staticmethod
     def approximateToNearest5Minutes(dateTimeObject):return datetime(dateTimeObject.year, dateTimeObject.month, dateTimeObject.day, dateTimeObject.hour, 5*(dateTimeObject.minute/5))
     @staticmethod
+    def approximateEpoch(epoch, modInSeconds): return int(epoch/modInSeconds)*modInSeconds
+    @staticmethod
     def getValueDistribution(itemList, valueFunction, *args):
         distribution = defaultdict(int)
         for v in itemList: distribution[valueFunction(v, *args)]+=1
