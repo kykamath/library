@@ -12,7 +12,7 @@ earthRadiusKMs = 6371.009
 
 def plotPointsOnUSMap(points, pointLabels=[], pointSize=[], pointColor='b'):
     from mpl_toolkits.basemap import Basemap
-    m = Basemap(llcrnrlon=-119, llcrnrlat=22, urcrnrlon=-64, urcrnrlat=49, projection='lcc', lat_1=33, lat_2=45, lon_0=-95, resolution='h', area_thresh=10000)
+    m = Basemap(llcrnrlon=-119, llcrnrlat=22, urcrnrlon=-64, urcrnrlat=49, projection='lcc', lat_1=33, lat_2=45, lon_0=-95, resolution='l', area_thresh=10000)
     m.drawmapboundary(fill_color='#85A6D9')
     
     m.fillcontinents(color='white',lake_color='#85A6D9')
@@ -172,7 +172,7 @@ def getLatticeLid(point, accuracy=0.0075):
 #print convertRadiansToMiles(49-24)
 #print getLatticeLid([37.065,-122.640381])
 #print getLattice([37.073,-122.640381])
-#print getHaversineDistance([0, 0], [0.5, 0])
+#print getHaversineDistance([0, 0], [0.2, 0])
 #print getHaversineDistance([37.699999999999996, -122.23499999999999], [37.700000000000003, -122.235])
 #print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]], error=True, accuracy=0.5)
 #print getHaversineDistance([38.533449900000001, -121.4920635], [38.533449900000001, -121.4920635])
