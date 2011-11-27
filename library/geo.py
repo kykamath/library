@@ -26,7 +26,7 @@ def plotPointsOnUSMap(points, pointLabels=[], *args, **kwargs):
     lats, lngs = zip(*points)
     
     x,y = m(lngs,lats)
-    scatterPlot = m.scatter(x, y, *args, **kwargs)
+    scatterPlot = m.scatter(x, y, zorder = 2, *args, **kwargs)
     
     for population, xpt, ypt in zip(pointLabels, x, y):
         label_txt = str(population)
