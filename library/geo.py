@@ -26,12 +26,13 @@ def plotPointsOnUSMap(points, pointLabels=[], pointSize=[], pointColor='b', *arg
     lats, lngs = zip(*points)
     
     x,y = m(lngs,lats)
-    m.scatter(x, y, s=pointSize, c=pointColor, marker='o', alpha=1.0, zorder = 2, *args, **kwargs)
+    scatterPlot = m.scatter(x, y, s=pointSize, c=pointColor, marker='o', alpha=1.0, zorder = 2, *args, **kwargs)
     
     for population, xpt, ypt in zip(pointLabels, x, y):
         label_txt = str(population)
         plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
-
+    return scatterPlot
+    
 def parseData(line):
     data = line.strip().split('\t')
     if len(data)!=7: data.append(None) 
