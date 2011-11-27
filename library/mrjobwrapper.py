@@ -86,11 +86,49 @@ class ModifiedMRJob(MRJob):
         sys.stdout = sys.__stdout__ 
         for i in filter (lambda a: a != '\n', mapperOutput.content): yield reader.read(i)
     
-    ''' Jobs to count number of keys.
+    ''' Start: Jobs to count number of keys.
     '''
     def mapper_count_key(self, key, _): yield 1, key
     def reducer_count_key(self, _, values): yield 1, {'total': len(list(values))}
     def jobsToCountNumberOfKeys(self): return [self.mr(mapper=self.mapper_count_key, reducer=self.reducer_count_key)]
+    ''' End: Jobs to count number of keys.
+    '''
+#    
+#    ''' Start: Jobs to find stable Markov modelling process.
+#        Got this code from: https://github.com/Yelp/mrjob/blob/development/mrjob/examples/mr_page_rank.py
+#    '''
+#    def send_score(self, node_id, node):
+#        """Mapper: send score from a single node to other nodes.
+#
+#        Input: ``node_id, node``
+#
+#        Output:
+#        ``node_id, ('node', node)`` OR
+#        ``node_id, ('score', score)``
+#        """
+#        yield node_id, ('node', node)
+#        for dest_id, weight in node.get('links') or []: yield dest_id, ('score', node['score'] * weight)
+#    def receive_score(self, node_id, typed_values):
+#        """Reducer: Combine scores sent from other nodes, and update this node
+#        (creating it if necessary).
+#
+#        Store information about the node's previous score in *prev_score*.
+#        """
+#        node = {}
+#        total_score = 0
+#        for value_type, value in typed_values:
+#            if value_type == 'node': node = value
+#            else:
+#                assert value_type == 'score'
+#                total_score += value
+#        node['prev_score'] = node['score']
+#        d = self.options.damping_factor
+#        node['score'] = 1 - d + d * total_score
+#        yield node_id, node
+#    def getJobsToGetStableTransitionProbabilities(self): return ([self.mr(mapper=self.send_score, reducer=self.receive_score)] * self.options.iterations)
+#    ''' End: Jobs to find stable Markov modelling process.
+#    '''
+    
             
     @classmethod
     def protocols(cls):
