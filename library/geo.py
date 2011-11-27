@@ -11,7 +11,7 @@ earthRadiusMiles = 3958.761
 earthRadiusKMs = 6371.009
 earthCircumferenceInMiles = 24901.55
 
-def plotPointsOnUSMap(points, pointLabels=[], pointSize=[], pointColor='b', *args, **kwargs):
+def plotPointsOnUSMap(points, pointLabels=[], *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
     m = Basemap(llcrnrlon=-119, llcrnrlat=22, urcrnrlon=-64, urcrnrlat=49, projection='lcc', lat_1=33, lat_2=45, lon_0=-95, resolution='l', area_thresh=10000)
     m.drawmapboundary(fill_color='#85A6D9')
@@ -26,7 +26,7 @@ def plotPointsOnUSMap(points, pointLabels=[], pointSize=[], pointColor='b', *arg
     lats, lngs = zip(*points)
     
     x,y = m(lngs,lats)
-    scatterPlot = m.scatter(x, y, s=pointSize, c=pointColor, marker='o', zorder = 2, *args, **kwargs)
+    scatterPlot = m.scatter(x, y, marker='o', zorder = 2, *args, **kwargs)
     
     for population, xpt, ypt in zip(pointLabels, x, y):
         label_txt = str(population)
