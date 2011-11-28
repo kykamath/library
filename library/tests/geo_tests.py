@@ -6,9 +6,10 @@ Created on Oct 4, 2011
 import sys
 sys.path.append('../')
 import unittest
+import matplotlib.pyplot as plt
 from geo import getLidFromLocation, getLocationFromLid, convertMilesToRadians,\
     convertRadiansToMiles, convertKMsToRadians, convertRadiansToKMs,\
-    isWithinBoundingBox,getHaversineDistanceForLids
+    isWithinBoundingBox,getHaversineDistanceForLids, plotPointsOnUSMap
 
 class GeoTests(unittest.TestCase):
     def test_getLidFromLocation(self): self.assertEqual('38.930 -77.028', getLidFromLocation([38.929854, -77.027976]))
@@ -27,6 +28,12 @@ class GeoTests(unittest.TestCase):
         self.assertTrue(isWithinBoundingBox([37.788081,-73.037109], boundary))
         self.assertTrue(isWithinBoundingBox([25.562265, -80.595703], boundary))
     def test_getHaversineDistanceForLids(self): self.assertEqual(553.86484760274641, getHaversineDistanceForLids(getLidFromLocation([25.562265, -80.595703]), getLidFromLocation([37.788081,-73.037109])))
+    def test_plotPointsOnUSMap(self):
+        pointLabels = ['a', 'b', 'c']
+        pointSize = [19.75, 100, 500]
+        pointColor = ['b', 'r', 'g']
+        plotPointsOnUSMap([[40.809, -74.02], [40.809, -76.02], [44.809, -74.02]], pointLabels, pointSize, pointColor)
+        plt.show()
     
 if __name__ == '__main__':
     unittest.main()

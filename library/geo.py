@@ -33,6 +33,25 @@ def plotPointsOnUSMap(points, pointLabels=[], *args, **kwargs):
         plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
     return scatterPlot
     
+def plotPointsOnWorldMap(points, pointLabels=[], *args, **kwargs):
+    from mpl_toolkits.basemap import Basemap
+    m = Basemap(projection='mill', llcrnrlon=-180. ,llcrnrlat=-60, urcrnrlon=180. ,urcrnrlat=80.)
+    m.drawmapboundary(fill_color='#85A6D9')
+    
+    m.fillcontinents(color='white',lake_color='#85A6D9')
+    m.drawcoastlines(color='#6D5F47', linewidth=.4)
+    m.drawcountries(color='#6D5F47', linewidth=.4)
+    
+    lats, lngs = zip(*points)
+    
+    x,y = m(lngs,lats)
+    scatterPlot = m.scatter(x, y, zorder = 2, *args, **kwargs)
+    
+    for population, xpt, ypt in zip(pointLabels, x, y):
+        label_txt = str(population)
+        plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
+    return scatterPlot
+    
 def parseData(line):
     data = line.strip().split('\t')
     if len(data)!=7: data.append(None) 
