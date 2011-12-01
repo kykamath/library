@@ -37,6 +37,10 @@ def smooth(x,window_len=11,window='hanning'):
 
 class CurveFit():
     @staticmethod
+    def logFunction(p, x):
+        ''' Log function:  = p[0]+log(p[1])'''
+        return p[0]+np.log(p[1])
+    @staticmethod
     def decreasingExponentialFunction(p, x): 
         ''' Exponential funcion: y = p[0].x^-p[1]    '''
         return p[0]*pow(x, -1*p[1])
