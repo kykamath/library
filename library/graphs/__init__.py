@@ -136,7 +136,7 @@ def clusterUsingMCLClustering(graph, inflation=1.4, **kwargs):
     def getClusters(data, inflation=1.4):
         clusters = []
         if data:
-            os.environ["PATH"] = os.environ["PATH"]+os.pathsep+'/opt/local/bin'
+            os.environ["PATH"] = os.environ["PATH"]+os.pathsep+'/opt/local/bin'+os.pathsep+'/usr/local/bin'
             mcl_folder = '/tmp/mcl_dir/'
             if not os.path.exists(mcl_folder): os.mkdir(mcl_folder)
             os.chdir(mcl_folder)
