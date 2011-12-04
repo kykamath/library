@@ -141,7 +141,7 @@ def clusterUsingMCLClustering(graph, inflation=1.4, **kwargs):
             if not os.path.exists(mcl_folder): os.mkdir(mcl_folder)
             os.chdir(mcl_folder)
             graph_file = open('graph', 'w')
-            for edge in data: graph_file.write('%s %s %d\n'%(edge))
+            for edge in data: graph_file.write('%s %s %0.6f\n'%(edge))
             graph_file.close()
             os.system('mcl graph -q x -V all -I %s --abc -o graph.out'%inflation)
             for l in open('graph.out'): clusters.append(l.strip().split())
