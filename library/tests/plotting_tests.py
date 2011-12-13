@@ -4,9 +4,9 @@ Created on Jul 5, 2011
 @author: kykamath
 '''
 import unittest
-import scipy
+import scipy, random
 from plotting import CurveFit, getCumulativeDistribution,\
-    getInverseCumulativeDistribution, Map
+    getInverseCumulativeDistribution, Map, plot3D
 import matplotlib.pyplot as plt
 from classes import GeneralMethods
 
@@ -34,6 +34,10 @@ class GlobalMethodTests(unittest.TestCase):
         pd = [0.5,0.25, 0.1, 0.1, 0.05]
         cd = [1, 0.5, 0.25, 0.14999999999999999, 0.049999999999999989]
         self.assertEqual(cd,getInverseCumulativeDistribution(pd))
+    def test_plot3d(self):
+        data =  dict([(i, dict([(j, random.random())for j in range(10)])) for i in range(5)])
+        plot3D(data)
+        plt.show()
 
 class MapTests(unittest.TestCase):
     def test_map(self):
