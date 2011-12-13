@@ -193,7 +193,7 @@ def getLatticeLid(point, accuracy=0.0075):
 #print convertRadiansToMiles(49-24)
 #print getLatticeLid([37.065,-122.640381])
 #print getLattice([37.073,-122.640381])
-print getHaversineDistance([-6.6699999999999999, 109.03999999999999], [-3.250209, 128.847656])
+#print getHaversineDistance([-6.6699999999999999, 109.03999999999999], [-3.250209, 128.847656])
 #print getHaversineDistance([37.699999999999996, -122.23499999999999], [37.700000000000003, -122.235])
 #print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]], error=True, accuracy=0.5)
 #print getHaversineDistance([38.533449900000001, -121.4920635], [38.533449900000001, -121.4920635])
