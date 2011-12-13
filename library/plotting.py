@@ -35,6 +35,19 @@ def smooth(x,window_len=11,window='hanning'):
     y=np.convolve(w/w.sum(),s,mode='valid')
     return y
 
+def plot3D(data):
+    from mpl_toolkits.mplot3d import axes3d
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    X = sorted(data.keys())
+    Y = sorted(data[X[0]].keys())
+    Z = []
+    for y in Y: Z.append([data[x][y] for x in X])
+    X, Y = np.meshgrid(X, Y)
+    Z = np.array(Z)
+    print X.shape, Y.shape, Z.shape
+    ax.plot_wireframe(X,Y,Z)
+
 class CurveFit():
     @staticmethod
     def logFunction(p, x):
