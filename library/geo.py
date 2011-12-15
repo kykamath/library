@@ -33,7 +33,7 @@ def plotPointsOnUSMap(points, pointLabels=[], *args, **kwargs):
         plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
     return scatterPlot
     
-def plotPointsOnWorldMap(points, pointLabels=[], *args, **kwargs):
+def plotPointsOnWorldMap(points, returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
     m = Basemap(projection='mill', llcrnrlon=-180. ,llcrnrlat=-60, urcrnrlon=180. ,urcrnrlat=80.)
     m.drawmapboundary(fill_color='#85A6D9')
@@ -50,7 +50,8 @@ def plotPointsOnWorldMap(points, pointLabels=[], *args, **kwargs):
     for population, xpt, ypt in zip(pointLabels, x, y):
         label_txt = str(population)
         plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
-    return scatterPlot
+    if not returnBaseMapObject: return scatterPlot
+    else: return (scatterPlot, m)
     
 def parseData(line):
     data = line.strip().split('\t')
