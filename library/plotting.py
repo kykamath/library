@@ -18,7 +18,7 @@ def plotMethods(methods): map(lambda method: method(returnAxisValuesOnly=False),
 def splineSmooth(dataX, dataY):
     newDataX = np.linspace(min(dataX),max(dataX),300)
     dataY = spline(dataX,dataY,newDataX)
-    return dataX, dataY
+    return newDataX, dataY
 
 def plotNorm(maxYValue, mu, sigma, color=None, **kwargs):
     s = np.random.normal(mu, sigma, 1000)
