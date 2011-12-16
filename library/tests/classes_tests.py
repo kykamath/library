@@ -41,8 +41,9 @@ class GeneralMethodsTests(unittest.TestCase):
             @timeit
             def test(): time.sleep(2)
         @timeit
-        def method(): time.sleep(1)
+        def method(**kwargs): time.sleep(1)
         method(), dummy.test()
+        self.assertNotEqual(method(returnTimeDifferenceOnly=True), None)
     def test_getValueDistribution(self):
         map = {'a': [1,2,3], 'b': [3], 'c': [4]}
         self.assertEqual({1: 2, 3: 1}, GeneralMethods.getValueDistribution(map.itervalues(), len))

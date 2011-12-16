@@ -18,9 +18,12 @@ def timeit(method):
         timeItMessage = 'timeit: '
         ts = time.time()
 #        print '%sStarting %r'%(timeItMessage, method.__name__)
+        returnTimeDifferenceOnly = kw.get('returnTimeDifferenceOnly', None)
         result = method(*args, **kw)
         te = time.time()
-        print '%s%r took %2.2f sec' % (timeItMessage, method.__name__, te-ts)
+        timeDifference = te-ts
+        if returnTimeDifferenceOnly: return (result, timeDifference)
+        print '%s%r took %2.2f sec' % (timeItMessage, method.__name__, timeDifference)
         return result
     return timed
 
