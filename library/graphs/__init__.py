@@ -29,7 +29,13 @@ class Networkx:
         for node, nodeData in data['nodes']: graph.add_node(node, nodeData)
         for u, v , edgeData in data['edges']: graph.add_edge(u, v, edgeData)
         return graph
-    
+
+def clusterUsingAffinityPropagation(graph,**kwargs):
+    from sklearn.cluster.affinity_propagation_ import AffinityPropagation
+    S = nx.to_numpy_matrix(graph, weight='w')
+    af = AffinityPropagation(**kwargs).fit(S)
+    return (len(af.cluster_centers_indices_), zip(graph.nodes(), af.labels_))
+
 def getMincutTree(graph, mincutMethod = ford_fulkerson):
     ''' Construciton of mincut tree as described in 
         "Multi-Terminal Network Flows" - R. E. Gomory and T. C. Hu (http://www.jstor.org/stable/2098881)
