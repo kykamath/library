@@ -9,10 +9,16 @@ import scipy.optimize
 from collections import defaultdict
 from numpy.ma.core import exp, log
 from classes import GeneralMethods
+from scipy.interpolate import spline
 
 def getLatexForString(str): return '$'+str.replace(' ', '\\ ')+'$'
 
 def plotMethods(methods): map(lambda method: method(returnAxisValuesOnly=False), methods), plt.show()
+
+def splineSmooth(dataX, dataY):
+    newDataX = np.linspace(min(dataX),max(dataX),300)
+    dataY = spline(dataX,dataY,newDataX)
+    return dataX, dataY
 
 def plotNorm(maxYValue, mu, sigma, color=None, **kwargs):
     s = np.random.normal(mu, sigma, 1000)
