@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from random import sample
 from maxflow import ford_fulkerson
 from operator import itemgetter
+from file_io import FileIO
 
 MINCUT_TREE_NODE = 'mincut_tree_node'
 CAPACITY = 'capacity'
@@ -29,6 +30,10 @@ class Networkx:
         for node, nodeData in data['nodes']: graph.add_node(node, nodeData)
         for u, v , edgeData in data['edges']: graph.add_edge(u, v, edgeData)
         return graph
+    @staticmethod
+    def writeGraphToFile(graph, fileName): FileIO.writeToFileAsJson(Networkx.getDictForGraph(graph), fileName)
+    @staticmethod
+    def readGraphFromFile(fileName): return Networkx.getGraphFromDict(list(FileIO.iterateJsonFromFile(fileName))[0])
 
 def clusterUsingAffinityPropagation(graph,**kwargs):
     from sklearn.cluster.affinity_propagation_ import AffinityPropagation
