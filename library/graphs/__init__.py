@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from random import sample
 from maxflow import ford_fulkerson
 from operator import itemgetter
-from file_io import FileIO
+from library.file_io import FileIO
 
 MINCUT_TREE_NODE = 'mincut_tree_node'
 CAPACITY = 'capacity'
