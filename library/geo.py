@@ -34,20 +34,20 @@ def plotPointsOnUSMap(points, returnBaseMapObject = False, pointLabels=[], *args
     if not returnBaseMapObject: return scatterPlot
     else: return (scatterPlot, m)
     
-def plotPointsOnWorldMap(points, returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
+def plotPointsOnWorldMap(points, blueMarble=False, returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
     m = Basemap(projection='mill', llcrnrlon=-180. ,llcrnrlat=-60, urcrnrlon=180. ,urcrnrlat=80.)
-    m.drawmapboundary(fill_color='#85A6D9')
-    
-    m.fillcontinents(color='white',lake_color='#85A6D9')
-    m.drawcoastlines(color='#6D5F47', linewidth=.4)
-    m.drawcountries(color='#6D5F47', linewidth=.4)
+    if blueMarble: m.bluemarble()
+    else:
+        m.drawmapboundary(fill_color='#85A6D9')
+        m.fillcontinents(color='white',lake_color='#85A6D9')
+        m.drawcoastlines(color='#6D5F47', linewidth=.4)
+        m.drawcountries(color='#6D5F47', linewidth=.4)
     
     lats, lngs = zip(*points)
     
     x,y = m(lngs,lats)
     scatterPlot = m.scatter(x, y, zorder = 2, *args, **kwargs)
-    
     for population, xpt, ypt in zip(pointLabels, x, y):
         label_txt = str(population)
         plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
