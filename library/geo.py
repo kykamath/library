@@ -34,13 +34,13 @@ def plotPointsOnUSMap(points, returnBaseMapObject = False, pointLabels=[], *args
     if not returnBaseMapObject: return scatterPlot
     else: return (scatterPlot, m)
     
-def plotPointsOnWorldMap(points, blueMarble=False, returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
+def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
     m = Basemap(projection='mill', llcrnrlon=-180. ,llcrnrlat=-60, urcrnrlon=180. ,urcrnrlat=80.)
     if blueMarble: m.bluemarble()
     else:
-        m.drawmapboundary(fill_color='#85A6D9')
-        m.fillcontinents(color='white',lake_color='#85A6D9')
+        m.drawmapboundary(fill_color=bkcolor)
+        m.fillcontinents(color='white',lake_color=bkcolor)
         m.drawcoastlines(color='#6D5F47', linewidth=.4)
         m.drawcountries(color='#6D5F47', linewidth=.4)
     
