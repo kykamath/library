@@ -58,16 +58,17 @@ def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBase
     if not returnBaseMapObject: return scatterPlot
     else: return (scatterPlot, m)
 
-def plot_graph_clusters_on_world_map(graph, s=0, lw=0, alpha=0.6, bkcolor='#CFCFCF', returnBaseMapObject=True, *args, **kwargs):  
+def plot_graph_clusters_on_world_map(graph, s=0, lw=0, alpha=0.6, bkcolor='#CFCFCF', *args, **kwargs):  
     no_of_clusters, tuples_of_location_and_cluster_id = clusterUsingAffinityPropagation(graph)
     map_from_location_to_cluster_id = dict(tuples_of_location_and_cluster_id)
     map_from_cluster_id_to_cluster_color = dict([(i, GeneralMethods.getRandomColor()) for i in range(no_of_clusters)])
     points, colors = zip(*map(lambda  location: (getLocationFromLid(location.replace('_', ' ')), map_from_cluster_id_to_cluster_color[map_from_location_to_cluster_id[location]]), graph.nodes()))
-    _, m = plotPointsOnWorldMap(points, c=colors, s=s, lw=lw, returnBaseMapObject=returnBaseMapObject,  *args, **kwargs)
+    _, m = plotPointsOnWorldMap(points, c=colors, s=s, lw=lw, returnBaseMapObject=True,  *args, **kwargs)
     for u, v, data in graph.edges(data=True):
         if map_from_location_to_cluster_id[u]==map_from_location_to_cluster_id[v]:
             color, u, v, w = map_from_cluster_id_to_cluster_color[map_from_location_to_cluster_id[u]], getLocationFromLid(u.replace('_', ' ')), getLocationFromLid(v.replace('_', ' ')), data['w']
             m.drawgreatcircle(u[1], u[0], v[1], v[0], color=color, alpha=alpha)
+    return (no_of_clusters, tuples_of_location_and_cluster_id)
     
 def parseData(line):
     data = line.strip().split('\t')
