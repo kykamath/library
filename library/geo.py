@@ -7,6 +7,9 @@ import datetime, math
 import numpy as n
 import matplotlib.pyplot as plt
 from graphs import clusterUsingAffinityPropagation
+from classes import GeneralMethods
+from itertools import groupby
+from operator import itemgetter
 
 earthRadiusMiles = 3958.761
 earthRadiusKMs = 6371.009
@@ -55,17 +58,16 @@ def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBase
     if not returnBaseMapObject: return scatterPlot
     else: return (scatterPlot, m)
 
-def plot_graph_clusters_on_world_map(graph, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], *args, **kwargs):  
-    no_of_clusters, clusters = clusterUsingAffinityPropagation(graph)
-    nodeToClusterIdMap = dict(clusters)
-    colorMap = dict([(i, GeneralMethods.getRandomColor()) for i in range(noOfClusters)])
-    clusters = [(c, list(l)) for c, l in groupby(sorted(clusters, key=itemgetter(1)), key=itemgetter(1))]
-    points, colors = zip(*map(lambda  l: (getLocationFromLid(l.replace('_', ' ')), colorMap[nodeToClusterIdMap[l]]), graph.nodes()))
-    _, m =plotPointsOnWorldMap(points[:1], s=0, lw=0, c=colors[:1], returnBaseMapObject=True)
+def plot_graph_clusters_on_world_map(graph, s=0, lw=0, alpha=0.6, bkcolor='#CFCFCF', returnBaseMapObject=True, *args, **kwargs):  
+    no_of_clusters, tuples_of_location_and_cluster_id = clusterUsingAffinityPropagation(graph)
+    map_from_location_to_cluster_id = dict(tuples_of_location_and_cluster_id)
+    map_from_cluster_id_to_cluster_color = dict([(i, GeneralMethods.getRandomColor()) for i in range(no_of_clusters)])
+    points, colors = zip(*map(lambda  location: (getLocationFromLid(location.replace('_', ' ')), map_from_cluster_id_to_cluster_color[map_from_location_to_cluster_id[location]]), graph.nodes()))
+    _, m = plotPointsOnWorldMap(points, c=colors, s=s, lw=lw, returnBaseMapObject=returnBaseMapObject,  *args, **kwargs)
     for u, v, data in graph.edges(data=True):
-        if nodeToClusterIdMap[u]==nodeToClusterIdMap[v]:
-            color, u, v, w = colorMap[nodeToClusterIdMap[u]], getLocationFromLid(u.replace('_', ' ')), getLocationFromLid(v.replace('_', ' ')), data['w']
-            m.drawgreatcircle(u[1],u[0],v[1],v[0],color=color, alpha=1.5)
+        if map_from_location_to_cluster_id[u]==map_from_location_to_cluster_id[v]:
+            color, u, v, w = map_from_cluster_id_to_cluster_color[map_from_location_to_cluster_id[u]], getLocationFromLid(u.replace('_', ' ')), getLocationFromLid(v.replace('_', ' ')), data['w']
+            m.drawgreatcircle(u[1], u[0], v[1], v[0], color=color, alpha=alpha)
     
 def parseData(line):
     data = line.strip().split('\t')
