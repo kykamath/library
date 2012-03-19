@@ -98,8 +98,8 @@ class GeneralMethods:
     @staticmethod
     def get_method_id(): 
         stack = inspect.stack()
-        index = stack[1][4][0].strip().rfind('(')
-        return stack[1][4][0].strip()[:index].replace('.', '/')
+        index = stack[2][4][0].strip().rfind('(')
+        return stack[2][4][0].strip()[:index].replace('.', '/')
 
         
 class TwoWayMap:
