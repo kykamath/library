@@ -4,7 +4,7 @@ Created on Jun 22, 2011
 @author: kykamath
 '''
 from datetime import timedelta, datetime
-import time, random, os
+import time, random, os, inspect
 from collections import defaultdict
 import numpy as np
 
@@ -95,6 +95,11 @@ class GeneralMethods:
     def getElementsInWindow(l, window):
         for i in range(len(l)):
             if i+window<=len(l): yield l[i:i+window]
+    @staticmethod
+    def get_method_id(): 
+        stack = inspect.stack()
+        index = stack[1][4][0].strip().rfind('(')
+        return stack[1][4][0].strip()[:index].replace('.', '/')
 
         
 class TwoWayMap:
