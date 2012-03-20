@@ -31,3 +31,7 @@ def getOutliersRangeUsingIRQ(data):
     q3 = stats.scoreatpercentile(data, 75)
     iqr = q3-q1
     return [q1-1.5*iqr, q3+1.5*iqr]
+
+def filter_outliers(data):
+    lower_range, upper_range = getOutliersRangeUsingIRQ(data)
+    return filter(lambda d: d>=lower_range and d<=upper_range, data)
