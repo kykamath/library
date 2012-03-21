@@ -24,6 +24,13 @@ class CurveFitTests(unittest.TestCase):
         x, p = 85079, [  1.09194452e+03,   1.03448106e+00]
         self.assertTrue(x==int(CurveFit.inverseOfDecreasingExponentialFunction(p, CurveFit.decreasingExponentialFunction(p, x))))
         self.assertTrue(x==int(CurveFit.inverseOfIncreasingExponentialFunction(p, CurveFit.increasingExponentialFunction(p, x))))
+    def test_lineFunction(self):
+        x = range(10)
+        y = range(10)
+        plt.scatter(x,y)
+        params = CurveFit.getParamsAfterFittingData(x, y, CurveFit.lineFunction, [1., 1.])
+        plt.plot(x, CurveFit.getYValues(CurveFit.lineFunction, params, x))
+        plt.show()
 
 class GlobalMethodTests(unittest.TestCase):
     def test_getCumulativeDistribution(self):
