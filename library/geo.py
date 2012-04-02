@@ -33,8 +33,8 @@ def plotPointsOnUSMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMap
 #    m.drawcoastlines(color='#6D5F47', linewidth=.4)
 #    m.drawcountries(color='#6D5F47', linewidth=.4)
     
-    m.drawmeridians(n.arange(-180, 180, 30), color='#bbbbbb')
-    m.drawparallels(n.arange(-90, 90, 30), color='#bbbbbb')
+#    m.drawmeridians(n.arange(-180, 180, 30), color='#bbbbbb')
+#    m.drawparallels(n.arange(-90, 90, 30), color='#bbbbbb')
     lats, lngs = zip(*points)
     
     x,y = m(lngs,lats)
