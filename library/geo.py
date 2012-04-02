@@ -17,7 +17,7 @@ earthCircumferenceInMiles = 24901.55
 
 def plotPointsOnUSMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
-    m = Basemap(llcrnrlon=-125.15625, llcrnrlat=20, urcrnrlon=-59.765625, urcrnrlat=49.61071, projection='lcc', lat_1=24, lat_2=50, lon_0=-98, resolution='l', area_thresh=10000)
+    m = Basemap(llcrnrlon=-125.15625, llcrnrlat=20, urcrnrlon=-59.765625, urcrnrlat=49.61071, projection='mill', lat_1=24, lat_2=50, lon_0=-98, resolution='l', area_thresh=10000)
     m.drawmapboundary(fill_color='#85A6D9')
     
     if blueMarble: m.bluemarble()
