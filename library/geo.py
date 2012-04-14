@@ -15,18 +15,26 @@ earthRadiusMiles = 3958.761
 earthRadiusKMs = 6371.009
 earthCircumferenceInMiles = 24901.55
 
-def plotPointsOnUSMap(points, returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
+def plotPointsOnUSMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
-    m = Basemap(llcrnrlon=-125.15625, llcrnrlat=20, urcrnrlon=-59.765625, urcrnrlat=49.61071, projection='lcc', lat_1=24, lat_2=50, lon_0=-98, resolution='l', area_thresh=10000)
+    m = Basemap(llcrnrlon=-125.15625, llcrnrlat=20, urcrnrlon=-59.765625, urcrnrlat=49.61071, projection='mill', lat_1=24, lat_2=50, lon_0=-98, resolution='l', area_thresh=10000)
     m.drawmapboundary(fill_color='#85A6D9')
     
-    m.fillcontinents(color='white',lake_color='#85A6D9')
-    m.drawstates(color='#6D5F47', linewidth=.4)
-    m.drawcoastlines(color='#6D5F47', linewidth=.4)
-    m.drawcountries(color='#6D5F47', linewidth=.4)
+    if blueMarble: m.bluemarble()
+    else:
+        m.drawmapboundary(fill_color=bkcolor)
+        m.fillcontinents(color='white',lake_color=bkcolor)
+        m.drawcoastlines(color='#6D5F47', linewidth=.4)
+        m.drawcountries(color='#6D5F47', linewidth=.4)
+        m.drawstates(color='#6D5F47', linewidth=.4)
     
-    m.drawmeridians(n.arange(-180, 180, 30), color='#bbbbbb')
-    m.drawparallels(n.arange(-90, 90, 30), color='#bbbbbb')
+#    m.fillcontinents(color='white',lake_color='#85A6D9')
+#    m.drawstates(color='#6D5F47', linewidth=.4)
+#    m.drawcoastlines(color='#6D5F47', linewidth=.4)
+#    m.drawcountries(color='#6D5F47', linewidth=.4)
+    
+#    m.drawmeridians(n.arange(-180, 180, 30), color='#bbbbbb')
+#    m.drawparallels(n.arange(-90, 90, 30), color='#bbbbbb')
     lats, lngs = zip(*points)
     
     x,y = m(lngs,lats)
