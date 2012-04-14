@@ -10,10 +10,17 @@ from collections import defaultdict
 from numpy.ma.core import exp, log
 from classes import GeneralMethods
 from scipy.interpolate import spline
+from file_io import FileIO
 
 def getLatexForString(str): return '$'+str.replace(' ', '\\ ')+'$'
 
 def plotMethods(methods): map(lambda method: method(returnAxisValuesOnly=False), methods), plt.show()
+
+def savefig(output_file):
+    print 'Saving figure: ', output_file
+    FileIO.createDirectoryForFile(output_file)
+    plt.savefig(output_file)
+    plt.clf()
 
 def splineSmooth(dataX, dataY):
     newDataX = np.linspace(min(dataX),max(dataX),300)
