@@ -155,6 +155,7 @@ def getHaversineDistance((lon1, lat1), (lon2, lat2), radius=earthRadiusMiles):
     '''
     Got this code from
     '''
+    print (lon1, lat1), (lon2, lat2)
     if str(lon1)==str(lon2) and str(lat1)==str(lat2): return 0.0
     p1lat, p1lon = math.radians(lat1), math.radians(lon1)
     p2lat, p2lon = math.radians(lat2), math.radians(lon2)
