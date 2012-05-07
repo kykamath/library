@@ -46,9 +46,9 @@ def plotPointsOnUSMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMap
     if not returnBaseMapObject: return scatterPlot
     else: return (scatterPlot, m)
     
-def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], *args, **kwargs):
+def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], resolution='l', *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
-    m = Basemap(projection='mill', llcrnrlon=-180. ,llcrnrlat=-60, urcrnrlon=180. ,urcrnrlat=80.)
+    m = Basemap(projection='mill', llcrnrlon=-180. ,llcrnrlat=-60, urcrnrlon=180. ,urcrnrlat=80, resolution=resolution)
     if blueMarble: m.bluemarble()
     else:
         m.drawmapboundary(fill_color=bkcolor)
