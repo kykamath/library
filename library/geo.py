@@ -218,6 +218,24 @@ def getLatticeLid(point, accuracy=0.0075):
     ''' Accuracy in miles getHaversineDistance([0, 0], [0, 0.0075])
     '''
     return '%0.4f_%0.4f'%(int(point[0]/accuracy)*accuracy, int(point[1]/accuracy)*accuracy)
+def point_inside_polygon(x,y,poly):
+    ''' Got this code from http://www.ariel.com.au/a/python-point-int-poly.html .
+    poly = [[x1,y1], [x2, y2], ...]
+    '''
+    n = len(poly)
+    inside =False
+    p1x,p1y = poly[0]
+    for i in range(n+1):
+        p2x,p2y = poly[i % n]
+        if y > min(p1y,p2y):
+            if y <= max(p1y,p2y):
+                if x <= max(p1x,p2x):
+                    if p1y != p2y:
+                        xinters = (y-p1y)*(p2x-p1x)/(p2y-p1y)+p1x
+                    if p1x == p2x or x <= xinters:
+                        inside = not inside
+        p1x,p1y = p2x,p2y
+    return inside
 #print breakIntoLattice([[0,-10], [10,0]], [2,2])
 #getLatticeBoundingBoxFor([[0,-10], [10,0]], [2,2], [2.5, -7.5])
 #print convertRadiansToMiles(49-24)
@@ -225,7 +243,7 @@ def getLatticeLid(point, accuracy=0.0075):
 #print getLatticeLid([30.259067,-97.695923], 0.725)
 #print getLatticeLid([3.141545,101.691685], 0.725)
 #print getLattice([37.073,-122.640381])
-#print getHaversineDistance([0., 15], [0.,0.])
+#print getHaversineDistance([0., 1.45], [0.,0.])
 #print getHaversineDistance([37.699999999999996, -122.23499999999999], [37.700000000000003, -122.235])
 #print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]], error=True, accuracy=0.5)
 #print getHaversineDistance((33.747123999999999, -84.379047), (33.747124669999998, -84.379047))
