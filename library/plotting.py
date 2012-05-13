@@ -19,7 +19,7 @@ def plotMethods(methods): map(lambda method: method(returnAxisValuesOnly=False),
 def savefig(output_file):
     print 'Saving figure: ', output_file
     FileIO.createDirectoryForFile(output_file)
-    plt.savefig(output_file)
+    plt.savefig(output_file, bbox_inches='tight')
     plt.clf()
 
 def splineSmooth(dataX, dataY):
