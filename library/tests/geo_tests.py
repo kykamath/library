@@ -9,7 +9,28 @@ import unittest
 import matplotlib.pyplot as plt
 from geo import getLidFromLocation, getLocationFromLid, convertMilesToRadians,\
     convertRadiansToMiles, convertKMsToRadians, convertRadiansToKMs,\
-    isWithinBoundingBox,getHaversineDistanceForLids, plotPointsOnUSMap
+    isWithinBoundingBox,getHaversineDistanceForLids, plotPointsOnUSMap, UTMConverter
+    
+class UTMConverterTests(unittest.TestCase):
+    hrbb_lat_long = (30.619058,-96.338798)
+    hrbb_utm = ('14R', 755103.23660390463, 3390404.0353642241)
+    hrbb_utm1 = ('19T',
+                 32,
+                 469)
+    print hrbb_utm1
+    def test_LLtoUTM(self):
+        print UTMConverter.LLtoUTM(23,
+                                   UTMConverterTests.hrbb_lat_long[0],
+                                   UTMConverterTests.hrbb_lat_long[1])
+    def test_UTMtoLL(self):
+        print UTMConverter.UTMtoLL(23,
+                                   UTMConverterTests.hrbb_utm[0],
+                                   UTMConverterTests.hrbb_utm[1],
+                                   UTMConverterTests.hrbb_utm[2])
+        print UTMConverter.UTMtoLL(23,
+                                   UTMConverterTests.hrbb_utm1[0],
+                                   UTMConverterTests.hrbb_utm1[1],
+                                   UTMConverterTests.hrbb_utm1[2])
 
 class GeoTests(unittest.TestCase):
     def test_getLidFromLocation(self): self.assertEqual('38.930 -77.028', getLidFromLocation([38.929854, -77.027976]))
