@@ -14,23 +14,56 @@ from geo import getLidFromLocation, getLocationFromLid, convertMilesToRadians,\
 class UTMConverterTests(unittest.TestCase):
     hrbb_lat_long = (30.619058,-96.338798)
     hrbb_utm = ('14R', 755103.23660390463, 3390404.0353642241)
-    hrbb_utm1 = ('19T',
-                 32,
-                 469)
-    print hrbb_utm1
     def test_LLtoUTM(self):
-        print UTMConverter.LLtoUTM(23,
-                                   UTMConverterTests.hrbb_lat_long[0],
-                                   UTMConverterTests.hrbb_lat_long[1])
+        self.assertEqual(UTMConverterTests.hrbb_utm, 
+                         UTMConverter.LLtoUTM(
+                                UTMConverterTests.hrbb_lat_long[0],
+                                UTMConverterTests.hrbb_lat_long[1])
+                         )
+        self.assertEqual(('14R', 755, 3390), 
+                         UTMConverter.LLtoUTM(
+                                UTMConverterTests.hrbb_lat_long[0],
+                                UTMConverterTests.hrbb_lat_long[1],
+                                UTMConverter.accuracy_1M)
+                         )
+        self.assertEqual(('14R', 75, 339), 
+                         UTMConverter.LLtoUTM(
+                                UTMConverterTests.hrbb_lat_long[0],
+                                UTMConverterTests.hrbb_lat_long[1],
+                                UTMConverter.accuracy_10KM)
+                         )
+        self.assertEqual(('14R', 7, 33), 
+                         UTMConverter.LLtoUTM(
+                                UTMConverterTests.hrbb_lat_long[0],
+                                UTMConverterTests.hrbb_lat_long[1],
+                                UTMConverter.accuracy_100KM)
+                         )
     def test_UTMtoLL(self):
-        print UTMConverter.UTMtoLL(23,
-                                   UTMConverterTests.hrbb_utm[0],
-                                   UTMConverterTests.hrbb_utm[1],
-                                   UTMConverterTests.hrbb_utm[2])
-        print UTMConverter.UTMtoLL(23,
-                                   UTMConverterTests.hrbb_utm1[0],
-                                   UTMConverterTests.hrbb_utm1[1],
-                                   UTMConverterTests.hrbb_utm1[2])
+        self.assertEqual((30.619058000461653, -96.338797998733185),
+                            UTMConverter.UTMtoLL(
+                                UTMConverterTests.hrbb_utm[0],
+                                UTMConverterTests.hrbb_utm[1],
+                                UTMConverterTests.hrbb_utm[2]
+                            )
+                        )
+        self.assertEqual((30.619838288437187, -96.334639070348715),
+                         UTMConverter.UTMtoLL(
+                                              '14R', 755, 3390, 
+                                              UTMConverter.accuracy_1M
+                                              )
+                         )
+        self.assertEqual((30.660507884195773, -96.338739254497924),
+                         UTMConverter.UTMtoLL(
+                                              '14R', 75, 339, 
+                                              UTMConverter.accuracy_10KM
+                                              )
+                         )
+        self.assertEqual((30.255907497032403, -96.401669265383276),
+                         UTMConverter.UTMtoLL(
+                                              '14R', 7, 33, 
+                                              UTMConverter.accuracy_100KM
+                                              )
+                         )
 
 class GeoTests(unittest.TestCase):
     def test_getLidFromLocation(self): self.assertEqual('38.930 -77.028', getLidFromLocation([38.929854, -77.027976]))
@@ -49,12 +82,12 @@ class GeoTests(unittest.TestCase):
         self.assertTrue(isWithinBoundingBox([37.788081,-73.037109], boundary))
         self.assertTrue(isWithinBoundingBox([25.562265, -80.595703], boundary))
     def test_getHaversineDistanceForLids(self): self.assertEqual(553.86484760274641, getHaversineDistanceForLids(getLidFromLocation([25.562265, -80.595703]), getLidFromLocation([37.788081,-73.037109])))
-    def test_plotPointsOnUSMap(self):
-        pointLabels = ['a', 'b', 'c']
-        pointSize = [19.75, 100, 500]
-        pointColor = ['b', 'r', 'g']
-        plotPointsOnUSMap([[40.809, -74.02], [40.809, -76.02], [44.809, -74.02]], pointLabels, pointSize, pointColor)
-        plt.show()
+#    def test_plotPointsOnUSMap(self):
+#        pointLabels = ['a', 'b', 'c']
+#        pointSize = [19.75, 100, 500]
+#        pointColor = ['b', 'r', 'g']
+#        plotPointsOnUSMap([[40.809, -74.02], [40.809, -76.02], [44.809, -74.02]], pointLabels, pointSize, pointColor)
+#        plt.show()
     
 if __name__ == '__main__':
     unittest.main()

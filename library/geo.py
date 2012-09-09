@@ -253,11 +253,26 @@ class UTMConverter:
     Internet: pdana@mail.utexas.edu
     3/22/95
     
+    If UTM value is [567890N,78900S]. Removing last 3 digits give 1m accuracy.
+    That is any lat long that converts to [567xxxN,78xxxS] will be in the same
+    1m square.  Removing 4 digits give 10km accuracy. 5 digits give 100km
+    accuracy.
+
+    Similary we can convert from lat/long to UTM . Say we have [567N,78S] with
+    a 1m square accuracy. Multiply by 1000. [56000N,78000S] gives bottom left
+    corner of 1m square box. Add 500 to each to get mid poiint. [56500N,78500S]
+    gives the mid-point of square.UTMtoLL wii give the value in lat/long.
+    
     Source
     Defense Mapping Agency. 1987b. DMA Technical Report: Supplement to
     Department of Defense World Geodetic System 1984 Technical Report.
     Part I and II. Washington, DC: Defense Mapping Agency
     '''
+    accuracy_exact = 0
+    accuracy_1M = 1
+    accuracy_10KM = 2
+    accuracy_100KM = 3
+
     earthRadiusMiles = 3958.761
     earthRadiusKMs = 6371.009
     earthCircumferenceInMiles = 24901.55
@@ -328,13 +343,14 @@ class UTMConverter:
         else: return 'Z'    # if the Latitude is outside the UTM limits
     
     @staticmethod
-    def LLtoUTM(ReferenceEllipsoid, Lat, Long):
+    def LLtoUTM(Lat, Long, accuracy = 0):
         ''' Converts lat/long to UTM coords.  Equations from USGS Bulletin 1532 
         East Longitudes are positive, West longitudes are negative. 
         North latitudes are positive, South latitudes are negative
         Lat and Long are in decimal degrees
         Written by Chuck Gantz- chuck.gantz@globalstar.com
         '''
+        ReferenceEllipsoid = 23
         a = UTMConverter._ellipsoid[ReferenceEllipsoid]\
                                             [UTMConverter._EquatorialRadius]
         eccSquared = UTMConverter._ellipsoid[ReferenceEllipsoid]\
@@ -397,10 +413,18 @@ class UTMConverter:
         if Lat < 0:
             UTMNorthing = UTMNorthing + 10000000.0; 
             #10000000 meter offset for southern hemisphere
-        return (UTMZone, UTMEasting, UTMNorthing)
+        if accuracy == UTMConverter.accuracy_exact: 
+            return (UTMZone, UTMEasting, UTMNorthing)
+        elif accuracy == UTMConverter.accuracy_1M: 
+            return (UTMZone, int(UTMEasting)/1000, int(UTMNorthing)/1000)
+        elif accuracy == UTMConverter.accuracy_10KM: 
+            return (UTMZone, int(UTMEasting)/10000, int(UTMNorthing)/10000)
+        elif accuracy == UTMConverter.accuracy_100KM: 
+            return (UTMZone, int(UTMEasting)/100000, int(UTMNorthing)/100000)
+#        return (UTMZone, UTMEasting, UTMNorthing)
     
     @staticmethod
-    def UTMtoLL(ReferenceEllipsoid, zone, easting, northing):
+    def UTMtoLL(zone, easting, northing, accuracy = 0):
         ''' Converts UTM coords to lat/long.  Equations from USGS Bulletin 1532 
         East Longitudes are positive, West longitudes are negative. 
         North latitudes are positive, South latitudes are negative
@@ -408,6 +432,16 @@ class UTMConverter:
         Written by Chuck Gantz- chuck.gantz@globalstar.com
         Converted to Python by Russ Nelson <nelson@crynwr.com>
         '''
+        if accuracy == UTMConverter.accuracy_exact: 
+            easting, northing = easting, northing
+        elif accuracy == UTMConverter.accuracy_1M: 
+            easting, northing = (easting*1000)+500, (northing*1000)+500
+        elif accuracy == UTMConverter.accuracy_10KM: 
+            easting, northing = (easting*10000)+5000, (northing*10000)+5000
+        elif accuracy == UTMConverter.accuracy_100KM: 
+            easting, northing = (easting*100000)+50000, (northing*100000)+50000
+        
+        ReferenceEllipsoid = 23
         k0 = 0.9996
         a = UTMConverter._ellipsoid[ReferenceEllipsoid]\
                                             [UTMConverter._EquatorialRadius]
