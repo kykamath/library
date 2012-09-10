@@ -495,16 +495,22 @@ class UTMConverter:
         return (Lat, Long)
     
     @staticmethod
-    def getUTMLid(latitude_longitude,accuracy= 1000):
+    def getUTMIdFromLatLong(Lat, Long, accuracy = 0):
         ''' Returns UTM id corresponding to the point = [latitude, longitude]
         at the accuracy specified.
         '''
-        point = UTMConverter.LLtoUTM(23,
-                                     latitude_longitude[0],
-                                     latitude_longitude[1])
-        return '%s_%d_%d'%(point[0],
-                           int(point[1]/accuracy),
-                           int(point[2]/accuracy))
+        UTMZone, UTMEasting, UTMNorthing = UTMConverter.LLtoUTM(Lat,
+                                                                Long,
+                                                                accuracy)
+        return '%s_%dE_%dN'%(UTMZone, UTMEasting, UTMNorthing)
+        
+    @staticmethod
+    def getLatLongFromUTMId(UTMId, accuracy = 0):
+        UTMZone, UTMEasting, UTMNorthing = UTMId.split('_')
+        UTMEasting = float(UTMEasting[:-1])
+        UTMNorthing = float(UTMNorthing[:-1])
+        return UTMConverter.UTMtoLL(UTMZone, UTMEasting, UTMNorthing, accuracy)
+    
 #print breakIntoLattice([[0,-10], [10,0]], [2,2])
 #getLatticeBoundingBoxFor([[0,-10], [10,0]], [2,2], [2.5, -7.5])
 #print convertRadiansToMiles(49-24)

@@ -64,7 +64,20 @@ class UTMConverterTests(unittest.TestCase):
                                               UTMConverter.accuracy_100KM
                                               )
                          )
-
+        
+    def test_getUTMIdFromLatLong(self):
+        self.assertEqual('14R_755103E_3390404N', 
+                         UTMConverter.getUTMIdFromLatLong(
+                                            UTMConverterTests.hrbb_lat_long[0],
+                                            UTMConverterTests.hrbb_lat_long[1]
+                                            )
+                         )
+        self.assertEqual((30.619057732179147, -96.33880047343645),
+                         UTMConverter.getLatLongFromUTMId(
+                                                          '14R_755103E_3390404N'
+                                                          )
+                         )
+        
 class GeoTests(unittest.TestCase):
     def test_getLidFromLocation(self): self.assertEqual('38.930 -77.028', getLidFromLocation([38.929854, -77.027976]))
     def test_getLocationFromLid(self): self.assertEqual([38.93, -77.028000000000006], getLocationFromLid('38.930 -77.028'))
