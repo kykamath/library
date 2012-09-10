@@ -239,20 +239,19 @@ def point_inside_polygon(x,y,poly):
     return inside
 
 class UTMConverter:
-    '''
-    Why do we use 23?
-    How do we get accuracy?
-    '''
-    ''' The class provides methods to convert latitude and longitude pairs to
-    UTM and vice versa.
-    Got this code from Aparna's lat-long to UTM converter.
+    ''' 
+    The Universal Transverse Mercator (UTM) geographic coordinate system uses a
+    2-dimensional Cartesian coordinate system to give locations on the surface
+    of the Earth. It is a horizontal position representation, i.e. it is used
+    to identify locations on the Earth independently of vertical position, but
+    differs from the traditional method of latitude and longitude in several
+    respects. For more details take a look at:
+    http://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system
     
-    Reference ellipsoids derived from Peter H. Dana's website- 
-    http://www.utexas.edu/depts/grg/gcraft/notes/datum/elist.html
-    Department of Geography, University of Texas at Austin
-    Internet: pdana@mail.utexas.edu
-    3/22/95
+    This class provides methods to convert latitude and longitude
+    pairs to UTM and vice versa.
     
+    Tip on accuracy:
     If UTM value is [567890N,78900S]. Removing last 3 digits give 1m accuracy.
     That is any lat long that converts to [567xxxN,78xxxS] will be in the same
     1m square.  Removing 4 digits give 10km accuracy. 5 digits give 100km
@@ -263,10 +262,16 @@ class UTMConverter:
     corner of 1m square box. Add 500 to each to get mid poiint. [56500N,78500S]
     gives the mid-point of square.UTMtoLL wii give the value in lat/long.
     
-    Source
+    Source:
     Defense Mapping Agency. 1987b. DMA Technical Report: Supplement to
     Department of Defense World Geodetic System 1984 Technical Report.
     Part I and II. Washington, DC: Defense Mapping Agency
+    
+    Reference ellipsoids derived from Peter H. Dana's website- 
+    http://www.utexas.edu/depts/grg/gcraft/notes/datum/elist.html
+    Department of Geography, University of Texas at Austin
+    Internet: pdana@mail.utexas.edu
+    3/22/95
     '''
     accuracy_exact = 0
     accuracy_1M = 1
@@ -506,6 +511,8 @@ class UTMConverter:
         
     @staticmethod
     def getLatLongFromUTMId(UTMId, accuracy = 0):
+        ''' Returns lat long corresponding to a UTM id.
+        '''
         UTMZone, UTMEasting, UTMNorthing = UTMId.split('_')
         UTMEasting = float(UTMEasting[:-1])
         UTMNorthing = float(UTMNorthing[:-1])
