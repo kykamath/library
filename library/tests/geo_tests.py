@@ -6,7 +6,6 @@ Created on Oct 4, 2011
 import sys
 sys.path.append('../')
 import unittest
-import matplotlib.pyplot as plt
 from geo import getLidFromLocation, getLocationFromLid, convertMilesToRadians,\
     convertRadiansToMiles, convertKMsToRadians, convertRadiansToKMs,\
     isWithinBoundingBox,getHaversineDistanceForLids, plotPointsOnUSMap, UTMConverter
