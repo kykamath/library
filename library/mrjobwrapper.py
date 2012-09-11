@@ -60,10 +60,22 @@ class CJSONProtocol(HadoopStreamingProtocol):
     @classmethod
     def write(cls, key, value): return '%s\t%s' % (cjson.encode(key), cjson.encode(value))
 
-def runMRJob(mrJobClass, outputFileName, inputFileList, args='-r hadoop'.split(), **kwargs):
-    mrJob = mrJobClass(args=args)
+def runMRJob(mrJobClass,
+             outputFileName,
+             inputFileList,
+             mrJobClassParams = None,
+             args='-r hadoop'.split(),
+             **kwargs):
+    mrJob = mrJobClass(args=args, mrJobClassParams=mrJobClassParams)
     GeneralMethods.runCommand('rm -rf %s'%outputFileName)
     for l in mrJob.runJob(inputFileList=inputFileList, **kwargs): FileIO.writeToFileAsJson(l[1], outputFileName)
+
+def runMRJobAndYieldResult(mrJobClass,
+                           inputFileList,
+                           args='-r hadoop'.split(),
+                           **kwargs):
+    mrJob = mrJobClass(args=args)
+    for l in mrJob.runJob(inputFileList=inputFileList, **kwargs): yield l[1]
 
 class ModifiedMRJob(MRJob):
     DEFAULT_INPUT_PROTOCOL=CJSONProtocol.ID
