@@ -27,10 +27,13 @@ class FileIO:
         f.close()
     
     @staticmethod
-    def iterateJsonFromFile(file):
+    def iterateJsonFromFile(file, remove_params_dict=False):
         for line in open(file): 
             try:
-                yield cjson.decode(line)
+                if not remove_params_dict: yield cjson.decode(line)
+                else:
+                    data = cjson.decode(line)
+                    if 'PARAMS_DICT' not in data: yield data
             except: pass
     
     @staticmethod
