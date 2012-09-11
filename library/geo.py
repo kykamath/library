@@ -518,6 +518,19 @@ class UTMConverter:
         UTMNorthing = float(UTMNorthing[:-1])
         return UTMConverter.UTMtoLL(UTMZone, UTMEasting, UTMNorthing, accuracy)
     
+    @staticmethod
+    def getUTMIdInLatLongFormFromLatLong(Lat, Long, accuracy = 0):
+        ''' Returns UTM id corresponding to the point = [latitude, longitude]
+        at the accuracy specified.
+        '''
+        UTMZone, UTMEasting, UTMNorthing = UTMConverter.LLtoUTM(Lat,
+                                                                Long,
+                                                                accuracy)
+        return '%s_%s'%UTMConverter.UTMtoLL(UTMZone,
+                                            UTMEasting,
+                                            UTMNorthing,
+                                            accuracy)
+    
 #print breakIntoLattice([[0,-10], [10,0]], [2,2])
 #getLatticeBoundingBoxFor([[0,-10], [10,0]], [2,2], [2.5, -7.5])
 #print convertRadiansToMiles(49-24)
