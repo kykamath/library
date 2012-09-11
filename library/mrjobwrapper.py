@@ -63,10 +63,10 @@ class CJSONProtocol(HadoopStreamingProtocol):
 def runMRJob(mrJobClass,
              outputFileName,
              inputFileList,
-             mrJobClassParams = None,
+             mrJobClassParams = {},
              args='-r hadoop'.split(),
              **kwargs):
-    mrJob = mrJobClass(args=args, mrJobClassParams=mrJobClassParams)
+    mrJob = mrJobClass(args=args, **mrJobClassParams)
     GeneralMethods.runCommand('rm -rf %s'%outputFileName)
     for l in mrJob.runJob(inputFileList=inputFileList, **kwargs): FileIO.writeToFileAsJson(l[1], outputFileName)
 
