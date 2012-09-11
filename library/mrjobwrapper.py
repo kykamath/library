@@ -72,9 +72,10 @@ def runMRJob(mrJobClass,
 
 def runMRJobAndYieldResult(mrJobClass,
                            inputFileList,
+                           mrJobClassParams = {},
                            args='-r hadoop'.split(),
                            **kwargs):
-    mrJob = mrJobClass(args=args)
+    mrJob = mrJobClass(args=args, **mrJobClassParams)
     for l in mrJob.runJob(inputFileList=inputFileList, **kwargs): yield l[1]
 
 class ModifiedMRJob(MRJob):
