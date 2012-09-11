@@ -81,6 +81,8 @@ def runMRJobAndYieldResult(mrJobClass,
 class ModifiedMRJob(MRJob):
     DEFAULT_INPUT_PROTOCOL=CJSONProtocol.ID
     DEFAULT_PROTOCOL=CJSONProtocol.ID
+    def __init__(self, args=None, **kwargs):
+        super(ModifiedMRJob, self).__init__(args=args)
     def _setOptions(self, **kwargs):
         self.args = kwargs.get('inputFileList', self.args)
         self.options.jobconf = combine_dicts(self.options.jobconf, kwargs.get('jobconf', self.options.jobconf))
