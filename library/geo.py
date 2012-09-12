@@ -523,6 +523,10 @@ class UTMConverter:
                                             UTMNorthing,
                                             accuracy) +\
                 '_%s'%accuracy
+    @staticmethod
+    def getAccuracyFromUTMIdInLatLongFormFrom(utm_id):
+        _,_,accuracy = utm_id.split('_')
+        return float(accuracy)
 
     
 #print breakIntoLattice([[0,-10], [10,0]], [2,2])
