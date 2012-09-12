@@ -12,56 +12,48 @@ from geo import getLidFromLocation, getLocationFromLid, convertMilesToRadians,\
     
 class UTMConverterTests(unittest.TestCase):
     hrbb_lat_long = (30.619058,-96.338798)
-    hrbb_utm = ('14R', 755103.23660390463, 3390404.0353642241)
+    hrbb_utm = ('14R', 755103, 3390404)
     def test_LLtoUTM(self):
         self.assertEqual(UTMConverterTests.hrbb_utm, 
                          UTMConverter.LLtoUTM(
                                 UTMConverterTests.hrbb_lat_long[0],
                                 UTMConverterTests.hrbb_lat_long[1])
                          )
+        self.assertEqual(('14R', 75510, 339040), 
+                         UTMConverter.LLtoUTM(
+                                UTMConverterTests.hrbb_lat_long[0],
+                                UTMConverterTests.hrbb_lat_long[1],
+                                10)
+                         )
+        self.assertEqual(('14R', 7551, 33904), 
+                         UTMConverter.LLtoUTM(
+                                UTMConverterTests.hrbb_lat_long[0],
+                                UTMConverterTests.hrbb_lat_long[1],
+                                100)
+                         )
         self.assertEqual(('14R', 755, 3390), 
                          UTMConverter.LLtoUTM(
                                 UTMConverterTests.hrbb_lat_long[0],
                                 UTMConverterTests.hrbb_lat_long[1],
-                                UTMConverter.accuracy_1M)
+                                1000)
                          )
-        self.assertEqual(('14R', 75, 339), 
-                         UTMConverter.LLtoUTM(
-                                UTMConverterTests.hrbb_lat_long[0],
-                                UTMConverterTests.hrbb_lat_long[1],
-                                UTMConverter.accuracy_10KM)
-                         )
-        self.assertEqual(('14R', 7, 33), 
-                         UTMConverter.LLtoUTM(
-                                UTMConverterTests.hrbb_lat_long[0],
-                                UTMConverterTests.hrbb_lat_long[1],
-                                UTMConverter.accuracy_100KM)
-                         )
+        
     def test_UTMtoLL(self):
-        self.assertEqual((30.619058000461653, -96.338797998733185),
+        self.assertEqual((30.619062132475648, -96.338795138873706),
                             UTMConverter.UTMtoLL(
                                 UTMConverterTests.hrbb_utm[0],
                                 UTMConverterTests.hrbb_utm[1],
                                 UTMConverterTests.hrbb_utm[2]
                             )
                         )
+        self.assertEqual((30.619066319375175, -96.338779381922208),
+                         UTMConverter.UTMtoLL('14R', 75510, 339040, 10)
+                         )
+        self.assertEqual((30.619462344971936, -96.338299269220485),
+                         UTMConverter.UTMtoLL('14R', 7551, 33904, 100)
+                         )
         self.assertEqual((30.619838288437187, -96.334639070348715),
-                         UTMConverter.UTMtoLL(
-                                              '14R', 755, 3390, 
-                                              UTMConverter.accuracy_1M
-                                              )
-                         )
-        self.assertEqual((30.660507884195773, -96.338739254497924),
-                         UTMConverter.UTMtoLL(
-                                              '14R', 75, 339, 
-                                              UTMConverter.accuracy_10KM
-                                              )
-                         )
-        self.assertEqual((30.255907497032403, -96.401669265383276),
-                         UTMConverter.UTMtoLL(
-                                              '14R', 7, 33, 
-                                              UTMConverter.accuracy_100KM
-                                              )
+                         UTMConverter.UTMtoLL('14R', 755, 3390, 1000)
                          )
         
     def test_getUTMIdMethods(self):
@@ -71,12 +63,12 @@ class UTMConverterTests(unittest.TestCase):
                                             UTMConverterTests.hrbb_lat_long[1]
                                             )
                          )
-        self.assertEqual((30.619057732179147, -96.33880047343645),
+        self.assertEqual((30.619062132475648, -96.338795138873706),
                          UTMConverter.getLatLongFromUTMId(
                                                           '14R_755103E_3390404N'
                                                           )
                          )
-        self.assertEqual('30.6190580005_-96.3387979987',
+        self.assertEqual('30.6190621325_-96.3387951389',
                         UTMConverter.getUTMIdInLatLongFormFromLatLong(
                             UTMConverterTests.hrbb_lat_long[0],
                             UTMConverterTests.hrbb_lat_long[1])

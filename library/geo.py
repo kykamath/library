@@ -273,10 +273,10 @@ class UTMConverter:
     Internet: pdana@mail.utexas.edu
     3/22/95
     '''
-    accuracy_exact = 0
-    accuracy_1M = 1
-    accuracy_10KM = 2
-    accuracy_100KM = 3
+#    accuracy_exact = 0
+#    accuracy_1M = 1
+#    accuracy_10KM = 2
+#    accuracy_100KM = 3
 
     earthRadiusMiles = 3958.761
     earthRadiusKMs = 6371.009
@@ -348,12 +348,14 @@ class UTMConverter:
         else: return 'Z'    # if the Latitude is outside the UTM limits
     
     @staticmethod
-    def LLtoUTM(Lat, Long, accuracy = 0):
+    def LLtoUTM(Lat, Long, accuracy = 1):
         ''' Converts lat/long to UTM coords.  Equations from USGS Bulletin 1532 
         East Longitudes are positive, West longitudes are negative. 
         North latitudes are positive, South latitudes are negative
         Lat and Long are in decimal degrees
-        Written by Chuck Gantz- chuck.gantz@globalstar.com
+        Modified code written by Chuck Gantz- chuck.gantz@globalstar.com
+        
+        accuracy in square metres.
         '''
         ReferenceEllipsoid = 23
         a = UTMConverter._ellipsoid[ReferenceEllipsoid]\
@@ -418,18 +420,13 @@ class UTMConverter:
         if Lat < 0:
             UTMNorthing = UTMNorthing + 10000000.0; 
             #10000000 meter offset for southern hemisphere
-        if accuracy == UTMConverter.accuracy_exact: 
-            return (UTMZone, UTMEasting, UTMNorthing)
-        elif accuracy == UTMConverter.accuracy_1M: 
-            return (UTMZone, int(UTMEasting)/1000, int(UTMNorthing)/1000)
-        elif accuracy == UTMConverter.accuracy_10KM: 
-            return (UTMZone, int(UTMEasting)/10000, int(UTMNorthing)/10000)
-        elif accuracy == UTMConverter.accuracy_100KM: 
-            return (UTMZone, int(UTMEasting)/100000, int(UTMNorthing)/100000)
-#        return (UTMZone, UTMEasting, UTMNorthing)
+        UTMZone, UTMEasting, UTMNorthing
+        UTMEasting = int(UTMEasting/accuracy)
+        UTMNorthing = int(UTMNorthing/accuracy)
+        return (UTMZone, UTMEasting, UTMNorthing)
     
     @staticmethod
-    def UTMtoLL(zone, easting, northing, accuracy = 0):
+    def UTMtoLL(zone, easting, northing, accuracy = 1):
         ''' Converts UTM coords to lat/long.  Equations from USGS Bulletin 1532 
         East Longitudes are positive, West longitudes are negative. 
         North latitudes are positive, South latitudes are negative
@@ -437,14 +434,9 @@ class UTMConverter:
         Written by Chuck Gantz- chuck.gantz@globalstar.com
         Converted to Python by Russ Nelson <nelson@crynwr.com>
         '''
-        if accuracy == UTMConverter.accuracy_exact: 
-            easting, northing = easting, northing
-        elif accuracy == UTMConverter.accuracy_1M: 
-            easting, northing = (easting*1000)+500, (northing*1000)+500
-        elif accuracy == UTMConverter.accuracy_10KM: 
-            easting, northing = (easting*10000)+5000, (northing*10000)+5000
-        elif accuracy == UTMConverter.accuracy_100KM: 
-            easting, northing = (easting*100000)+50000, (northing*100000)+50000
+        half_accuracy = accuracy/2.
+        easting = (easting*accuracy) + half_accuracy
+        northing = (northing*accuracy) + half_accuracy
         
         ReferenceEllipsoid = 23
         k0 = 0.9996
@@ -500,7 +492,7 @@ class UTMConverter:
         return (Lat, Long)
     
     @staticmethod
-    def getUTMIdFromLatLong(Lat, Long, accuracy = 0):
+    def getUTMIdFromLatLong(Lat, Long, accuracy = 1):
         ''' Returns UTM id corresponding to the point = [latitude, longitude]
         at the accuracy specified.
         '''
@@ -510,7 +502,7 @@ class UTMConverter:
         return '%s_%dE_%dN'%(UTMZone, UTMEasting, UTMNorthing)
         
     @staticmethod
-    def getLatLongFromUTMId(UTMId, accuracy = 0):
+    def getLatLongFromUTMId(UTMId, accuracy = 1):
         ''' Returns lat long corresponding to a UTM id.
         '''
         UTMZone, UTMEasting, UTMNorthing = UTMId.split('_')
@@ -519,7 +511,7 @@ class UTMConverter:
         return UTMConverter.UTMtoLL(UTMZone, UTMEasting, UTMNorthing, accuracy)
     
     @staticmethod
-    def getUTMIdInLatLongFormFromLatLong(Lat, Long, accuracy = 0):
+    def getUTMIdInLatLongFormFromLatLong(Lat, Long, accuracy = 1):
         ''' Returns UTM id corresponding to the point = [latitude, longitude]
         at the accuracy specified.
         '''
