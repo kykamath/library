@@ -68,7 +68,7 @@ class UTMConverterTests(unittest.TestCase):
                                                           '14R_755103E_3390404N'
                                                           )
                          )
-        self.assertEqual('30.6190621325_-96.3387951389',
+        self.assertEqual('30.6190621325_-96.3387951389_1',
                         UTMConverter.getUTMIdInLatLongFormFromLatLong(
                             UTMConverterTests.hrbb_lat_long[0],
                             UTMConverterTests.hrbb_lat_long[1])

@@ -521,7 +521,9 @@ class UTMConverter:
         return '%s_%s'%UTMConverter.UTMtoLL(UTMZone,
                                             UTMEasting,
                                             UTMNorthing,
-                                            accuracy)
+                                            accuracy) +\
+                '_%s'%accuracy
+
     
 #print breakIntoLattice([[0,-10], [10,0]], [2,2])
 #getLatticeBoundingBoxFor([[0,-10], [10,0]], [2,2], [2.5, -7.5])
