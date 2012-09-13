@@ -249,7 +249,8 @@ class UTMConverter:
     http://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system
     
     This class provides methods to convert latitude and longitude
-    pairs to UTM and vice versa.
+    pairs to UTM and vice versa. The methods in the class were initially
+    modified by Aparna.
     
     Tip on accuracy:
     If UTM value is [567890N,78900S]. Removing last 3 digits give 1m accuracy.
