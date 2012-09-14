@@ -39,6 +39,11 @@ class R_HelperTests(unittest.TestCase):
                                                        p_to_remove=0.20
                                                     )
                      )
+#    def test_null(self):
+#        current_path = os.path.realpath(__file__)
+#        data_frame = robjects.DataFrame.from_csvfile(
+#                current_path[:current_path.rindex('/')] + '/../data/state.df')
+#        print data_frame.colnames
         
 if __name__ == '__main__':
     unittest.main()
