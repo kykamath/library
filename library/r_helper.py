@@ -14,7 +14,14 @@ class R_Helper(object):
     def variable_selection_using_backward_elimination(data_frame,
                                                       prediction_variable,
                                                       predictor_variables,
+                                                      p_to_remove = 0.05,
                                                       debug=False):
+        '''
+        Implements the backward elimination algorithm to select substet of 
+        predictor variables using liniear regression. The elimnation is based
+        on the algorithm described in Section 10.2 of "Practical Regression and
+        ANOVA using R" book by Julian J. Faraway
+        '''
         def get_predictor_to_eliminate(data_frame,
                                        prediction_variable,
                                        predictor_variables):
@@ -28,9 +35,9 @@ class R_Helper(object):
                 ltuo_pred_and_pred_p_value = zip(predictor_variables, 
                                                  predictor_p_values[1:])
                 ltuo_pred_and_pred_p_value = filter(
-                                                lambda (_, p_val): p_val > 0.05,
-                                                ltuo_pred_and_pred_p_value
-                                            )
+                                        lambda (_, p_val): p_val > p_to_remove,
+                                        ltuo_pred_and_pred_p_value
+                                    )
                 if len(ltuo_pred_and_pred_p_value) > 1:
                     predictor_to_eliminate, _ = sorted(
                                                     ltuo_pred_and_pred_p_value,
