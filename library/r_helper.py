@@ -6,6 +6,7 @@ Created on Sep 13, 2012
 
 from operator import itemgetter 
 import rpy2.robjects as robjects
+import cjson
 
 R = robjects.r
 
@@ -62,3 +63,23 @@ class R_Helper(object):
                 predictor_variables.remove(predictor_to_eliminate)
                 num_of_variables_eliminated+=1
         return predictor_variables
+    @staticmethod
+    def get_json_for_data_frame(data_frame):
+        def get_data_type(value):
+            if type(value)==type(1): return 'int'
+            elif type(value)==type(1.): return 'float'
+        data = {}
+        for column in data_frame.colnames: 
+            column_data = list(data_frame.rx2(column))
+            data[column]={'value': list(data_frame.rx2(column)), 'type': get_data_type(column_data[0])}
+        return cjson.encode(data)
+    @staticmethod
+    def get_data_frame_from_json(json_string): 
+        data_for_df = {}
+        data = cjson.decode(json_string)
+        for column in data:
+            type = data[column]['type']
+            if type == 'int': data_for_df[column] = robjects.IntVector(data[column]['value'])
+            elif type == 'float': data_for_df[column] = robjects.FloatVector(data[column]['value'])
+        return robjects.DataFrame(data_for_df)
+            
