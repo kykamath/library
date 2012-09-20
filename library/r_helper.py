@@ -12,9 +12,20 @@ R = robjects.r
 
 class R_Helper(object):
     @staticmethod
-    def linear_regression_model(data_frame, prediction_variable, predictor_variables):
+    def linear_regression_model(data_frame,
+                                prediction_variable,
+                                predictor_variables,
+                                with_variable_selection = False,
+                                *args,
+                                **kwargs):
         ''' Builds model using linear regression and returns it.
         '''
+        if with_variable_selection:
+            predictor_variables = R_Helper.variable_selection_using_backward_elimination(data_frame,
+                                                                                         prediction_variable,
+                                                                                         predictor_variables,
+                                                                                         *args,
+                                                                                         **kwargs)
         predictor_string = '+'.join(predictor_variables)
         formula_string = '%s ~ %s'%(prediction_variable, predictor_string)
         return R.lm(formula_string, data=data_frame)
