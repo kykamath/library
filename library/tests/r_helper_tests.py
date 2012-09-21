@@ -74,7 +74,12 @@ class R_HelperTests(unittest.TestCase):
         model = R_Helper.linear_regression_model(data_frame, prediction_variable, predictor_variables)
         parameter_names_and_values = R_Helper.get_parameter_values(model)
         self.assertEqual(expected_parameter_names_and_values, parameter_names_and_values)
-        model = R_Helper.linear_regression_model(data_frame, prediction_variable, predictor_variables, with_variable_selection=True)
+        model = R_Helper.linear_regression_model(
+                                                 data_frame,
+                                                 prediction_variable,
+                                                 predictor_variables,
+                                                 with_variable_selection=True
+                                                )
         parameter_names_and_values = R_Helper.get_parameter_values(model)
         self.assertEqual(expected_parameter_names_and_values2, parameter_names_and_values)
     def test_get_predicted_value(self):
