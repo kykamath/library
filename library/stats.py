@@ -3,9 +3,11 @@ Created on Oct 22, 2011
 
 @author: kykamath
 '''
+from operator import itemgetter
 from scipy import stats
 import math
-from operator import itemgetter
+import numpy as np
+import random
 
 #def getWeitzmanOVL(mu1, mu2, sd1, sd2):
 #    ''' Code by user whuber of http://stats.stackexchange.com/
@@ -50,3 +52,54 @@ def focus(mf_key_to_count):
     total_value = float(sum(mf_key_to_count.itervalues()))
     max_key, max_value = max(mf_key_to_count.iteritems(), key=itemgetter(1))
     return max_key, max_value/total_value
+
+class MonteCarloSimulation(object):
+    '''
+    Part of this code was got from the implementation in the book "Statistics is Easy!" By Dennis Shasha and
+    Manda Wilson
+    '''
+    NUM_OF_SIMULATIONS = 10000
+    @staticmethod
+    def _shuffle(grps):
+        num_grps = len(grps)
+        pool = []
+        # pool all values
+        for i in range(num_grps):
+            pool.extend(grps[i])
+        # mix them up
+        random.shuffle(pool)
+        # reassign to groups of same size as original groups
+        new_grps = []
+        start_index = 0
+        end_index = 0
+        for i in range(num_grps):
+            end_index = start_index + len(grps[i])
+            new_grps.append(pool[start_index:end_index])
+            start_index = end_index
+        return new_grps
+    @staticmethod
+    # subtracts group a mean from group b mean and returns result
+    def _meandiff(grpA, grpB):
+        return sum(grpB) / float(len(grpB)) - sum(grpA) / float(len(grpA))
+
+    @staticmethod
+    def probability_of_data_extracted_from_same_sample(sample1, sample2):
+        ''' Difference between Two Means Significance Test
+        '''
+        samples = [sample1, sample2] 
+        a, b = 0, 1
+        observed_mean_diff = MonteCarloSimulation._meandiff(samples[a], samples[b])
+        count = 0
+        num_shuffles = MonteCarloSimulation.NUM_OF_SIMULATIONS
+        for i in range(num_shuffles):
+            new_samples = MonteCarloSimulation._shuffle(samples)
+            mean_diff = MonteCarloSimulation._meandiff(new_samples[a], new_samples[b])
+            # if the observed difference is negative, look for differences that are smaller
+            # if the observed difference is positive, look for differences that are greater
+            if observed_mean_diff < 0 and mean_diff <= observed_mean_diff: count = count + 1
+            elif observed_mean_diff >= 0 and mean_diff >= observed_mean_diff: count = count + 1
+        return (count / float(num_shuffles))
+    @staticmethod
+    def mean_probability(method, *args, **kwargs):
+        return np.mean([method(*args, **kwargs) for i in range(10)])
+        
