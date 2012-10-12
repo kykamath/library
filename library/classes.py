@@ -3,10 +3,14 @@ Created on Jun 22, 2011
 
 @author: kykamath
 '''
-from datetime import timedelta, datetime
-import time, random, os, inspect
 from collections import defaultdict
+from datetime import timedelta, datetime
+from itertools import groupby
+import inspect
 import numpy as np
+import os
+import random
+import time
 
 def timeit(method):
     '''
