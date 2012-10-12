@@ -100,6 +100,10 @@ class GeneralMethods:
         stack = inspect.stack()
         index = stack[2][4][0].strip().rfind('(')
         return stack[2][4][0].strip()[:index].replace('.', '/')
+    @staticmethod
+    def group_items_by(list_object, key):
+        list_object.sort(key=key)
+        return [(k,list(ito_items)) for k, ito_items in groupby(list_object, key=key)]
 
         
 class TwoWayMap:
