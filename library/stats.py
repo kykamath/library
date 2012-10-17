@@ -101,5 +101,5 @@ class MonteCarloSimulation(object):
         return (count / float(num_shuffles))
     @staticmethod
     def mean_probability(method, *args, **kwargs):
-        return np.mean([method(*args, **kwargs) for i in range(10)])
+        return method(*args, **kwargs)
         

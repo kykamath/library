@@ -74,6 +74,10 @@ class UTMConverterTests(unittest.TestCase):
                          (30.619062132500002, -96.338795138899997),
                          UTMConverter.getLatLongUTMIdInLatLongForm('30.6190621325_-96.3387951389_1')
                          )
+    def test_dummy(self):
+        print UTMConverter.getLatLongFromUTMId('24S_5E_44N', accuracy=10**5)
+        print UTMConverter.getLatLongFromUTMId('24T_5E_44N', accuracy=10**5)
+        print UTMConverter.getUTMIdFromLatLong(40.198908988233377, -38.412537111773879, 10**5)
         
         
 class GeoTests(unittest.TestCase):
