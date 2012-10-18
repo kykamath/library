@@ -46,7 +46,7 @@ def plotPointsOnUSMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMap
     if not returnBaseMapObject: return scatterPlot
     else: return (scatterPlot, m)
     
-def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], resolution='l', *args, **kwargs):
+def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBaseMapObject = False, pointLabels=[], pointLabelSize='small', resolution='l', *args, **kwargs):
     from mpl_toolkits.basemap import Basemap
     m = Basemap(projection='mill', llcrnrlon=-180. ,llcrnrlat=-60, urcrnrlon=180. ,urcrnrlat=80, resolution=resolution)
     if blueMarble: m.bluemarble()
@@ -62,7 +62,7 @@ def plotPointsOnWorldMap(points, blueMarble=False, bkcolor='#85A6D9', returnBase
     scatterPlot = m.scatter(x, y, zorder = 2, *args, **kwargs)
     for population, xpt, ypt in zip(pointLabels, x, y):
         label_txt = str(population)
-        plt.text( xpt, ypt, label_txt, color = 'black', size='small', horizontalalignment='center', verticalalignment='center', zorder = 3)
+        plt.text( xpt, ypt, label_txt, color = 'black', size=pointLabelSize, horizontalalignment='center', verticalalignment='center', zorder = 3)
     if not returnBaseMapObject: return scatterPlot
     else: return (scatterPlot, m)
 
