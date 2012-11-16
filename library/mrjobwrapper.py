@@ -49,13 +49,26 @@ def  updateMRJobConf():
             }
     with open('/Users/kykamath/.mrjob', 'w') as f: dump_mrjob_conf(conf, f)
    
+#class CJSONProtocol(HadoopStreamingProtocol):
+#    """A cjson wrapper for CJSONProtocol.
+#    """
+#    ID = 'cjson'
+#    @classmethod
+#    def read(cls, line):
+#        key, value = line.split('\t')
+#        return cjson.decode(key), cjson.decode(value)
+#    @classmethod
+#    def write(cls, key, value): return '%s\t%s' % (cjson.encode(key), cjson.encode(value))
+
 class CJSONProtocol(HadoopStreamingProtocol):
     """A cjson wrapper for CJSONProtocol.
     """
     ID = 'cjson'
     @classmethod
     def read(cls, line):
-        key, value = line.split('\t')
+        splits = line.split('\t')
+        if len(splits)==2: key, value = splits
+        else: key, value = 'null', splits[0]
         return cjson.decode(key), cjson.decode(value)
     @classmethod
     def write(cls, key, value): return '%s\t%s' % (cjson.encode(key), cjson.encode(value))
