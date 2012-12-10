@@ -157,7 +157,6 @@ class AnchoredText(AnchoredOffsetbox):
                                            frameon=frameon)
 def plot_anchored_text(text, loc=1):
     ax = plt.gca()
-    ax.set_aspect(1.)
     at = AnchoredText(text, loc=loc, frameon=True)
     at.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
     ax.add_artist(at)
