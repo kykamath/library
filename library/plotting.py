@@ -3,14 +3,17 @@ Created on Jul 5, 2011
 
 @author: kykamath
 '''
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.optimize
-from collections import defaultdict
-from numpy.ma.core import exp, log
 from classes import GeneralMethods
-from scipy.interpolate import spline
+from collections import defaultdict
 from file_io import FileIO
+from matplotlib.offsetbox import AnchoredOffsetbox
+from matplotlib.offsetbox import TextArea
+from numpy.ma.core import exp
+from numpy.ma.core import log
+from scipy.interpolate import spline
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.optimize
 
 def getLatexForString(str): return '$'+str.replace(' ', '\\ ')+'$'
 
@@ -140,3 +143,15 @@ class Map():
     def plotPoints(self, longitude, latitudes, color, lw=0, marker='o', *args, **kwargs):
         mlon, mlat = self.m(longitude,latitudes)
         self.m.plot(mlon,mlat,color=color, lw=lw, marker=marker, *args, **kwargs)
+
+class AnchoredText(AnchoredOffsetbox):
+    def __init__(self, s, loc, pad=0.4, borderpad=0.5, prop=None, frameon=True):
+
+        self.txt = TextArea(s,
+                            minimumdescent=False)
+
+
+        super(AnchoredText, self).__init__(loc, pad=pad, borderpad=borderpad,
+                                           child=self.txt,
+                                           prop=prop,
+                                           frameon=frameon)

@@ -546,3 +546,10 @@ class UTMConverter:
 #print getCenterOfMass([[-115.303551,36.181283],[-115.297509,36.181283],[-115.297509,36.186214],[-115.303551,36.186214]], error=True, accuracy=0.5)
 #print getHaversineDistance((33.747123999999999, -84.379047), (33.747124669999998, -84.379047))
 #print breakIntoLattice([[40.491, -74.356], [41.181, -72.612]], [250,100])[1:]
+
+#print UTMConverter.getUTMIdFromLatLong(40.759202, -73.984654, accuracy=1000) #ts
+#print UTMConverter.getUTMIdFromLatLong(40.750435,-73.993512, accuracy=1000) #penn
+#print UTMConverter.getUTMIdFromLatLong(40.748492,-73.985585, accuracy=1000) #es
+#print UTMConverter.getUTMIdFromLatLong(40.779827,-73.967091, accuracy=1000) #cp
+
+
