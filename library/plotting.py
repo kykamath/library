@@ -146,11 +146,7 @@ class Map():
 
 class AnchoredText(AnchoredOffsetbox):
     def __init__(self, s, loc, pad=0.4, borderpad=0.5, prop=None, frameon=True):
-
-        self.txt = TextArea(s,
-                            minimumdescent=False)
-
-
+        self.txt = TextArea(s, minimumdescent=False)
         super(AnchoredText, self).__init__(loc, pad=pad, borderpad=borderpad,
                                            child=self.txt,
                                            prop=prop,
