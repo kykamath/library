@@ -37,6 +37,38 @@ class Networkx:
     @staticmethod
     def readGraphFromFile(fileName): return Networkx.getGraphFromDict(list(FileIO.iterateJsonFromFile(fileName))[0])
 
+def clusterUsingMCLClustering(graph, inflation=1.4, **kwargs):
+    ''' Uses Markov Cluster Algorithm described in http://micans.org/mcl/.
+    '''
+    def getClusters(data, inflation=1.4):
+        clusters = []
+        if data:
+            os.environ["PATH"] = os.environ["PATH"]+os.pathsep+'/opt/local/bin'+os.pathsep+'/usr/local/bin'
+            mcl_folder = '/tmp/mcl_dir/'
+            if not os.path.exists(mcl_folder): os.mkdir(mcl_folder)
+            os.chdir(mcl_folder)
+            graph_file = open('graph', 'w')
+            for edge in data: graph_file.write('%s %s %0.6f\n'%(edge))
+            graph_file.close()
+            os.system('mcl graph -q x -V all -I %s --abc -o graph.out'%inflation)
+            for l in open('graph.out'): clusters.append(l.strip().split())
+            os.system('rm -rf /tmp/mcl_dir/*')
+        return clusters
+    edges, nodeToCluster = [], {}
+    for e in graph.edges_iter(data=True):
+        if 'w' in e[2]: edges.append((e[0], e[1], e[2]['w']))
+        else: edges.append((e[0], e[1], 1))
+    clusterId = 0
+    return getClusters(edges, inflation=inflation)
+
+def clusterUsingMCLClusteringStandardOutput(graph, inflation=1.4, **kwargs):
+    clusters = clusterUsingMCLClustering(graph, inflation=inflation, **kwargs)
+    num_of_clusters = len(clusters)
+    ltuo_node_and_cluster_id = []
+    for cluster_id, cluster in enumerate(clusters):
+        for node in cluster: ltuo_node_and_cluster_id.append((node, cluster_id))
+    return (num_of_clusters, ltuo_node_and_cluster_id)
+
 def clusterUsingAffinityPropagation(graph,**kwargs):
     from sklearn.cluster.affinity_propagation_ import AffinityPropagation
     S = nx.to_numpy_matrix(graph, weight='w')
@@ -142,28 +174,4 @@ def _getReducedGraphForMincutTreeNode(graph, mincutTreeNode):
         if reducedGraph.has_edge(uVertexInReducedGraph, vVertexInReducedGraph): reducedGraph[uVertexInReducedGraph][vVertexInReducedGraph][CAPACITY]+=graph[u][v][CAPACITY]
         else: reducedGraph.add_edge(uVertexInReducedGraph, vVertexInReducedGraph, capacity=graph[u][v][CAPACITY])
     return reducedGraph
-
-def clusterUsingMCLClustering(graph, inflation=1.4, **kwargs):
-    ''' Uses Markov Cluster Algorithm described in http://micans.org/mcl/.
-    '''
-    def getClusters(data, inflation=1.4):
-        clusters = []
-        if data:
-            os.environ["PATH"] = os.environ["PATH"]+os.pathsep+'/opt/local/bin'+os.pathsep+'/usr/local/bin'
-            mcl_folder = '/tmp/mcl_dir/'
-            if not os.path.exists(mcl_folder): os.mkdir(mcl_folder)
-            os.chdir(mcl_folder)
-            graph_file = open('graph', 'w')
-            for edge in data: graph_file.write('%s %s %0.6f\n'%(edge))
-            graph_file.close()
-            os.system('mcl graph -q x -V all -I %s --abc -o graph.out'%inflation)
-            for l in open('graph.out'): clusters.append(l.strip().split())
-            os.system('rm -rf /tmp/mcl_dir/*')
-        return clusters
-    edges, nodeToCluster = [], {}
-    for e in graph.edges_iter(data=True):
-        if 'w' in e[2]: edges.append((e[0], e[1], e[2]['w']))
-        else: edges.append((e[0], e[1], 1))
-    clusterId = 0
-    return getClusters(edges, inflation=inflation)
     
