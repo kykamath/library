@@ -12,9 +12,6 @@ from mrjob.protocol import HadoopStreamingProtocol
 from mrjob.job import MRJob
 from file_io import FileIO
 from classes import GeneralMethods
-import os
-import tempfile
-os.environ['MPLCONFIGDIR'] = tempfile.mkdtemp()
 
 class MRJobWrapper():
     ''' MARKED FOR REMOVAL. DO NOT USE THIS.
