@@ -1,6 +1,8 @@
 import sys
 sys.path.append('../')
 import os
+import tempfile
+os.environ['MPLCONFIGDIR'] = tempfile.mkdtemp()
 import networkx as nx
 import matplotlib.pyplot as plt
 from random import sample
