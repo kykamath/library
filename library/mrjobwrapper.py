@@ -83,6 +83,17 @@ def runMRJob(mrJobClass,
     GeneralMethods.runCommand('rm -rf %s'%outputFileName)
     for l in mrJob.runJob(inputFileList=inputFileList, **kwargs): FileIO.writeToFileAsJson(l[1], outputFileName)
 
+def runMRJobWithOutPutToHDFS(mrJobClass,
+             outputFileName,
+             inputFileList,
+             output_dir,
+             mrJobClassParams = {},
+             args='-r hadoop'.split(),
+             **kwargs):
+    mrJob = mrJobClass(args=args, **mrJobClassParams)
+    GeneralMethods.runCommand('hadoop fs -rm -r %s'%output_dir)
+    mrJob.runJobWithOutPutToHDFS(output_dir, inputFileList=inputFileList, **kwargs)
+
 def runMRJobAndYieldResult(mrJobClass,
                            inputFileList,
                            mrJobClassParams = {},
@@ -105,11 +116,10 @@ class ModifiedMRJob(MRJob):
         with self.make_runner() as runner:
             runner.run()
             for line in runner.stream_output(): yield self.parse_output_line(line)
-    def runJobWithOutPutToHDFS(self, **kwargs):
+    def runJobWithOutPutToHDFS(self, output_dir, **kwargs):
         self._setOptions(**kwargs)
         self.options.no_output = True
-        self.options.output_dir = kwargs['output_dir']
-        GeneralMethods.runCommand('hadoop fs -rm -r %s'%self.options.output_dir)
+        self.options.output_dir = output_dir
         with self.make_runner() as runner: runner.run()
     def runMapper(self, **kwargs):
         self._setOptions(**kwargs)
