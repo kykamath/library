@@ -90,7 +90,7 @@ def runMRJobAndYieldResult(mrJobClass,
                            **kwargs):
     mrJob = mrJobClass(args=args, **mrJobClassParams)
     for l in mrJob.runJob(inputFileList=inputFileList, **kwargs): yield l[1]
-
+    
 class ModifiedMRJob(MRJob):
     DEFAULT_INPUT_PROTOCOL=CJSONProtocol.ID
     DEFAULT_PROTOCOL=CJSONProtocol.ID
@@ -105,6 +105,12 @@ class ModifiedMRJob(MRJob):
         with self.make_runner() as runner:
             runner.run()
             for line in runner.stream_output(): yield self.parse_output_line(line)
+    def runJobWithOutPutToHDFS(self, **kwargs):
+        self._setOptions(**kwargs)
+        self.options.no_output = True
+        self.options.output_dir = kwargs['output_dir']
+        GeneralMethods.runCommand('hadoop fs -rm -r %s'%self.options.output_dir)
+        with self.make_runner() as runner: runner.run()
     def runMapper(self, **kwargs):
         self._setOptions(**kwargs)
         reader = self.protocols()[self.DEFAULT_OUTPUT_PROTOCOL or self.DEFAULT_PROTOCOL]
