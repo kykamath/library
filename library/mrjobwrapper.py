@@ -86,13 +86,12 @@ def runMRJob(mrJobClass,
 def runMRJobWithOutPutToHDFS(mrJobClass,
              outputFileName,
              inputFileList,
-             output_dir,
              mrJobClassParams = {},
              args='-r hadoop'.split(),
              **kwargs):
     mrJob = mrJobClass(args=args, **mrJobClassParams)
-    GeneralMethods.runCommand('hadoop fs -rm -r %s'%output_dir)
-    mrJob.runJobWithOutPutToHDFS(output_dir, inputFileList=inputFileList, **kwargs)
+    GeneralMethods.runCommand('hadoop fs -rm -r %s'%outputFileName)
+    mrJob.runJobWithOutPutToHDFS(outputFileName, inputFileList=inputFileList, **kwargs)
 
 def runMRJobAndYieldResult(mrJobClass,
                            inputFileList,
@@ -120,6 +119,7 @@ class ModifiedMRJob(MRJob):
         self._setOptions(**kwargs)
         self.options.no_output = True
         self.options.output_dir = output_dir
+        if 'label' in kwargs: self.options.label = kwargs['label']
         with self.make_runner() as runner: runner.run()
     def runMapper(self, **kwargs):
         self._setOptions(**kwargs)
