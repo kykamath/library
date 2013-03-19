@@ -3,6 +3,9 @@ Created on Oct 4, 2011
 
 @author: kykamath
 '''
+import os
+import tempfile
+os.environ['MPLCONFIGDIR'] = tempfile.mkdtemp()
 import datetime, math
 import numpy as n
 import matplotlib.pyplot as plt
