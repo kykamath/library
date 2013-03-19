@@ -7,6 +7,8 @@ from classes import GeneralMethods
 from itertools import imap
 import cjson
 import os
+import random
+import string
 
 class FileIO:
     @staticmethod
@@ -35,7 +37,8 @@ class FileIO:
                     if 'PARAMS_DICT' not in data: yield data
             except: pass
     @staticmethod
-    def getFileByDay(currentTime): return '_'.join([str(currentTime.year), str(currentTime.month), str(currentTime.day)])
+    def getFileByDay(currentTime):
+        return '_'.join([str(currentTime.year), str(currentTime.month), str(currentTime.day)])
     @staticmethod
     def iterateLinesFromFile(filePath, commentCharacter='#'):
         for line in open(filePath):
@@ -45,7 +48,7 @@ class FileIO:
         return imap(lambda d: cjson.decode(d.strip().split('\t')[1]), file(f))
     @staticmethod
     def write_file_from_hdfs_to_local_file(hdfs_file, f_local):
-        f_temp_output = '/tmp/%s'%os.urandom(10)
+        f_temp_output = '/tmp/%s'%(''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(10)))
         GeneralMethods.runCommand('hadoop fs -cat %s/part* > %s'%(hdfs_file, f_temp_output))
         GeneralMethods.runCommand('rm -rf %s'%f_local)
         for data in file(f_temp_output): FileIO.writeToFile(data.strip().split('\t')[1], f_local)
