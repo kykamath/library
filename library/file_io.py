@@ -3,6 +3,7 @@ Created on Jun 13, 2011
 
 @author: kykamath
 '''
+from classes import GeneralMethods
 from itertools import imap
 import cjson
 import os
@@ -42,4 +43,11 @@ class FileIO:
     @staticmethod
     def iter_json_from_hdfs_output(f):
         return imap(lambda d: cjson.decode(d.strip().split('\t')[1]), file(f))
+    @staticmethod
+    def write_file_from_hdfs_to_local_file(hdfs_file, f_local):
+        f_temp_output = '/tmp/%s'%os.urandom(10)
+        GeneralMethods.runCommand('hadoop fs -cat %s/part* > %s'%(hdfs_file, f_temp_output))
+        GeneralMethods.runCommand('rm -rf %s'%f_local)
+        for data in file(f_temp_output): FileIO.writeToFile(data.strip().split('\t')[1], f_local)
+        GeneralMethods.runCommand('rm -rf %s'%f_temp_output)
             
