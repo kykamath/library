@@ -159,14 +159,25 @@ def getHaversineDistance((lon1, lat1), (lon2, lat2), radius=earthRadiusMiles):
     '''
     Got this code from
     '''
-    try:
-    #    print (lon1, lat1), (lon2, lat2)
-        if str(lon1)==str(lon2) and str(lat1)==str(lat2): return 0.0
-    #    if '%0.5f'%(lon1)=='%0.5f'%(lon2) and '%0.5f'%(lat1)=='%0.5f'%(lat2): return 0.0
-        p1lat, p1lon = math.radians(lat1), math.radians(lon1)
-        p2lat, p2lon = math.radians(lat2), math.radians(lon2)
-        return radius * math.acos(math.sin(p1lat) * math.sin(p2lat) + math.cos(p1lat) * math.cos(p2lat) * math.cos(p2lon - p1lon))
-    except: return 0.0
+        #    try:
+        #    #    print (lon1, lat1), (lon2, lat2)
+        #        if str(lon1)==str(lon2) and str(lat1)==str(lat2): return 0.0
+        #    #    if '%0.5f'%(lon1)=='%0.5f'%(lon2) and '%0.5f'%(lat1)=='%0.5f'%(lat2): return 0.0
+        #        p1lat, p1lon = math.radians(lat1), math.radians(lon1)
+        #        p2lat, p2lon = math.radians(lat2), math.radians(lon2)
+    #        return radius * math.acos(math.sin(p1lat) * math.sin(p2lat) + math.cos(p1lat) * math.cos(p2lat) * math.cos(p2lon - p1lon))
+#    except: return 0.0
+def getHaversineDistance(origin, destination, radius=earthRadiusMiles):
+    lat1, lon1 = origin
+    lat2, lon2 = destination
+    #radius = 6371 # km
+    dlat = math.radians(lat2-lat1)
+    dlon = math.radians(lon2-lon1)
+    a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
+        * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    d = radius * c
+    return d
     
 def getCenterOfMass(points, accuracy=10**-6, error=False): 
     com = getLattice(n.mean(points,0), accuracy=accuracy)
