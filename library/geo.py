@@ -165,6 +165,7 @@ def getHaversineDistanceForLids(lid1, lid2, radius=earthRadiusMiles): return get
     #        return radius * math.acos(math.sin(p1lat) * math.sin(p2lat) + math.cos(p1lat) * math.cos(p2lat) * math.cos(p2lon - p1lon))
 #    except: return 0.0
 def getHaversineDistance(origin, destination, radius=earthRadiusMiles):
+    #get code from "gist.github.com/rochacbruno/2883505"
     lat1, lon1 = origin
     lat2, lon2 = destination
     #radius = 6371 # km
