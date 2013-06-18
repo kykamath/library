@@ -10,6 +10,7 @@ from matplotlib.offsetbox import AnchoredOffsetbox
 from matplotlib.offsetbox import TextArea
 from numpy.ma.core import exp
 from numpy.ma.core import log
+from operator import itemgetter
 from scipy.interpolate import spline
 import matplotlib.pyplot as plt
 import numpy as np
@@ -143,6 +144,38 @@ class Map():
     def plotPoints(self, longitude, latitudes, color, lw=0, marker='o', *args, **kwargs):
         mlon, mlat = self.m(longitude,latitudes)
         self.m.plot(mlon,mlat,color=color, lw=lw, marker=marker, *args, **kwargs)
+
+def plot_probability_distribution(ltuo_x_and_y,
+             figsize=(6,3),
+             x_label = None,
+             y_label = None,
+             output_file = None,
+             prob_function = lambda p: p
+            ):
+    ''' Input_data_format = [[1.0, 1085874.0], [2.0, 660072.0], [3.0, 395773.0]]
+    '''
+    ltuo_x_and_y = sorted(ltuo_x_and_y, key=itemgetter(0))
+    x_values, y_values = zip(*ltuo_x_and_y)
+    total_count = sum(y_values)
+    current_count, cdf = 0.0, []
+    for y in y_values:
+        current_count+=y
+        cdf+=[prob_function(current_count/total_count)]
+    fig = plt.figure(num=None, figsize=figsize)
+    plt.scatter(x_values, cdf, c='k')
+    plt.plot(x_values, cdf, '-', c='k')
+    
+    if y_label: plt.ylabel(y_label)
+    if x_label: plt.xlabel(x_label)
+    plt.grid()
+    if not output_file: plt.show()
+    else: savefig(output_file)
+
+def plot_cdf(*args, **kwargs): plot_probability_distribution(*args, **kwargs)
+
+def plot_ccdf(*args, **kwargs): plot_probability_distribution(prob_function = lambda p: 1-p, *args, **kwargs)
+
+        
 
 class AnchoredText(AnchoredOffsetbox):
     '''
