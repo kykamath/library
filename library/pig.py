@@ -11,13 +11,14 @@ class Pig(object):
             return ' -p ' + ' -p '.join(map(lambda (k,v): '%s=%s'%(k,v), params))
         return ''
     def combine_files(self, input_files, output_file):
-        with open(output_file, 'w') as f:
-            dash = ' --------------------------------- '
-            for input_file in input_files:
-                print 'Adding %s'%input_file
-                f.write(dash + input_file + dash + '\n')
-                map(lambda line: f.write(line), open(input_file).readlines())
-                f.write(dash + dash + '\n\n\n')
+        dash = ' --------------------------------- '
+        f = open(output_file, 'w') 
+        for input_file in input_files:
+            print 'Adding %s'%input_file
+            f.write(dash + input_file + dash + '\n')
+            map(lambda line: f.write(line), open(input_file).readlines())
+            f.write(dash + dash + '\n\n\n')
+        f.close()
     def generate_output_pig_script(self):
         print 'Generating %s script...'%self.output_pig_script
         self.combine_files(self.input_pig_scripts, self.output_pig_script)
