@@ -67,6 +67,8 @@ class GeneralMethods:
     @staticmethod
     def runCommand(command): print '=> ',command; os.system(command)
     @staticmethod
+    def remove_file(file_name): GeneralMethods.runCommand('rm -rf %s'%file_name)
+    @staticmethod
     def getEpochFromDateTimeObject(dateTimeObject): return time.mktime(dateTimeObject.timetuple())
     @staticmethod
     def getRandomColor(): return '#'+''.join(random.choice('0123456789abcdef') for i in range(6))
