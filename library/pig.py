@@ -1,5 +1,6 @@
 from classes import GeneralMethods
 import inspect
+import os
 
 class Pig(object):
     def __init__(self, input_pig_scripts, params):
@@ -26,4 +27,5 @@ class Pig(object):
     def run(self):
         self.generate_output_pig_script()
         print 'Running pig script'
-        GeneralMethods.runCommand('pig %s %s'%(self.params_str, self.output_pig_script))
+        command = 'pig %s %s'%(self.params_str, self.output_pig_script)
+        print '=> ',command; os.system(command)
