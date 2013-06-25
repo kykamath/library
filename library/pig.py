@@ -1,12 +1,13 @@
-from classes import GeneralMethods
 import inspect
 import os
 
 class Pig(object):
-    def __init__(self, input_pig_scripts, params):
+    def __init__(self, input_pig_scripts, params, output_file_name):
         self.input_pig_scripts = input_pig_scripts
         self.params_str = self.get_params_str(params)
-        self.output_pig_script = inspect.stack()[1][1].split('/')[-1][:-3] + '.pig'
+        if output_file_name == None:
+            self.output_pig_script = inspect.stack()[1][1].split('/')[-1][:-3] + '.pig'
+        else: self.output_pig_script = output_file_name
     def get_params_str(self, params):
         if params:
             return ' -p ' + ' -p '.join(map(lambda (k,v): '%s=%s'%(k,v), params))
@@ -24,8 +25,9 @@ class Pig(object):
         print 'Generating %s script...'%self.output_pig_script
         self.combine_files(self.input_pig_scripts, self.output_pig_script)
         print 'Done.'
-    def run(self):
+    def run(self, just_check=True):
         self.generate_output_pig_script()
         print 'Running pig script'
-        command = 'pig %s %s'%(self.params_str, self.output_pig_script)
+        if just_check: command = 'pig -c %s %s'%(self.params_str, self.output_pig_script)
+        else: command = 'pig %s %s'%(self.params_str, self.output_pig_script)
         print '=> ',command; os.system(command)
