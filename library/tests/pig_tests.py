@@ -14,8 +14,8 @@ class FileIOTests(unittest.TestCase):
         self.f2 = 'f2'
         open(self.f1, 'w').write('a\nb\n')
         open(self.f2, 'w').write('1\n2\n')
-    def test_combine_files(self):
-        pig = Pig([self.f1, self.f2], [])
+    def test_run(self):
+        pig = Pig([self.f1, self.f2], [('A', '32'), ('B', 'sdfd')])
         pig.run()
         GeneralMethods.runCommand('cat %s'%pig.output_pig_script)
     def tearDown(self):

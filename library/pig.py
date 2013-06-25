@@ -4,8 +4,12 @@ import inspect
 class Pig(object):
     def __init__(self, input_pig_scripts, params):
         self.input_pig_scripts = input_pig_scripts
-        self.params = params
+        self.params_str = self.get_params_str(params)
         self.output_pig_script = inspect.stack()[1][1].split('/')[-1][:-3] + '.pig'
+    def get_params_str(self, params):
+        if params:
+            return ' -p ' + ' -p '.join(map(lambda (k,v): '%s=%s'%(k,v), params))
+        return ''
     def combine_files(self, input_files, output_file):
         with open(output_file, 'w') as f:
             dash = ' --------------------------------- '
@@ -21,4 +25,4 @@ class Pig(object):
     def run(self):
         self.generate_output_pig_script()
         print 'Running pig script'
-        GeneralMethods.runCommand('pig %s'%self.output_pig_script)
+        GeneralMethods.runCommand('pig %s %s'%(self.params_str, self.output_pig_script))
