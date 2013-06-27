@@ -149,6 +149,8 @@ def plot_probability_distribution(ltuo_x_and_y,
              figsize=(6,3),
              x_label = None,
              y_label = None,
+             x_scale = None,
+             y_scale = None,
              output_file = None,
              prob_function = lambda p: p
             ):
@@ -167,6 +169,8 @@ def plot_probability_distribution(ltuo_x_and_y,
     
     if y_label: plt.ylabel(y_label)
     if x_label: plt.xlabel(x_label)
+    if x_scale: plt.xscale(x_scale)
+    if y_scale: plt.yscale(y_scale)
     plt.grid()
     if not output_file: plt.show()
     else: savefig(output_file)
