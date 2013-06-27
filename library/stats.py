@@ -53,6 +53,19 @@ def focus(mf_key_to_count):
     max_key, max_value = max(mf_key_to_count.iteritems(), key=itemgetter(1))
     return max_key, max_value/total_value
 
+def get_items_between_distribution(ltuo_x_and_y, x1 = None, x2 = None):
+    ''' Input_data_format = [[1.0, 1085874.0], [2.0, 660072.0], [3.0, 395773.0]]
+    '''
+    group_size = sorted(zip(*ltuo_x_and_y))[0]
+    mf_group_size_to_num_of_groups = dict(ltuo_x_and_y)
+    if not x1: x1 = group_size[0]
+    if not x2: x2 = group_size[-1]
+    total = 0.0
+    for k in group_size:
+        if (x1 <= k <= x2):
+            total+=k*mf_group_size_to_num_of_groups[k]
+    return total
+
 class MonteCarloSimulation(object):
     '''
     Part of this code was got from the implementation in the book "Statistics is Easy!" By Dennis Shasha and
