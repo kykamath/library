@@ -31,3 +31,4 @@ class Pig(object):
         if just_check: command = 'pig -c %s %s'%(self.params_str, self.output_pig_script)
         else: command = 'pig %s %s'%(self.params_str, self.output_pig_script)
         print '=> ',command; os.system(command)
+        print '=> ',command
