@@ -147,6 +147,7 @@ class Map():
 
 def plot_probability_distribution(ltuo_x_and_y,
              figsize=(6,3),
+             title = None,
              x_label = None,
              y_label = None,
              x_scale = None,
@@ -167,6 +168,7 @@ def plot_probability_distribution(ltuo_x_and_y,
     plt.scatter(x_values, cdf, c='k')
     plt.plot(x_values, cdf, '-', c='k')
     
+    if title: plt.title(title)
     if y_label: plt.ylabel(y_label)
     if x_label: plt.xlabel(x_label)
     if x_scale: plt.xscale(x_scale)
