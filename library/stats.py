@@ -66,6 +66,20 @@ def get_items_between_distribution(ltuo_x_and_y, x1 = None, x2 = None):
             total+=k*mf_group_size_to_num_of_groups[k]
     return total
 
+def kl(p, q):
+    """Kullback-Leibler divergence D(P || Q) for discrete distributions
+    
+    Parameters
+    ----------
+    p, q : array-like, dtype=float, shape=n
+        Discrete probability distributions.
+    Got this code from http://pastebin.com/yyf6efXs
+    
+    """
+    p = np.asarray(p, dtype=np.float)
+    q = np.asarray(q, dtype=np.float)
+    return np.sum(np.where(p != 0, p * np.log(p / q), 0))
+
 class MonteCarloSimulation(object):
     '''
     Part of this code was got from the implementation in the book "Statistics is Easy!" By Dennis Shasha and
