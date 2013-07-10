@@ -66,7 +66,7 @@ def get_items_between_distribution(ltuo_x_and_y, x1 = None, x2 = None):
             total+=k*mf_group_size_to_num_of_groups[k]
     return total
 
-def kl(p, q):
+def KL_Divergence(p, q):
     """Kullback-Leibler divergence D(P || Q) for discrete distributions
     
     Parameters
