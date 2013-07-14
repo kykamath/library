@@ -176,6 +176,38 @@ def plot_hist(ltuo_x_and_y,
     if not output_file: plt.show()
     else: savefig(output_file)
 
+def plot_correlation(ltuo_x_and_y,
+             figsize=(6,3),
+             title = None,
+             x_label = None,
+             y_label = None,
+             x_scale = None,
+             y_scale = None,
+             fit_x_values = None,
+             output_file = None,
+             prob_function = lambda p: p,
+             probability = False,
+             color = 'k'
+            ):
+    ''' Input_data_format = [[1.0, 1085874.0], [2.0, 660072.0], [3.0, 395773.0]]
+    '''
+    ltuo_x_and_y = sorted(ltuo_x_and_y, key=itemgetter(0))
+    x_values, y_values = zip(*ltuo_x_and_y)
+    fig = plt.figure(num=None, figsize=figsize)
+    plt.scatter(x_values, y_values, c=color, lw=0)
+    fit = np.polyfit(x_values, y_values, 1)
+    fit_fn = np.poly1d(fit) # fit_fn is now a function which takes in x and returns an estimate for y
+    if not fit_x_values: fit_x_values = x_values
+    plt.plot(fit_x_values, fit_fn(fit_x_values), '--b', lw=2)
+    if title: plt.title(title)
+    if y_label: plt.ylabel(y_label)
+    if x_label: plt.xlabel(x_label)
+    if x_scale: plt.xscale(x_scale)
+    if y_scale: plt.yscale(y_scale)
+    plt.grid()
+    if not output_file: plt.show()
+    else: savefig(output_file)
+
 
 def plot_probability_distribution(ltuo_x_and_y,
              figsize=(6,3),
