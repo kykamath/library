@@ -163,9 +163,6 @@ def plot_hist(ltuo_x_and_y,
     if probability:
         total = sum(y_values)
         y_values = map(lambda y: y/total, y_values)
-    print y_values
-    print probability
-    
     fig = plt.figure(num=None, figsize=figsize)
     plt.scatter(x_values, y_values, c='k')
     plt.plot(x_values, y_values, '-', c='k')
