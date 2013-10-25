@@ -272,3 +272,19 @@ def plot_anchored_text(text, loc=1):
     at = AnchoredText(text, loc=loc, frameon=True)
     at.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
     ax.add_artist(at)
+
+class PlotFromHistogramFile(object):
+    @staticmethod
+    def distribution(ltuo_x_and_y, xlabel='x-value', ylabel='y-value', color='k'):
+        x_values, y_values = zip(*ltuo_x_and_y)
+        plt.figure(num=None, figsize=(6,3))
+        plt.subplots_adjust(bottom=0.2, top=0.9)
+        plt.ylabel(xlabel)
+        plt.xlabel(ylabel)
+        plt.scatter(x_values, y_values, c=color, )
+        plt.grid(True)
+        
+        
+        
+        
+        
