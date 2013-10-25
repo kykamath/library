@@ -6,7 +6,7 @@ Created on Jul 5, 2011
 import unittest
 import scipy, random
 from plotting import CurveFit, getCumulativeDistribution,\
-    getInverseCumulativeDistribution, Map, plot3D, PlotFromHistogramFile
+    getInverseCumulativeDistribution, Map, plot3D, PlotFromHistograms
 import matplotlib.pyplot as plt
 from classes import GeneralMethods
 
@@ -56,9 +56,25 @@ from classes import GeneralMethods
 class PlotFromHistogramFileTests(unittest.TestCase):
     f_name = '../data/histogram'
     def test_distribution(self):
+        plt.Figure
         ltuo_x_and_y = map(lambda l: map(float, l.split()), open(PlotFromHistogramFileTests.f_name))
-        PlotFromHistogramFile.distribution(ltuo_x_and_y)
-        plt.show()
+        PlotFromHistograms.distribution(ltuo_x_and_y)
+#         plt.show()
+    def test_probability_distribution(self):
+        plt.Figure
+        ltuo_x_and_y = map(lambda l: map(float, l.split()), open(PlotFromHistogramFileTests.f_name))
+        PlotFromHistograms.probability_distribution(ltuo_x_and_y)
+#         plt.show()
+    def test_cdf(self):
+        plt.Figure
+        ltuo_x_and_y = map(lambda l: map(float, l.split()), open(PlotFromHistogramFileTests.f_name))
+        PlotFromHistograms.cdf(ltuo_x_and_y)
+#         plt.show()
+    def test_ccdf(self):
+        plt.Figure
+        ltuo_x_and_y = map(lambda l: map(float, l.split()), open(PlotFromHistogramFileTests.f_name))
+        PlotFromHistograms.ccdf(ltuo_x_and_y)
+#         plt.show()
     
 if __name__ == '__main__':
     unittest.main()

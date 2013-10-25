@@ -273,7 +273,7 @@ def plot_anchored_text(text, loc=1):
     at.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
     ax.add_artist(at)
 
-class PlotFromHistogramFile(object):
+class PlotFromHistograms(object):
     @staticmethod
     def distribution(ltuo_x_and_y, xlabel='x-value', ylabel='y-value', color='k'):
         x_values, y_values = zip(*ltuo_x_and_y)
@@ -283,8 +283,49 @@ class PlotFromHistogramFile(object):
         plt.xlabel(ylabel)
         plt.scatter(x_values, y_values, c=color, )
         plt.grid(True)
-        
-        
-        
-        
+    @staticmethod
+    def probability_distribution(ltuo_x_and_y, xlabel='x-value', ylabel='y-value', color='k'):
+        x_values, y_values = zip(*ltuo_x_and_y)
+        total_y = sum(y_values) + 0.0
+        y_values = map(lambda v: v/total_y, y_values)
+        plt.figure(num=None, figsize=(6,3))
+        plt.subplots_adjust(bottom=0.2, top=0.9)
+        plt.ylabel(xlabel)
+        plt.xlabel(ylabel)
+        plt.scatter(x_values, y_values, c=color, )
+        plt.grid(True)
+    @staticmethod
+    def cdf(ltuo_x_and_y, xlabel='x-value', ylabel='y-value', color='k'):
+        x_values, y_values = zip(*ltuo_x_and_y)
+        total_y = sum(y_values) + 0.0
+        current_val = 0.0
+        new_y_values = []
+        for y in y_values:
+            next_val=y+current_val
+            new_y_values+=[next_val/total_y]
+            current_val = next_val
+        y_values = new_y_values
+        plt.figure(num=None, figsize=(6,3))
+        plt.subplots_adjust(bottom=0.2, top=0.9)
+        plt.ylabel(xlabel)
+        plt.xlabel(ylabel)
+        plt.scatter(x_values, y_values, c=color, )
+        plt.grid(True)
+    @staticmethod
+    def ccdf(ltuo_x_and_y, xlabel='x-value', ylabel='y-value', color='k'):
+        x_values, y_values = zip(*ltuo_x_and_y)
+        total_y = sum(y_values) + 0.0
+        current_val = sum(y_values) + 0.0
+        new_y_values = []
+        for y in y_values:
+            new_y_values+=[current_val/total_y]
+            current_val-=y
+        y_values = new_y_values
+        plt.figure(num=None, figsize=(6,3))
+        plt.subplots_adjust(bottom=0.2, top=0.9)
+        plt.ylabel(xlabel)
+        plt.xlabel(ylabel)
+        plt.scatter(x_values, y_values, c=color, )
+        plt.grid(True)
+
         
