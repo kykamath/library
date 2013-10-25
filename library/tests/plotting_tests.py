@@ -58,7 +58,7 @@ class PlotFromHistogramFileTests(unittest.TestCase):
     def test_distribution(self):
         plt.Figure
         ltuo_x_and_y = map(lambda l: map(float, l.split()), open(PlotFromHistogramFileTests.f_name))
-        PlotFromHistograms.distribution(ltuo_x_and_y)
+        PlotFromHistograms.distribution(ltuo_x_and_y, x_log=True, y_log=True)
 #         plt.show()
     def test_probability_distribution(self):
         plt.Figure
